@@ -1,4 +1,4 @@
-package antlapit.near.api.kotlin.rpc
+package antlapit.near.api.providers
 
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
@@ -17,7 +17,7 @@ import io.ktor.http.*
  *      <li>HTTP scheme with Address and Port</li>
  * </ul>
  */
-class RPCClient(val address: String) {
+class BaseJsonRpcProvider(val address: String) {
 
     private val client: HttpClient
 
@@ -34,7 +34,7 @@ class RPCClient(val address: String) {
         }
     }
 
-    suspend fun sendRequest(method: String, params: Any? = null, timeout: Long = 2_000): Any {
+    suspend fun sendJsonRpc(method: String, params: Any? = null, timeout: Long = 2_000): Any {
         val response = client.post<Map<String, Any>>(address) {
             contentType(ContentType.Application.Json)
             body = GenericRequest(method, params)
@@ -67,7 +67,7 @@ class RPCClient(val address: String) {
         } else {
             paramsMap["finality"] = blockSearch.finality!!.code
         }
-        return sendRequest(method = "query", params = paramsMap)
+        return sendJsonRpc(method = "query", params = paramsMap)
     }
 
     private data class GenericRequest(val method: String, val params: Any?) {

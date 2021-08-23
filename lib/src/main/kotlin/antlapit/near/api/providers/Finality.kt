@@ -1,9 +1,9 @@
-package antlapit.near.api.kotlin.rpc
+package antlapit.near.api.providers
 
 /**
  * Query parameter for choosing last block search strategy
  *
- * @link https://docs.near.org/docs/api/rpc#using-finality-param
+ * @link https://docs.near.org/docs/api/providers#using-finality-param
  */
 enum class Finality(val code: String) {
 

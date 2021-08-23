@@ -1,21 +1,21 @@
-package antlapit.near.api.kotlin.rpc
+package antlapit.near.api.providers
 
-import antlapit.near.api.kotlin.rpc.BlockSearch.Companion.fromBlockHash
-import antlapit.near.api.kotlin.rpc.BlockSearch.Companion.fromBlockId
+import antlapit.near.api.providers.BlockSearch.Companion.fromBlockHash
+import antlapit.near.api.providers.BlockSearch.Companion.fromBlockId
 
 /**
  * RPC endpoint for working with Blocks / Chunks
- * @link https://docs.near.org/docs/api/rpc/block-chunk
+ * @link https://docs.near.org/docs/api/providers/block-chunk
  */
-class BlockEndpoints(private val client: RPCClient) {
+class BlockProvider(private val client: BaseJsonRpcProvider) {
 
     /**
      * Returns basic account information.
-     * @link https://docs.near.org/docs/api/rpc/block-chunk#block-details
+     * @link https://docs.near.org/docs/api/providers/block-chunk#block-details
      *
      * @param blockSearch Block search strategy for querying blocks
      */
-    suspend fun getBlock(blockSearch: BlockSearch = BlockSearch.BLOCK_OPTIMISTIC) = client.sendRequest(
+    suspend fun getBlock(blockSearch: BlockSearch = BlockSearch.BLOCK_OPTIMISTIC) = client.sendJsonRpc(
         method = "block",
         blockSearch
     )
@@ -30,12 +30,12 @@ class BlockEndpoints(private val client: RPCClient) {
     return self.json_rpc('EXPERIMENTAL_changes_in_block', changes_in_block_request)
      */
 
-    /**
+    /**`
      * Returns details of a specific chunk.
-     * @link https://docs.near.org/docs/api/rpc/block-chunk#chunk-details
+     * @link https://docs.near.org/docs/api/providers/block-chunk#chunk-details
      *
      * @param chunkHash Valid chunk hash
      */
-    suspend fun getChunk(chunkHash: String) = client.sendRequest(method = "chunk", params = listOf(chunkHash))
+    suspend fun getChunk(chunkHash: String) = client.sendJsonRpc(method = "chunk", params = listOf(chunkHash))
 
 }

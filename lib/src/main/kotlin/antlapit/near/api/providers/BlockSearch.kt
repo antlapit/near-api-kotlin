@@ -1,9 +1,9 @@
-package antlapit.near.api.kotlin.rpc
+package antlapit.near.api.providers
 
 /**
  *
- * @link https://docs.near.org/docs/api/rpc#using-finality-param
- * @link https://docs.near.org/docs/api/rpc#using-block_id-param
+ * @link https://docs.near.org/docs/api/providers#using-finality-param
+ * @link https://docs.near.org/docs/api/providers#using-block_id-param
  */
 class BlockSearch(var finality: Finality? = Finality.OPTIMISTIC,
                   var blockId: Long? = null,

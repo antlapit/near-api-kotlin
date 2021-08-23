@@ -1,4 +1,4 @@
-package antlapit.near.api.kotlin.rpc
+package antlapit.near.api.providers
 
 import java.nio.charset.Charset
 import java.util.*

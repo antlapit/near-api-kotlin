@@ -1,17 +1,17 @@
-package antlapit.near.api.kotlin.rpc
+package antlapit.near.api.providers
 
-import antlapit.near.api.kotlin.rpc.BlockSearch.Companion.fromBlockHash
-import antlapit.near.api.kotlin.rpc.BlockSearch.Companion.fromBlockId
+import antlapit.near.api.providers.BlockSearch.Companion.fromBlockHash
+import antlapit.near.api.providers.BlockSearch.Companion.fromBlockId
 
 /**
  * RPC endpoint for working with Accounts / Contracts
- * @link https://docs.near.org/docs/api/rpc/contracts
+ * @link https://docs.near.org/docs/api/providers/contracts
  */
-class ContractEndpoints(private val client: RPCClient) {
+class ContractProvider(private val client: BaseJsonRpcProvider) {
 
     /**
      * Returns basic account information.
-     * @link https://docs.near.org/docs/api/rpc/contracts#view-account
+     * @link https://docs.near.org/docs/api/providers/contracts#view-account
      *
      * @param accountId Account Identifier
      * @param blockSearch Block search strategy for querying blocks
@@ -34,7 +34,7 @@ class ContractEndpoints(private val client: RPCClient) {
     /**
      * Returns the contract code (Wasm binary) deployed to the account for last block by finality param.
      * <br>Please note that the returned code will be encoded in base64.
-     * @link https://docs.near.org/docs/api/rpc/contracts#view-contract-code
+     * @link https://docs.near.org/docs/api/providers/contracts#view-contract-code
      *
      * @param accountId Account Identifier
      * @param blockSearch Block search strategy for querying blocks
@@ -55,7 +55,7 @@ class ContractEndpoints(private val client: RPCClient) {
 
     /**
      * Returns the contract code (Wasm binary) deployed to the account. Please note that the returned code will be encoded in base64.
-     * @link https://docs.near.org/docs/api/rpc/contracts#view-contract-state
+     * @link https://docs.near.org/docs/api/providers/contracts#view-contract-state
      *
      * @param accountId Account Identifier
      * @param blockSearch Block search strategy for querying blocks
@@ -81,7 +81,7 @@ class ContractEndpoints(private val client: RPCClient) {
     /**
      * Allows you to call a contract method as a <a href="https://docs.near.org/docs/develop/contracts/as/intro#view-and-change-functions">view function</a>.
      *
-     * @link https://docs.near.org/docs/api/rpc/contracts#call-a-contract-function
+     * @link https://docs.near.org/docs/api/providers/contracts#call-a-contract-function
      *
      * @param accountId Account Identifier
      * @param methodName Contract method to call

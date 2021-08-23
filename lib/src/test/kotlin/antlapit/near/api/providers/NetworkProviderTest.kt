@@ -1,4 +1,4 @@
-package antlapit.near.api.kotlin.rpc
+package antlapit.near.api.providers
 
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
@@ -7,13 +7,13 @@ import kotlin.test.Test
 import kotlin.test.assertNotNull
 
 @ExperimentalCoroutinesApi
-internal class NetworkEndpointsEndpointTest : BaseEndpointTest() {
+internal class NetworkProviderTest : BaseProviderTest() {
 
-    private lateinit var endpoint: NetworkEndpoints
+    private lateinit var endpoint: NetworkProvider
 
     @BeforeTest
     fun initEndpoint() {
-        endpoint = NetworkEndpoints(client)
+        endpoint = NetworkProvider(client)
     }
 
     @Test

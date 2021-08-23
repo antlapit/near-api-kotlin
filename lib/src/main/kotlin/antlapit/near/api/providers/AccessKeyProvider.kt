@@ -1,17 +1,17 @@
-package antlapit.near.api.kotlin.rpc
+package antlapit.near.api.providers
 
-import antlapit.near.api.kotlin.rpc.BlockSearch.Companion.fromBlockHash
-import antlapit.near.api.kotlin.rpc.BlockSearch.Companion.fromBlockId
+import antlapit.near.api.providers.BlockSearch.Companion.fromBlockHash
+import antlapit.near.api.providers.BlockSearch.Companion.fromBlockId
 
 /**
  * RPC endpoint for accessing Access Keys
- * @link https://docs.near.org/docs/api/rpc/access-keys
+ * @link https://docs.near.org/docs/api/providers/access-keys
  */
-class AccessKeyEndpoints(private val client: RPCClient) {
+class AccessKeyProvider(private val client: BaseJsonRpcProvider) {
 
     /**
      * Returns information about a single access key for given account.
-     * @link https://docs.near.org/docs/api/rpc/access-keys#view-access-key
+     * @link https://docs.near.org/docs/api/providers/access-keys#view-access-key
      *
      * @param accountId Account Identifier
      * @param publicKey Public key
@@ -32,7 +32,7 @@ class AccessKeyEndpoints(private val client: RPCClient) {
 
     /**
      * Returns <b>all</b> access keys for a given account.
-     * @link https://docs.near.org/docs/api/rpc/access-keys#view-access-key-list
+     * @link https://docs.near.org/docs/api/providers/access-keys#view-access-key-list
      *
      * @param accountId Account Identifier
      * @param blockSearch: BlockSearch = BlockSearch.BLOCK_OPTIMISTIC
