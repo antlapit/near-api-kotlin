@@ -1,7 +1,5 @@
 package antlapit.near.api.kotlin.rpc
 
-import antlapit.near.api.kotlin.Finality
-
 /**
  *
  * @link https://docs.near.org/docs/api/rpc#using-finality-param

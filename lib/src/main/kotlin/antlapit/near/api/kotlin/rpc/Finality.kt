@@ -1,4 +1,4 @@
-package antlapit.near.api.kotlin
+package antlapit.near.api.kotlin.rpc
 
 /**
  * Query parameter for choosing last block search strategy
