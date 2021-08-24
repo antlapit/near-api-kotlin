@@ -4,7 +4,7 @@ package antlapit.near.api.providers
  * RPC endpoint for transactions
  * @link https://docs.near.org/docs/api/providers/transactions
  */
-class TransactionProvider(private val client: BaseJsonRpcProvider) {
+class TransactionRpcProvider(private val client: BaseJsonRpcProvider) {
 
     /**
      * Sends a transaction and immediately returns transaction hash.

@@ -8,4 +8,5 @@
  */
 
 rootProject.name = "near-api-kotlin"
-include("lib")
+include("providers-api")
+include("providers")

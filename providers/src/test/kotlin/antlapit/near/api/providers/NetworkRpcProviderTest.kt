@@ -7,13 +7,13 @@ import kotlin.test.Test
 import kotlin.test.assertNotNull
 
 @ExperimentalCoroutinesApi
-internal class NetworkProviderTest : BaseProviderTest() {
+internal class NetworkRpcProviderTest : BaseProviderTest() {
 
-    private lateinit var endpoint: NetworkProvider
+    private lateinit var endpoint: NetworkRpcProvider
 
     @BeforeTest
     fun initEndpoint() {
-        endpoint = NetworkProvider(client)
+        endpoint = NetworkRpcProvider(client)
     }
 
     @Test

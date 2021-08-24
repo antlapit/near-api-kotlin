@@ -4,7 +4,7 @@ package antlapit.near.api.providers
  * RPC endpoint for getting Network state
  * @link https://docs.near.org/docs/api/providers/network
  */
-class NetworkProvider(private val client: BaseJsonRpcProvider) {
+class NetworkRpcProvider(private val client: BaseJsonRpcProvider) {
 
     /**
      * Returns general status of a given node (sync status, nearcore node version, protocol version, etc), and the current set of validators.

@@ -7,7 +7,7 @@ import antlapit.near.api.providers.BlockSearch.Companion.fromBlockId
  * RPC endpoint for working with Accounts / Contracts
  * @link https://docs.near.org/docs/api/providers/contracts
  */
-class ContractProvider(private val client: BaseJsonRpcProvider) {
+class ContractRpcProvider(private val client: BaseJsonRpcProvider) {
 
     /**
      * Returns basic account information.
