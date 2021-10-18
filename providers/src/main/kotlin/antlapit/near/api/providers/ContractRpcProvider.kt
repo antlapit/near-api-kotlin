@@ -2,21 +2,18 @@ package antlapit.near.api.providers
 
 import antlapit.near.api.providers.BlockSearch.Companion.fromBlockHash
 import antlapit.near.api.providers.BlockSearch.Companion.fromBlockId
+import antlapit.near.api.providers.BlockSearch.Companion.ofFinality
 
 /**
  * RPC endpoint for working with Accounts / Contracts
- * @link https://docs.near.org/docs/api/providers/contracts
+ * @link https://docs.near.org/docs/api/rpc/contracts
  */
-class ContractRpcProvider(private val client: BaseJsonRpcProvider) {
+class ContractRpcProvider(private val client: BaseJsonRpcProvider) : ContractProvider {
 
     /**
-     * Returns basic account information.
-     * @link https://docs.near.org/docs/api/providers/contracts#view-account
-     *
-     * @param accountId Account Identifier
-     * @param blockSearch Block search strategy for querying blocks
+     * @link https://docs.near.org/docs/api/rpc/contracts#view-account
      */
-    suspend fun getAccount(accountId: String, blockSearch: BlockSearch = BlockSearch.BLOCK_OPTIMISTIC) = client.query(
+    private suspend fun getAccount(accountId: String, blockSearch: BlockSearch = BlockSearch.BLOCK_OPTIMISTIC) = client.query(
         mapOf(
             "request_type" to "view_account",
             "account_id" to accountId
@@ -24,22 +21,17 @@ class ContractRpcProvider(private val client: BaseJsonRpcProvider) {
         blockSearch
     )
 
-    suspend fun getAccount(accountId: String, blockId: Long) = getAccount(accountId, fromBlockId(blockId))
+    override suspend fun getAccount(accountId: String, finality: Finality) = getAccount(accountId, ofFinality(finality))
 
-    suspend fun getAccount(accountId: String, blockHash: String) = getAccount(accountId, fromBlockHash(blockHash))
+    override suspend fun getAccount(accountId: String, blockId: Long) = getAccount(accountId, fromBlockId(blockId))
 
+    override suspend fun getAccount(accountId: String, blockHash: String) = getAccount(accountId, fromBlockHash(blockHash))
 
-    // TODO View account changes
 
     /**
-     * Returns the contract code (Wasm binary) deployed to the account for last block by finality param.
-     * <br>Please note that the returned code will be encoded in base64.
-     * @link https://docs.near.org/docs/api/providers/contracts#view-contract-code
-     *
-     * @param accountId Account Identifier
-     * @param blockSearch Block search strategy for querying blocks
+     * @link https://docs.near.org/docs/api/rpc/contracts#view-contract-code
      */
-    suspend fun getContractCode(accountId: String, blockSearch: BlockSearch = BlockSearch.BLOCK_OPTIMISTIC) =
+    private suspend fun getContractCode(accountId: String, blockSearch: BlockSearch = BlockSearch.BLOCK_OPTIMISTIC) =
         client.query(
             mapOf(
                 "request_type" to "view_code",
@@ -48,19 +40,17 @@ class ContractRpcProvider(private val client: BaseJsonRpcProvider) {
             blockSearch
         )
 
-    suspend fun getContractCode(accountId: String, blockId: Long) = getContractCode(accountId, fromBlockId(blockId))
+    override suspend fun getContractCode(accountId: String, finality: Finality) = getContractCode(accountId, ofFinality(finality))
 
-    suspend fun getContractCode(accountId: String, blockHash: String) =
+    override suspend fun getContractCode(accountId: String, blockId: Long) = getContractCode(accountId, fromBlockId(blockId))
+
+    override suspend fun getContractCode(accountId: String, blockHash: String) =
         getContractCode(accountId, fromBlockHash(blockHash))
 
     /**
-     * Returns the contract code (Wasm binary) deployed to the account. Please note that the returned code will be encoded in base64.
-     * @link https://docs.near.org/docs/api/providers/contracts#view-contract-state
-     *
-     * @param accountId Account Identifier
-     * @param blockSearch Block search strategy for querying blocks
+     * @link https://docs.near.org/docs/api/rpc/contracts#view-contract-state
      */
-    suspend fun getContractState(accountId: String, blockSearch: BlockSearch = BlockSearch.BLOCK_OPTIMISTIC) =
+    private suspend fun getContractState(accountId: String, blockSearch: BlockSearch = BlockSearch.BLOCK_OPTIMISTIC) =
         client.query(
             mapOf(
                 "request_type" to "view_state",
@@ -70,23 +60,15 @@ class ContractRpcProvider(private val client: BaseJsonRpcProvider) {
             blockSearch
         )
 
-    suspend fun getContractState(accountId: String, blockId: Long) = getContractState(accountId, fromBlockId(blockId))
+    override suspend fun getContractState(accountId: String, finality: Finality) = getContractState(accountId, ofFinality(finality))
 
-    suspend fun getContractState(accountId: String, blockHash: String) =
+    override suspend fun getContractState(accountId: String, blockId: Long) = getContractState(accountId, fromBlockId(blockId))
+
+    override suspend fun getContractState(accountId: String, blockHash: String) =
         getContractState(accountId, fromBlockHash(blockHash))
 
-    // TODO View contract state changes
-    // TODO View contract code changes
-
     /**
-     * Allows you to call a contract method as a <a href="https://docs.near.org/docs/develop/contracts/as/intro#view-and-change-functions">view function</a>.
-     *
-     * @link https://docs.near.org/docs/api/providers/contracts#call-a-contract-function
-     *
-     * @param accountId Account Identifier
-     * @param methodName Contract method to call
-     * @param args Serialized JSON method arguments
-     * @param blockSearch Block search strategy for querying blocks
+     * @link https://docs.near.org/docs/api/rpc/contracts#call-a-contract-function
      */
     suspend fun callFunction(
         accountId: String,
@@ -103,12 +85,17 @@ class ContractRpcProvider(private val client: BaseJsonRpcProvider) {
         blockSearch
     )
 
-    suspend fun callFunction(
+    override suspend fun callFunction(
+        accountId: String, methodName: String,
+        args: String, finality: Finality
+    ) = callFunction(accountId, methodName, args, ofFinality(finality))
+
+    override suspend fun callFunction(
         accountId: String, methodName: String,
         args: String, blockId: Long
     ) = callFunction(accountId, methodName, args, fromBlockId(blockId))
 
-    suspend fun callFunction(
+    override suspend fun callFunction(
         accountId: String, methodName: String,
         args: String, blockHash: String
     ) = callFunction(accountId, methodName, args, fromBlockHash(blockHash))

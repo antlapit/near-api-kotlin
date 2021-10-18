@@ -6,8 +6,8 @@ package antlapit.near.api.providers
  *      <li>finality - search for last block</li>
  *      <li>blockId or blockHash - search for concrete block</li>
  * </ul>
- * @link https://docs.near.org/docs/api/providers#using-finality-param
- * @link https://docs.near.org/docs/api/providers#using-block_id-param
+ * @link https://docs.near.org/docs/api/rpc#using-finality-param
+ * @link https://docs.near.org/docs/api/rpc#using-block_id-param
  */
 class BlockSearch(var finality: Finality? = Finality.OPTIMISTIC,
                   var blockId: Long? = null,

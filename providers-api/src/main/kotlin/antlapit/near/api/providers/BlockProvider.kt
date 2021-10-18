@@ -22,8 +22,6 @@ interface BlockProvider {
 
     /**
      * Returns details of a specific chunk.
-     * @link https://docs.near.org/docs/api/providers/block-chunk#chunk-details
-     *
      * @param chunkHash Valid chunk hash
      */
     suspend fun getChunk(chunkHash: String): Any

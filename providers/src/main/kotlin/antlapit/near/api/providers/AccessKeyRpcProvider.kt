@@ -6,7 +6,7 @@ import antlapit.near.api.providers.BlockSearch.Companion.ofFinality
 
 /**
  * RPC endpoint for accessing Access Keys
- * @link https://docs.near.org/docs/api/providers/access-keys
+ * @link https://docs.near.org/docs/api/rpc/access-keys
  */
 class AccessKeyRpcProvider(private val client: BaseJsonRpcProvider) : AccessKeyProvider {
 
@@ -14,7 +14,7 @@ class AccessKeyRpcProvider(private val client: BaseJsonRpcProvider) : AccessKeyP
      * @param accountId Account Identifier
      * @param publicKey Public key
      * @param blockSearch Block search strategy for querying blocks
-     * @link https://docs.near.org/docs/api/providers/access-keys#view-access-key
+     * @link https://docs.near.org/docs/api/rpc/access-keys#view-access-key
      */
     private suspend fun getAccessKey(accountId: String, publicKey: String, blockSearch: BlockSearch) = client.query(
         mapOf(
@@ -34,7 +34,7 @@ class AccessKeyRpcProvider(private val client: BaseJsonRpcProvider) : AccessKeyP
     /**
      * @param accountId Account Identifier
      * @param blockSearch Block search strategy for querying blocks
-     * @link https://docs.near.org/docs/api/providers/access-keys#view-access-key-list
+     * @link https://docs.near.org/docs/api/rpc/access-keys#view-access-key-list
      */
     private suspend fun getAccessKeyList(accountId: String, blockSearch: BlockSearch = BlockSearch.BLOCK_OPTIMISTIC) = client.query(
         mapOf(

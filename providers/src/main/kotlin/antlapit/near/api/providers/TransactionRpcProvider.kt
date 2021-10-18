@@ -2,14 +2,14 @@ package antlapit.near.api.providers
 
 /**
  * RPC endpoint for transactions
- * @link https://docs.near.org/docs/api/providers/transactions
+ * @link https://docs.near.org/docs/api/rpc/transactions
  */
 class TransactionRpcProvider(private val client: BaseJsonRpcProvider) {
 
     /**
      * Sends a transaction and immediately returns transaction hash.
      *
-     * @link https://docs.near.org/docs/api/providers/transactions#send-transaction-async
+     * @link https://docs.near.org/docs/api/rpc/transactions#send-transaction-async
      *
      * @param signedTx Signed Transaction
      */
@@ -21,7 +21,7 @@ class TransactionRpcProvider(private val client: BaseJsonRpcProvider) {
     /**
      * Sends a transaction and waits until transaction is fully complete. (Has a 10 second timeout)
      *
-     * @link https://docs.near.org/docs/api/providers/transactions#send-transaction-await
+     * @link https://docs.near.org/docs/api/rpc/transactions#send-transaction-await
      *
      * @param signedTx Signed Transaction
      */
@@ -34,7 +34,7 @@ class TransactionRpcProvider(private val client: BaseJsonRpcProvider) {
     /**
      * Queries status of a transaction by hash and returns the final transaction result.
      *
-     * @link https://docs.near.org/docs/api/providers/transactions#transaction-status
+     * @link https://docs.near.org/docs/api/rpc/transactions#transaction-status
      *
      * @param txHash Transaction hash
      * @param txRecipientId Sender account id
