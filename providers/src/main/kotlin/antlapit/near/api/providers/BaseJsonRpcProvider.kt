@@ -34,7 +34,14 @@ class BaseJsonRpcProvider(val address: String) {
         }
     }
 
-    suspend fun sendJsonRpc(method: String, params: Any? = null, timeout: Long = 2_000): Any {
+    /**
+     * Base method for sending RPC request
+     *
+     * @param method Method code
+     * @param params Method params (often - array)
+     * @param timeout Request timeout in ms (default - 10_000)
+     */
+    suspend fun sendJsonRpc(method: String, params: Any? = null, timeout: Long = 10_000): Any {
         val response = client.post<Map<String, Any>>(address) {
             contentType(ContentType.Application.Json)
             body = GenericRequest(method, params)
