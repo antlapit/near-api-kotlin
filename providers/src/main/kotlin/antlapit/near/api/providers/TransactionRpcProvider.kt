@@ -9,7 +9,7 @@ class TransactionRpcProvider(private val client: BaseJsonRpcProvider) : Transact
     /**
      * @link https://docs.near.org/docs/api/rpc/transactions#send-transaction-async
      */
-    override suspend fun sendTx(signedTx: String) = client.sendJsonRpc(
+    override suspend fun sendTx(signedTx: String) = client.sendJsonRpcDefault(
         method = "broadcast_tx_async",
         params = listOf(Utils.encodeToBase64(signedTx))
     )
@@ -17,7 +17,7 @@ class TransactionRpcProvider(private val client: BaseJsonRpcProvider) : Transact
     /**
      * @link https://docs.near.org/docs/api/rpc/transactions#send-transaction-await
      */
-    override suspend fun sendTxAndWait(signedTx: String, timeout: Long) = client.sendJsonRpc(
+    override suspend fun sendTxAndWait(signedTx: String, timeout: Long) = client.sendJsonRpcDefault(
         method = "broadcast_tx_commit",
         params = listOf(Utils.encodeToBase64(signedTx)),
         timeout = timeout
@@ -26,7 +26,7 @@ class TransactionRpcProvider(private val client: BaseJsonRpcProvider) : Transact
     /**
      * @link https://docs.near.org/docs/api/rpc/transactions#transaction-status
      */
-    override suspend fun getTx(txHash: String, txRecipientId: String) = client.sendJsonRpc(
+    override suspend fun getTx(txHash: String, txRecipientId: String) = client.sendJsonRpcDefault(
         method = "tx",
         params = listOf(txHash, txRecipientId)
     )

@@ -13,7 +13,7 @@ class ContractRpcProvider(private val client: BaseJsonRpcProvider) : ContractPro
     /**
      * @link https://docs.near.org/docs/api/rpc/contracts#view-account
      */
-    private suspend fun getAccount(accountId: String, blockSearch: BlockSearch = BlockSearch.BLOCK_OPTIMISTIC) = client.query(
+    private suspend fun getAccount(accountId: String, blockSearch: BlockSearch = BlockSearch.BLOCK_OPTIMISTIC) : Any = client.query(
         mapOf(
             "request_type" to "view_account",
             "account_id" to accountId
@@ -31,7 +31,7 @@ class ContractRpcProvider(private val client: BaseJsonRpcProvider) : ContractPro
     /**
      * @link https://docs.near.org/docs/api/rpc/contracts#view-contract-code
      */
-    private suspend fun getContractCode(accountId: String, blockSearch: BlockSearch = BlockSearch.BLOCK_OPTIMISTIC) =
+    private suspend fun getContractCode(accountId: String, blockSearch: BlockSearch = BlockSearch.BLOCK_OPTIMISTIC) : Any =
         client.query(
             mapOf(
                 "request_type" to "view_code",
@@ -50,7 +50,7 @@ class ContractRpcProvider(private val client: BaseJsonRpcProvider) : ContractPro
     /**
      * @link https://docs.near.org/docs/api/rpc/contracts#view-contract-state
      */
-    private suspend fun getContractState(accountId: String, blockSearch: BlockSearch = BlockSearch.BLOCK_OPTIMISTIC) =
+    private suspend fun getContractState(accountId: String, blockSearch: BlockSearch = BlockSearch.BLOCK_OPTIMISTIC) : Any =
         client.query(
             mapOf(
                 "request_type" to "view_state",
@@ -75,7 +75,7 @@ class ContractRpcProvider(private val client: BaseJsonRpcProvider) : ContractPro
         methodName: String,
         args: String,
         blockSearch: BlockSearch = BlockSearch.BLOCK_OPTIMISTIC
-    ) = client.query(
+    ) : Any = client.query(
         mapOf(
             "request_type" to "call_function",
             "account_id" to accountId,

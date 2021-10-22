@@ -13,7 +13,7 @@ class BlockRpcProvider(private val client: BaseJsonRpcProvider) : BlockProvider 
     /**
      * @link https://docs.near.org/docs/api/rpc/block-chunk#block-details
      */
-    private suspend fun getBlock(blockSearch: BlockSearch = BlockSearch.BLOCK_OPTIMISTIC) = client.sendJsonRpc(
+    private suspend fun getBlock(blockSearch: BlockSearch = BlockSearch.BLOCK_OPTIMISTIC) = client.sendJsonRpcDefault(
         method = "block",
         blockSearch
     )
@@ -27,6 +27,6 @@ class BlockRpcProvider(private val client: BaseJsonRpcProvider) : BlockProvider 
     /**
      * @link https://docs.near.org/docs/api/rpc/block-chunk#chunk-details
      */
-    override suspend fun getChunk(chunkHash: String) = client.sendJsonRpc(method = "chunk", params = listOf(chunkHash))
+    override suspend fun getChunk(chunkHash: String) = client.sendJsonRpcDefault(method = "chunk", params = listOf(chunkHash))
 
 }

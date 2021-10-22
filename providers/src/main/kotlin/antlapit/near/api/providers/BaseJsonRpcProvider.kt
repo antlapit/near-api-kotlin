@@ -1,5 +1,11 @@
 package antlapit.near.api.providers
 
+import antlapit.near.api.providers.exception.ProviderException
+import com.fasterxml.jackson.databind.DeserializationFeature
+import com.fasterxml.jackson.databind.PropertyNamingStrategies
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
+import com.fasterxml.jackson.module.kotlin.jacksonMapperBuilder
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.features.*
@@ -7,6 +13,7 @@ import io.ktor.client.features.json.*
 import io.ktor.client.features.logging.*
 import io.ktor.client.request.*
 import io.ktor.http.*
+import java.util.*
 
 /**
  * Main Client for accessing NEAR RPC API
@@ -17,22 +24,38 @@ import io.ktor.http.*
  *      <li>HTTP scheme with Address and Port</li>
  * </ul>
  */
-class BaseJsonRpcProvider(val address: String) {
+class BaseJsonRpcProvider(
+    val address: String
+) {
 
-    private val client: HttpClient
+    val objectMapper = jacksonMapperBuilder()
+        .addModule(JavaTimeModule())
+        .addModule(Jdk8Module())
+        .propertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
+        .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+        .build()
 
-    constructor(rpcAddr: String, port: Int) : this("http://$rpcAddr:$port")
-
-    init {
-        this.client = HttpClient(CIO) {
-            install(Logging) {
-                logger = Logger.DEFAULT
-                level = LogLevel.HEADERS
-            }
-            install(JsonFeature)
-            install(HttpTimeout)
+    // TODO close client after execution
+    val client: HttpClient = HttpClient(CIO) {
+        install(Logging) {
+            logger = Logger.DEFAULT
+            level = LogLevel.HEADERS
         }
+        install(JsonFeature) {
+            serializer = JacksonSerializer(
+                jackson = objectMapper
+            )
+        }
+        install(HttpTimeout)
     }
+
+    constructor(
+        rpcAddr: String,
+        port: Int,
+    ) : this(address = "http://$rpcAddr:$port")
+
+    suspend fun sendJsonRpcDefault(method: String, params: Any?, timeout: Long = 10_000) =
+        sendJsonRpc<Map<String, Any>>(method, params, timeout)
 
     /**
      * Base method for sending RPC request
@@ -41,30 +64,31 @@ class BaseJsonRpcProvider(val address: String) {
      * @param params Method params (often - array)
      * @param timeout Request timeout in ms (default - 10_000)
      */
-    suspend fun sendJsonRpc(method: String, params: Any? = null, timeout: Long = 10_000): Any {
-        val response = client.post<Map<String, Any>>(address) {
+    suspend inline fun <reified T> sendJsonRpc(method: String, params: Any? = null, timeout: Long = 10_000): T {
+        val response = client.post<GenericRpcResponse<T>>(address) {
             contentType(ContentType.Application.Json)
-            body = GenericRequest(method, params)
+            body = GenericRpcRequest(method, params)
 
             timeout {
                 requestTimeoutMillis = timeout
             }
         }
+        //val response = objectMapper.readValue(responseStr, object : TypeReference<GenericRpcResponse<T>>() {})
         when {
-            response["error"] != null -> {
-                throw RPCClientException(response["error"].toString())
+            response.error != null -> {
+                throw Utils.constructException(response.error)
             }
-            response["result"] == null -> {
-                throw RPCClientException("Empty result")
+            response.result == null -> {
+                throw ProviderException("Empty result in response without specifying error")
             }
             else -> {
-                return response["result"]!!
+                return response.result as T
             }
         }
     }
 
-    suspend fun query(queryObj: Map<String, Any>, blockSearch: BlockSearch): Any {
-        val paramsMap = LinkedHashMap<String, Any>(queryObj)
+    suspend inline fun <reified T> query(queryObj: Map<String, Any>, blockSearch: BlockSearch): T {
+        val paramsMap = LinkedHashMap(queryObj)
         if (blockSearch.finality == null) {
             if (blockSearch.blockId == null) {
                 paramsMap["blockId"] = blockSearch.blockHash!!
@@ -77,10 +101,14 @@ class BaseJsonRpcProvider(val address: String) {
         return sendJsonRpc(method = "query", params = paramsMap)
     }
 
-    private data class GenericRequest(val method: String, val params: Any?) {
+    data class RpcError(val name: String, val cause: RpcErrorCause)
+
+    data class RpcErrorCause(val name: String, val info: Map<String, Any>)
+
+    data class GenericRpcRequest(val method: String, val params: Any?) {
         val jsonrpc = "2.0"
-        val id = "dontcare"
+        val id = UUID.randomUUID().toString()
     }
 
-    class RPCClientException(error: String) : RuntimeException(error)
+    data class GenericRpcResponse<T>(val id: String, val jsonrpc: String, val error: RpcError?, val result: T?)
 }

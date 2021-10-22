@@ -18,9 +18,9 @@ internal class NetworkRpcProviderTest : BaseProviderTest() {
 
     @Test
     fun getNodeStatus_thenCorrect() = runBlocking {
-        val resp = endpoint.getNodeStatus() as Map<*, *>
+        val resp = endpoint.getNodeStatus()
         println(resp)
-        assertNotNull(resp["chain_id"])
+        assertNotNull(resp.chainId)
         return@runBlocking
     }
 
@@ -29,6 +29,14 @@ internal class NetworkRpcProviderTest : BaseProviderTest() {
         val resp = endpoint.getNetworkInfo() as Map<*, *>
         println(resp)
         assertNotNull(resp["active_peers"])
+        return@runBlocking
+    }
+
+    @Test
+    fun getValidationStatus_thenCorrect() = runBlocking {
+        val resp = endpoint.getValidationStatus() as Map<*, *>
+        println(resp)
+        assertNotNull(resp["current_proposals"])
         return@runBlocking
     }
 }
