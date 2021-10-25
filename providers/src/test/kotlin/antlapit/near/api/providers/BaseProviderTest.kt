@@ -2,5 +2,5 @@ package antlapit.near.api.providers
 
 open class BaseProviderTest {
 
-    val client = BaseJsonRpcProvider("https://rpc.testnet.near.org")
+    val client = JsonRpcProvider("https://rpc.testnet.near.org")
 }

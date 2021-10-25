@@ -2,6 +2,7 @@ package antlapit.near.api.providers
 
 import antlapit.near.api.providers.exception.ProviderException
 import com.fasterxml.jackson.databind.DeserializationFeature
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
@@ -24,11 +25,11 @@ import java.util.*
  *      <li>HTTP scheme with Address and Port</li>
  * </ul>
  */
-class BaseJsonRpcProvider(
+class JsonRpcProvider(
     val address: String
 ) {
 
-    val objectMapper = jacksonMapperBuilder()
+    private val objectMapper: ObjectMapper = jacksonMapperBuilder()
         .addModule(JavaTimeModule())
         .addModule(Jdk8Module())
         .propertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
@@ -54,17 +55,17 @@ class BaseJsonRpcProvider(
         port: Int,
     ) : this(address = "http://$rpcAddr:$port")
 
-    suspend fun sendJsonRpcDefault(method: String, params: Any?, timeout: Long = 10_000) =
-        sendJsonRpc<Map<String, Any>>(method, params, timeout)
+    suspend fun sendRpcDefault(method: String, params: Any?, timeout: Long = 10_000) =
+        sendRpc<Map<String, Any>>(method, params, timeout)
 
     /**
      * Base method for sending RPC request
      *
      * @param method Method code
-     * @param params Method params (often - array)
+     * @param params Method params (array, object, ...)
      * @param timeout Request timeout in ms (default - 10_000)
      */
-    suspend inline fun <reified T> sendJsonRpc(method: String, params: Any? = null, timeout: Long = 10_000): T {
+    suspend inline fun <reified T> sendRpc(method: String, params: Any? = null, timeout: Long = 10_000): T {
         val response = client.post<GenericRpcResponse<T>>(address) {
             contentType(ContentType.Application.Json)
             body = GenericRpcRequest(method, params)
@@ -73,7 +74,6 @@ class BaseJsonRpcProvider(
                 requestTimeoutMillis = timeout
             }
         }
-        //val response = objectMapper.readValue(responseStr, object : TypeReference<GenericRpcResponse<T>>() {})
         when {
             response.error != null -> {
                 throw Utils.constructException(response.error)
@@ -82,7 +82,7 @@ class BaseJsonRpcProvider(
                 throw ProviderException("Empty result in response without specifying error")
             }
             else -> {
-                return response.result as T
+                return response.result
             }
         }
     }
@@ -98,8 +98,17 @@ class BaseJsonRpcProvider(
         } else {
             paramsMap["finality"] = blockSearch.finality!!.code
         }
-        return sendJsonRpc(method = "query", params = paramsMap)
+        return sendRpc(method = "query", params = paramsMap)
     }
+
+    /**
+     * Some undocumented feature of RPC API - querying contract by path and data
+     *
+     * @param path Smart-contract path
+     * @param data Some data to call with
+     */
+    suspend inline fun <reified T> query(path: String, data: String) =
+        sendRpc<T>(method = "query", params = arrayListOf(path, data))
 
     data class RpcError(val name: String, val cause: RpcErrorCause)
 

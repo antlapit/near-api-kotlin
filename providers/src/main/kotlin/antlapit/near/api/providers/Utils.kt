@@ -14,7 +14,7 @@ class Utils {
         }
 
         @JvmStatic
-        fun constructException(error: BaseJsonRpcProvider.RpcError) : ProviderException {
+        fun constructException(error: JsonRpcProvider.RpcError) : ProviderException {
             val errorCause = ErrorCause.findByCode(error.cause.name)
             val info = error.cause.info
             return if (errorCause == null) {

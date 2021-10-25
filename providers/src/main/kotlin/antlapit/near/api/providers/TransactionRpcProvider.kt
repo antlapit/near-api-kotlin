@@ -4,12 +4,12 @@ package antlapit.near.api.providers
  * RPC endpoint for transactions
  * @link https://docs.near.org/docs/api/rpc/transactions
  */
-class TransactionRpcProvider(private val client: BaseJsonRpcProvider) : TransactionProvider {
+class TransactionRpcProvider(private val jsonRpcProvider: JsonRpcProvider) : TransactionProvider {
 
     /**
      * @link https://docs.near.org/docs/api/rpc/transactions#send-transaction-async
      */
-    override suspend fun sendTx(signedTx: String) = client.sendJsonRpcDefault(
+    override suspend fun sendTx(signedTx: String) = jsonRpcProvider.sendRpcDefault(
         method = "broadcast_tx_async",
         params = listOf(Utils.encodeToBase64(signedTx))
     )
@@ -17,7 +17,7 @@ class TransactionRpcProvider(private val client: BaseJsonRpcProvider) : Transact
     /**
      * @link https://docs.near.org/docs/api/rpc/transactions#send-transaction-await
      */
-    override suspend fun sendTxAndWait(signedTx: String, timeout: Long) = client.sendJsonRpcDefault(
+    override suspend fun sendTxAndWait(signedTx: String, timeout: Long) = jsonRpcProvider.sendRpcDefault(
         method = "broadcast_tx_commit",
         params = listOf(Utils.encodeToBase64(signedTx)),
         timeout = timeout
@@ -26,7 +26,7 @@ class TransactionRpcProvider(private val client: BaseJsonRpcProvider) : Transact
     /**
      * @link https://docs.near.org/docs/api/rpc/transactions#transaction-status
      */
-    override suspend fun getTx(txHash: String, txRecipientId: String) = client.sendJsonRpcDefault(
+    override suspend fun getTx(txHash: String, txRecipientId: String) = jsonRpcProvider.sendRpcDefault(
         method = "tx",
         params = listOf(txHash, txRecipientId)
     )

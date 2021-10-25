@@ -8,12 +8,12 @@ import antlapit.near.api.providers.BlockSearch.Companion.ofFinality
  * RPC endpoint for working with Accounts / Contracts
  * @link https://docs.near.org/docs/api/rpc/contracts
  */
-class ContractRpcProvider(private val client: BaseJsonRpcProvider) : ContractProvider {
+class ContractRpcProvider(private val jsonRpcProvider: JsonRpcProvider) : ContractProvider {
 
     /**
      * @link https://docs.near.org/docs/api/rpc/contracts#view-account
      */
-    private suspend fun getAccount(accountId: String, blockSearch: BlockSearch = BlockSearch.BLOCK_OPTIMISTIC) : Any = client.query(
+    private suspend fun getAccount(accountId: String, blockSearch: BlockSearch = BlockSearch.BLOCK_OPTIMISTIC) : Any = jsonRpcProvider.query(
         mapOf(
             "request_type" to "view_account",
             "account_id" to accountId
@@ -32,7 +32,7 @@ class ContractRpcProvider(private val client: BaseJsonRpcProvider) : ContractPro
      * @link https://docs.near.org/docs/api/rpc/contracts#view-contract-code
      */
     private suspend fun getContractCode(accountId: String, blockSearch: BlockSearch = BlockSearch.BLOCK_OPTIMISTIC) : Any =
-        client.query(
+        jsonRpcProvider.query(
             mapOf(
                 "request_type" to "view_code",
                 "account_id" to accountId,
@@ -51,7 +51,7 @@ class ContractRpcProvider(private val client: BaseJsonRpcProvider) : ContractPro
      * @link https://docs.near.org/docs/api/rpc/contracts#view-contract-state
      */
     private suspend fun getContractState(accountId: String, blockSearch: BlockSearch = BlockSearch.BLOCK_OPTIMISTIC) : Any =
-        client.query(
+        jsonRpcProvider.query(
             mapOf(
                 "request_type" to "view_state",
                 "account_id" to accountId,
@@ -70,12 +70,12 @@ class ContractRpcProvider(private val client: BaseJsonRpcProvider) : ContractPro
     /**
      * @link https://docs.near.org/docs/api/rpc/contracts#call-a-contract-function
      */
-    suspend fun callFunction(
+    private suspend fun callFunction(
         accountId: String,
         methodName: String,
         args: String,
         blockSearch: BlockSearch = BlockSearch.BLOCK_OPTIMISTIC
-    ) : Any = client.query(
+    ) : Any = jsonRpcProvider.query(
         mapOf(
             "request_type" to "call_function",
             "account_id" to accountId,
@@ -99,4 +99,5 @@ class ContractRpcProvider(private val client: BaseJsonRpcProvider) : ContractPro
         accountId: String, methodName: String,
         args: String, blockHash: String
     ) = callFunction(accountId, methodName, args, fromBlockHash(blockHash))
+
 }

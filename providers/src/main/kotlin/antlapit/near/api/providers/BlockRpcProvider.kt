@@ -8,12 +8,12 @@ import antlapit.near.api.providers.BlockSearch.Companion.ofFinality
  * RPC endpoint for working with Blocks / Chunks
  * @link https://docs.near.org/docs/api/rpc/block-chunk
  */
-class BlockRpcProvider(private val client: BaseJsonRpcProvider) : BlockProvider {
+class BlockRpcProvider(private val jsonRpcProvider: JsonRpcProvider) : BlockProvider {
 
     /**
      * @link https://docs.near.org/docs/api/rpc/block-chunk#block-details
      */
-    private suspend fun getBlock(blockSearch: BlockSearch = BlockSearch.BLOCK_OPTIMISTIC) = client.sendJsonRpcDefault(
+    private suspend fun getBlock(blockSearch: BlockSearch = BlockSearch.BLOCK_OPTIMISTIC) = jsonRpcProvider.sendRpcDefault(
         method = "block",
         blockSearch
     )
@@ -27,6 +27,6 @@ class BlockRpcProvider(private val client: BaseJsonRpcProvider) : BlockProvider 
     /**
      * @link https://docs.near.org/docs/api/rpc/block-chunk#chunk-details
      */
-    override suspend fun getChunk(chunkHash: String) = client.sendJsonRpcDefault(method = "chunk", params = listOf(chunkHash))
+    override suspend fun getChunk(chunkHash: String) = jsonRpcProvider.sendRpcDefault(method = "chunk", params = listOf(chunkHash))
 
 }
