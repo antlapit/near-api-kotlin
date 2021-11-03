@@ -1,5 +1,6 @@
 package antlapit.near.api.providers
 
+import antlapit.jackson.datatype.kotlin.UnsignedNumericModule
 import antlapit.near.api.providers.exception.ProviderException
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -32,6 +33,7 @@ class JsonRpcProvider(
     private val objectMapper: ObjectMapper = jacksonMapperBuilder()
         .addModule(JavaTimeModule())
         .addModule(Jdk8Module())
+        .addModule(UnsignedNumericModule())
         .propertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
         .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
         .build()
@@ -40,7 +42,7 @@ class JsonRpcProvider(
     val client: HttpClient = HttpClient(CIO) {
         install(Logging) {
             logger = Logger.DEFAULT
-            level = LogLevel.HEADERS
+            level = LogLevel.BODY
         }
         install(JsonFeature) {
             serializer = JacksonSerializer(
@@ -55,17 +57,23 @@ class JsonRpcProvider(
         port: Int,
     ) : this(address = "http://$rpcAddr:$port")
 
-    suspend fun sendRpcDefault(method: String, params: Any?, timeout: Long = 10_000) =
+    suspend fun sendRpcDefault(method: String, params: Any?, timeout: Long = Constants.DEFAULT_TIMEOUT) =
         sendRpc<Map<String, Any>>(method, params, timeout)
+
+    suspend inline fun <reified T> sendRpc(method: String, blockSearch: BlockSearch, timeout: Long = Constants.DEFAULT_TIMEOUT): T {
+        return sendRpc(method = method, params = mergeParams(emptyMap(), blockSearch), timeout)
+    }
 
     /**
      * Base method for sending RPC request
      *
      * @param method Method code
      * @param params Method params (array, object, ...)
-     * @param timeout Request timeout in ms (default - 10_000)
+     * @param timeout Request timeout in ms (default - Constants.DEFAULT_TIMEOUT)
+     *
+     * @see Constants
      */
-    suspend inline fun <reified T> sendRpc(method: String, params: Any? = null, timeout: Long = 10_000): T {
+    suspend inline fun <reified T> sendRpc(method: String, params: Any? = null, timeout: Long = Constants.DEFAULT_TIMEOUT): T {
         val response = client.post<GenericRpcResponse<T>>(address) {
             contentType(ContentType.Application.Json)
             body = GenericRpcRequest(method, params)
@@ -87,19 +95,8 @@ class JsonRpcProvider(
         }
     }
 
-    suspend inline fun <reified T> query(queryObj: Map<String, Any>, blockSearch: BlockSearch): T {
-        val paramsMap = LinkedHashMap(queryObj)
-        if (blockSearch.finality == null) {
-            if (blockSearch.blockId == null) {
-                paramsMap["blockId"] = blockSearch.blockHash!!
-            } else {
-                paramsMap["blockId"] = blockSearch.blockId!!
-            }
-        } else {
-            paramsMap["finality"] = blockSearch.finality!!.code
-        }
-        return sendRpc(method = "query", params = paramsMap)
-    }
+    suspend inline fun <reified T> query(queryObj: Map<String, Any>, blockSearch: BlockSearch): T =
+        sendRpc(method = "query", params = mergeParams(queryObj, blockSearch))
 
     /**
      * Some undocumented feature of RPC API - querying contract by path and data
@@ -112,7 +109,7 @@ class JsonRpcProvider(
 
     data class RpcError(val name: String, val cause: RpcErrorCause)
 
-    data class RpcErrorCause(val name: String, val info: Map<String, Any>)
+    data class RpcErrorCause(val name: String, val info: Map<String, Any?>?)
 
     data class GenericRpcRequest(val method: String, val params: Any?) {
         val jsonrpc = "2.0"
@@ -120,4 +117,20 @@ class JsonRpcProvider(
     }
 
     data class GenericRpcResponse<T>(val id: String, val jsonrpc: String, val error: RpcError?, val result: T?)
+
+    companion object {
+        fun mergeParams(params: Map<String, Any>, blockSearch: BlockSearch): Map<String, Any> {
+            val paramsMap = LinkedHashMap(params)
+            if (blockSearch.finality == null) {
+                if (blockSearch.blockId == null) {
+                    paramsMap["block_id"] = blockSearch.blockHash!!
+                } else {
+                    paramsMap["block_id"] = blockSearch.blockId!!
+                }
+            } else {
+                paramsMap["finality"] = blockSearch.finality!!.code
+            }
+            return paramsMap
+        }
+    }
 }

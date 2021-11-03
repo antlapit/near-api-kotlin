@@ -1,6 +1,10 @@
 package antlapit.near.api.providers
 
-import antlapit.near.api.providers.model.NodeStatus
+import antlapit.near.api.providers.model.BlockHeight
+import antlapit.near.api.providers.model.networkinfo.NetworkInfo
+import antlapit.near.api.providers.model.networkinfo.NodeStatus
+import antlapit.near.api.providers.model.validators.EpochValidatorInfo
+import antlapit.near.api.providers.primitives.CryptoHash
 
 interface NetworkProvider {
 
@@ -12,22 +16,22 @@ interface NetworkProvider {
     /**
      * Returns the current state of node network connections (active peers, transmitted data, etc.)
      */
-    suspend fun getNetworkInfo(): Any
+    suspend fun getNetworkInfo(): NetworkInfo
 
     /**
      * Returns validation status of latest block.
      */
-    suspend fun getValidationStatus(): Any
+    suspend fun getValidationStatus(): EpochValidatorInfo
 
     /**
      * Returns validation status of numeric block id.
      * @param blockId Numeric block number
      */
-    suspend fun getValidationStatus(blockId: Long): Any
+    suspend fun getValidationStatus(blockId: BlockHeight): EpochValidatorInfo
 
     /**
      * Returns validation status of block hash.
      * @param blockHash Block hash
      */
-    suspend fun getValidationStatus(blockHash: String): Any
+    suspend fun getValidationStatus(blockHash: CryptoHash): EpochValidatorInfo
 }

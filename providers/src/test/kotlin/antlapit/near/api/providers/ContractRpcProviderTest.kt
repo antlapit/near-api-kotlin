@@ -24,7 +24,7 @@ class ContractRpcProviderTest : BaseProviderTest() {
 
     @Test
     fun viewAccount_thenCorrect() = runBlocking {
-        val resp = endpoint.getAccount("antlapit.testnet", Finality.OPTIMISTIC)
+        val resp = endpoint.getAccount("api_kotlin.testnet", Finality.OPTIMISTIC)
         println(resp)
         return@runBlocking
     }

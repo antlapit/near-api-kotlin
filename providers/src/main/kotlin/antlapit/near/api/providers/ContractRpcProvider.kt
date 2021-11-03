@@ -3,6 +3,9 @@ package antlapit.near.api.providers
 import antlapit.near.api.providers.BlockSearch.Companion.fromBlockHash
 import antlapit.near.api.providers.BlockSearch.Companion.fromBlockId
 import antlapit.near.api.providers.BlockSearch.Companion.ofFinality
+import antlapit.near.api.providers.model.BlockHeight
+import antlapit.near.api.providers.primitives.AccountId
+import antlapit.near.api.providers.primitives.CryptoHash
 
 /**
  * RPC endpoint for working with Accounts / Contracts
@@ -13,7 +16,7 @@ class ContractRpcProvider(private val jsonRpcProvider: JsonRpcProvider) : Contra
     /**
      * @link https://docs.near.org/docs/api/rpc/contracts#view-account
      */
-    private suspend fun getAccount(accountId: String, blockSearch: BlockSearch = BlockSearch.BLOCK_OPTIMISTIC) : Any = jsonRpcProvider.query(
+    private suspend fun getAccount(accountId: AccountId, blockSearch: BlockSearch = BlockSearch.BLOCK_OPTIMISTIC) : Any = jsonRpcProvider.query(
         mapOf(
             "request_type" to "view_account",
             "account_id" to accountId
@@ -21,17 +24,17 @@ class ContractRpcProvider(private val jsonRpcProvider: JsonRpcProvider) : Contra
         blockSearch
     )
 
-    override suspend fun getAccount(accountId: String, finality: Finality) = getAccount(accountId, ofFinality(finality))
+    override suspend fun getAccount(accountId: AccountId, finality: Finality) = getAccount(accountId, ofFinality(finality))
 
-    override suspend fun getAccount(accountId: String, blockId: Long) = getAccount(accountId, fromBlockId(blockId))
+    override suspend fun getAccount(accountId: AccountId, blockId: BlockHeight) = getAccount(accountId, fromBlockId(blockId))
 
-    override suspend fun getAccount(accountId: String, blockHash: String) = getAccount(accountId, fromBlockHash(blockHash))
+    override suspend fun getAccount(accountId: AccountId, blockHash: CryptoHash) = getAccount(accountId, fromBlockHash(blockHash))
 
 
     /**
      * @link https://docs.near.org/docs/api/rpc/contracts#view-contract-code
      */
-    private suspend fun getContractCode(accountId: String, blockSearch: BlockSearch = BlockSearch.BLOCK_OPTIMISTIC) : Any =
+    private suspend fun getContractCode(accountId: AccountId, blockSearch: BlockSearch = BlockSearch.BLOCK_OPTIMISTIC) : Any =
         jsonRpcProvider.query(
             mapOf(
                 "request_type" to "view_code",
@@ -40,17 +43,17 @@ class ContractRpcProvider(private val jsonRpcProvider: JsonRpcProvider) : Contra
             blockSearch
         )
 
-    override suspend fun getContractCode(accountId: String, finality: Finality) = getContractCode(accountId, ofFinality(finality))
+    override suspend fun getContractCode(accountId: AccountId, finality: Finality) = getContractCode(accountId, ofFinality(finality))
 
-    override suspend fun getContractCode(accountId: String, blockId: Long) = getContractCode(accountId, fromBlockId(blockId))
+    override suspend fun getContractCode(accountId: AccountId, blockId: BlockHeight) = getContractCode(accountId, fromBlockId(blockId))
 
-    override suspend fun getContractCode(accountId: String, blockHash: String) =
+    override suspend fun getContractCode(accountId: AccountId, blockHash: CryptoHash) =
         getContractCode(accountId, fromBlockHash(blockHash))
 
     /**
      * @link https://docs.near.org/docs/api/rpc/contracts#view-contract-state
      */
-    private suspend fun getContractState(accountId: String, blockSearch: BlockSearch = BlockSearch.BLOCK_OPTIMISTIC) : Any =
+    private suspend fun getContractState(accountId: AccountId, blockSearch: BlockSearch = BlockSearch.BLOCK_OPTIMISTIC) : Any =
         jsonRpcProvider.query(
             mapOf(
                 "request_type" to "view_state",
@@ -60,18 +63,18 @@ class ContractRpcProvider(private val jsonRpcProvider: JsonRpcProvider) : Contra
             blockSearch
         )
 
-    override suspend fun getContractState(accountId: String, finality: Finality) = getContractState(accountId, ofFinality(finality))
+    override suspend fun getContractState(accountId: AccountId, finality: Finality) = getContractState(accountId, ofFinality(finality))
 
-    override suspend fun getContractState(accountId: String, blockId: Long) = getContractState(accountId, fromBlockId(blockId))
+    override suspend fun getContractState(accountId: AccountId, blockId: BlockHeight) = getContractState(accountId, fromBlockId(blockId))
 
-    override suspend fun getContractState(accountId: String, blockHash: String) =
+    override suspend fun getContractState(accountId: AccountId, blockHash: CryptoHash) =
         getContractState(accountId, fromBlockHash(blockHash))
 
     /**
      * @link https://docs.near.org/docs/api/rpc/contracts#call-a-contract-function
      */
     private suspend fun callFunction(
-        accountId: String,
+        accountId: AccountId,
         methodName: String,
         args: String,
         blockSearch: BlockSearch = BlockSearch.BLOCK_OPTIMISTIC
@@ -86,18 +89,18 @@ class ContractRpcProvider(private val jsonRpcProvider: JsonRpcProvider) : Contra
     )
 
     override suspend fun callFunction(
-        accountId: String, methodName: String,
+        accountId: AccountId, methodName: String,
         args: String, finality: Finality
     ) = callFunction(accountId, methodName, args, ofFinality(finality))
 
     override suspend fun callFunction(
-        accountId: String, methodName: String,
-        args: String, blockId: Long
+        accountId: AccountId, methodName: String,
+        args: String, blockId: BlockHeight
     ) = callFunction(accountId, methodName, args, fromBlockId(blockId))
 
     override suspend fun callFunction(
-        accountId: String, methodName: String,
-        args: String, blockHash: String
+        accountId: AccountId, methodName: String,
+        args: String, blockHash: CryptoHash
     ) = callFunction(accountId, methodName, args, fromBlockHash(blockHash))
 
 }

@@ -9,7 +9,7 @@ class JsonRpcProviderTest : BaseProviderTest() {
 
     @Test
     fun getAccount_whenPathParam_thenCorrect() = runBlocking {
-        val resp = client.query<Any>("account/antlapit.testnet", "")
+        val resp = client.query<Any>("account/api_kotlin.testnet", "")
         println(resp)
         return@runBlocking
     }

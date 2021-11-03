@@ -8,7 +8,7 @@
 
 plugins {
     // Apply the org.jetbrains.kotlin.jvm Plugin to add support for Kotlin.
-    kotlin("jvm") version "1.5.31"
+    id("org.jetbrains.kotlin.jvm") version "1.5.0"
 
     // Apply the java-library plugin for API and implementation separation.
     `java-library`
@@ -20,41 +20,18 @@ repositories {
 }
 
 dependencies {
-    implementation(project(":providers-api"))
-    implementation(project(":jackson-datatype-kotlin"))
-
     // Align versions of all Kotlin components
     implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
 
     // Use the Kotlin JDK 8 standard library.
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
-    // Ktor for making requests
-    val ktorVersion = "1.6.2"
-    implementation("io.ktor:ktor-client-core:$ktorVersion")
-    implementation("io.ktor:ktor-client-cio:$ktorVersion")
-    implementation("io.ktor:ktor-client-logging:$ktorVersion")
-    implementation("io.ktor:ktor-client-jackson:$ktorVersion")
-
-    // Jackson for serialization
-    val jacksonVersion = "2.10.2"
-    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jacksonVersion")
-    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jdk8:$jacksonVersion")
-
-    // This dependency is used internally, and not exposed to consumers on their own compile classpath.
-    implementation("com.google.guava:guava:30.1.1-jre")
+    val jacksonVersion = "2.12.3"
+    implementation("com.fasterxml.jackson.core:jackson-databind:$jacksonVersion")
 
     // Use the Kotlin test library.
     testImplementation("org.jetbrains.kotlin:kotlin-test")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.1")
-
-    // Test logging
-    val logbackVersion = "1.2.5"
-    testImplementation("ch.qos.logback:logback-classic:$logbackVersion")
-
-    // Use the Kotlin JUnit integration.
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
-    testImplementation("org.junit.jupiter:junit-jupiter:5.7.0")
 }
 
 java {

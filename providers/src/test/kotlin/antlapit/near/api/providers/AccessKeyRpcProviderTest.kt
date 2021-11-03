@@ -17,7 +17,7 @@ class AccessKeyRpcProviderTest : BaseProviderTest() {
 
     @Test
     fun getAccessKeyList_thenCorrect() = runBlocking {
-        val resp = endpoint.getAccessKeyList("antlapit.testnet", Finality.FINAL)
+        val resp = endpoint.getAccessKeyList("api_kotlin.testnet", Finality.FINAL)
         println(resp)
         return@runBlocking
     }

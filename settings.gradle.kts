@@ -10,3 +10,4 @@
 rootProject.name = "near-api-kotlin"
 include("providers-api")
 include("providers")
+include("jackson-datatype-kotlin")

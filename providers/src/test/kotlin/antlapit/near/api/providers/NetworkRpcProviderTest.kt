@@ -26,17 +26,19 @@ internal class NetworkRpcProviderTest : BaseProviderTest() {
 
     @Test
     fun getNetworkInfo_thenCorrect() = runBlocking {
-        val resp = endpoint.getNetworkInfo() as Map<*, *>
+        val resp = endpoint.getNetworkInfo()
         println(resp)
-        assertNotNull(resp["active_peers"])
+        assertNotNull(resp.activePeers)
         return@runBlocking
     }
 
     @Test
     fun getValidationStatus_thenCorrect() = runBlocking {
-        val resp = endpoint.getValidationStatus() as Map<*, *>
+        val resp = endpoint.getValidationStatus()
         println(resp)
-        assertNotNull(resp["current_proposals"])
+        assertNotNull(resp.currentProposals)
         return@runBlocking
     }
+
+    // TODO Validation by block id ????
 }
