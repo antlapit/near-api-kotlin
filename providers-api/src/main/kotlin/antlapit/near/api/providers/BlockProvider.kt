@@ -1,7 +1,7 @@
 package antlapit.near.api.providers
 
-import antlapit.near.api.providers.model.BlockHeight
 import antlapit.near.api.providers.model.blocks.BlockView
+import antlapit.near.api.providers.primitives.BlockHeight
 import antlapit.near.api.providers.primitives.CryptoHash
 
 interface BlockProvider {

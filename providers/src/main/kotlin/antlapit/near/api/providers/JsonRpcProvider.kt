@@ -1,6 +1,5 @@
 package antlapit.near.api.providers
 
-import antlapit.jackson.datatype.kotlin.UnsignedNumericModule
 import antlapit.near.api.providers.exception.ProviderException
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -33,7 +32,6 @@ class JsonRpcProvider(
     private val objectMapper: ObjectMapper = jacksonMapperBuilder()
         .addModule(JavaTimeModule())
         .addModule(Jdk8Module())
-        .addModule(UnsignedNumericModule())
         .propertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
         .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
         .build()

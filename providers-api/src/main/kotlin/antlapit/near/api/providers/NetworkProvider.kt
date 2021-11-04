@@ -1,9 +1,9 @@
 package antlapit.near.api.providers
 
-import antlapit.near.api.providers.model.BlockHeight
 import antlapit.near.api.providers.model.networkinfo.NetworkInfo
 import antlapit.near.api.providers.model.networkinfo.NodeStatus
 import antlapit.near.api.providers.model.validators.EpochValidatorInfo
+import antlapit.near.api.providers.primitives.BlockHeight
 import antlapit.near.api.providers.primitives.CryptoHash
 
 interface NetworkProvider {

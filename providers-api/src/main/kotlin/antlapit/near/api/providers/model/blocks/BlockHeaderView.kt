@@ -1,9 +1,7 @@
 package antlapit.near.api.providers.model.blocks
 
-import antlapit.near.api.providers.model.*
 import antlapit.near.api.providers.model.validators.ValidatorStakeView
-import antlapit.near.api.providers.primitives.ChallengesResult
-import antlapit.near.api.providers.primitives.CryptoHash
+import antlapit.near.api.providers.primitives.*
 
 data class BlockHeaderView(
     val height: BlockHeight,
@@ -17,9 +15,9 @@ data class BlockHeaderView(
     val chunkHeadersRoot: CryptoHash,
     val chunkTxRoot: CryptoHash,
     val outcomeRoot: CryptoHash,
-    val chunksIncluded: ULong,
+    val chunksIncluded: Long, // TODO Rust u64,
     val challengesRoot: CryptoHash,
-    val timestampNanosec: ULong,
+    val timestampNanosec: Long, // TODO Rust u64,
     val randomValue: CryptoHash,
     val validatorProposals: List<ValidatorStakeView> = emptyList(),
     val chunkMask: List<Boolean> = emptyList(),

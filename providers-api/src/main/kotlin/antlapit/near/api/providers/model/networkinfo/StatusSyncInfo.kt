@@ -1,6 +1,6 @@
 package antlapit.near.api.providers.model.networkinfo
 
-import antlapit.near.api.providers.model.BlockHeight
+import antlapit.near.api.providers.primitives.BlockHeight
 import antlapit.near.api.providers.primitives.CryptoHash
 import java.time.ZonedDateTime
 

@@ -3,8 +3,8 @@ package antlapit.near.api.providers
 import antlapit.near.api.providers.BlockSearch.Companion.fromBlockHash
 import antlapit.near.api.providers.BlockSearch.Companion.fromBlockId
 import antlapit.near.api.providers.BlockSearch.Companion.ofFinality
-import antlapit.near.api.providers.model.BlockHeight
 import antlapit.near.api.providers.primitives.AccountId
+import antlapit.near.api.providers.primitives.BlockHeight
 import antlapit.near.api.providers.primitives.CryptoHash
 import antlapit.near.api.providers.primitives.PublicKey
 

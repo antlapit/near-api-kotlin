@@ -36,7 +36,7 @@ internal class NetworkRpcProviderTest : BaseProviderTest() {
     fun getValidationStatus_thenCorrect() = runBlocking {
         val resp = endpoint.getValidationStatus()
         println(resp)
-        assertNotNull(resp.currentProposals)
+        assertNotNull(resp.epochStartHeight)
         return@runBlocking
     }
 

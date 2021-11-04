@@ -21,7 +21,6 @@ repositories {
 
 dependencies {
     implementation(project(":providers-api"))
-    implementation(project(":jackson-datatype-kotlin"))
 
     // Align versions of all Kotlin components
     implementation(platform("org.jetbrains.kotlin:kotlin-bom"))

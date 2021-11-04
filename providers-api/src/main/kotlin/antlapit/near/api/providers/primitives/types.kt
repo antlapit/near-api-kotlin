@@ -1,6 +1,5 @@
-package antlapit.near.api.providers.model
+package antlapit.near.api.providers.primitives
 
-import antlapit.near.api.providers.primitives.CryptoHash
 import java.math.BigInteger
 
 
@@ -11,7 +10,7 @@ typealias MerkleHash = CryptoHash
 /**
 Validator identifier in current group.
  */
-typealias ValidatorId = ULong
+typealias ValidatorId = Long // TODO Rust u64
 /**
 Mask which validators participated in multi sign.
  */
@@ -19,7 +18,7 @@ typealias ValidatorMask = List<Boolean>
 /**
 StorageUsage is used to count the amount of storage used by a contract.
  */
-typealias StorageUsage = ULong
+typealias StorageUsage = Long // TODO Rust u64
 /**
 StorageUsageChange is used to count the storage usage within a single contract call.
  */
@@ -27,19 +26,19 @@ typealias StorageUsageChange = Long
 /**
 Nonce for transactions.
  */
-typealias Nonce = ULong
+typealias Nonce = Long // TODO Rust u64
 /**
 Height of the block.
  */
-typealias BlockHeight = ULong
+typealias BlockHeight = Long // TODO Rust u64
 /**
 Height of the epoch.
  */
-typealias EpochHeight = ULong
+typealias EpochHeight = Long // TODO Rust u64
 /**
 Shard index, from 0 to NUM_SHARDS - 1.
  */
-typealias ShardId = ULong
+typealias ShardId = Long // TODO Rust u64
 /**
 Balance is type for storing amounts of tokens.
  */
@@ -47,30 +46,32 @@ typealias Balance = BigInteger
 /**
 Gas is a type for storing amount of gas.
  */
-typealias Gas = ULong
+typealias Gas = Long // TODO Rust u64
 
 /**
 Number of blocks in current group.
  */
-typealias NumBlocks = ULong
+typealias NumBlocks = Long // TODO Rust u64
 /**
 Number of shards in current group.
  */
-typealias NumShards = ULong
+typealias NumShards = Long // TODO Rust u64
 /**
 Number of seats of validators (block producer or hidden ones) in current group (settlement).
  */
-typealias NumSeats = ULong
+typealias NumSeats = Long // TODO Rust u64
 /**
 Block height delta that measures the difference between `BlockHeight`s.
  */
-typealias BlockHeightDelta = ULong
+typealias BlockHeightDelta = Long // TODO Rust u64
 
-typealias GCCount = ULong
+typealias GCCount = Long // TODO Rust u64
 
-typealias ReceiptIndex = ULong
+typealias ReceiptIndex = Long // TODO Rust u64
 typealias PromiseId = List<ReceiptIndex>
-typealias ProtocolVersion = UInt
+typealias ProtocolVersion = Int // TODO UInt
 
 // TODO signature
 typealias Signature = String
+/// Hash used by to store state root.
+typealias StateRoot = CryptoHash
