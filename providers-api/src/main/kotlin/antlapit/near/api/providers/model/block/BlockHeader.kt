@@ -1,9 +1,9 @@
-package antlapit.near.api.providers.model.blocks
+package antlapit.near.api.providers.model.block
 
 import antlapit.near.api.providers.model.validators.ValidatorStakeView
 import antlapit.near.api.providers.primitives.*
 
-data class BlockHeaderView(
+data class BlockHeader(
     val height: BlockHeight,
     val prevHeight: BlockHeight?,
     val epochId: CryptoHash,

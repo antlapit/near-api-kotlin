@@ -31,4 +31,26 @@ class BlockRpcProviderTest : BaseProviderTest() {
         println(blockByHash)
         return@runBlocking
     }
+
+    @Test
+    fun getChunk_whenLatest_thenCorrect() = runBlocking {
+        // latest block
+        val finalBlock = endpoint.getBlock(Finality.FINAL)
+        // latest chunk by block id
+        val chunkByBlockId = endpoint.getChunk(finalBlock.header.height, 0)
+        // latest chunk by block hash
+        val chunkByBlockHash = endpoint.getChunk(finalBlock.header.hash, 0)
+        assertEquals(chunkByBlockId, chunkByBlockHash)
+
+        // chunk by hash
+        val chunkByHash = endpoint.getChunk(chunkByBlockId.header.chunkHash)
+        assertEquals(chunkByHash, chunkByBlockHash)
+    }
+
+    @Test
+    fun temp() = runBlocking {
+        //val block = endpoint.getBlock("D1RxWJKsLHP614QPQGpg1nCHExx3tDWC3SuAga3eJsu6")
+        val chunk = endpoint.getChunk("37QjY12QKbYgmApkQP6usVmsXEhatuYq2NRkSr63Piuj")
+        println(chunk)
+    }
 }

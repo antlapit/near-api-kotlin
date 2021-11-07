@@ -1,6 +1,12 @@
 package antlapit.near.api.providers
 
 import antlapit.near.api.providers.exception.ProviderException
+import antlapit.near.api.providers.mixins.AccessKeyPermissionMixin
+import antlapit.near.api.providers.mixins.ActionMixin
+import antlapit.near.api.providers.mixins.ReceiptEnumMixin
+import antlapit.near.api.providers.model.accesskey.AccessKeyPermission
+import antlapit.near.api.providers.model.block.Action
+import antlapit.near.api.providers.model.block.ReceiptEnum
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
@@ -34,6 +40,9 @@ class JsonRpcProvider(
         .addModule(Jdk8Module())
         .propertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
         .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+        .addMixIn(ReceiptEnum::class.java, ReceiptEnumMixin::class.java)
+        .addMixIn(Action::class.java, ActionMixin::class.java)
+        .addMixIn(AccessKeyPermission::class.java, AccessKeyPermissionMixin::class.java)
         .build()
 
     // TODO close client after execution
@@ -58,7 +67,20 @@ class JsonRpcProvider(
     suspend fun sendRpcDefault(method: String, params: Any?, timeout: Long = Constants.DEFAULT_TIMEOUT) =
         sendRpc<Map<String, Any>>(method, params, timeout)
 
-    suspend inline fun <reified T> sendRpc(method: String, blockSearch: BlockSearch, timeout: Long = Constants.DEFAULT_TIMEOUT): T {
+    suspend inline fun <reified T> sendRpc(
+        method: String,
+        blockSearch: BlockSearch,
+        params: Map<String, Any?>,
+        timeout: Long = Constants.DEFAULT_TIMEOUT
+    ): T {
+        return sendRpc(method = method, params = mergeParams(params, blockSearch), timeout)
+    }
+
+    suspend inline fun <reified T> sendRpc(
+        method: String,
+        blockSearch: BlockSearch,
+        timeout: Long = Constants.DEFAULT_TIMEOUT
+    ): T {
         return sendRpc(method = method, params = mergeParams(emptyMap(), blockSearch), timeout)
     }
 
@@ -71,7 +93,11 @@ class JsonRpcProvider(
      *
      * @see Constants
      */
-    suspend inline fun <reified T> sendRpc(method: String, params: Any? = null, timeout: Long = Constants.DEFAULT_TIMEOUT): T {
+    suspend inline fun <reified T> sendRpc(
+        method: String,
+        params: Any? = null,
+        timeout: Long = Constants.DEFAULT_TIMEOUT
+    ): T {
         val response = client.post<GenericRpcResponse<T>>(address) {
             contentType(ContentType.Application.Json)
             body = GenericRpcRequest(method, params)
@@ -117,7 +143,7 @@ class JsonRpcProvider(
     data class GenericRpcResponse<T>(val id: String, val jsonrpc: String, val error: RpcError?, val result: T?)
 
     companion object {
-        fun mergeParams(params: Map<String, Any>, blockSearch: BlockSearch): Map<String, Any> {
+        fun mergeParams(params: Map<String, Any?>, blockSearch: BlockSearch): Map<String, Any?> {
             val paramsMap = LinkedHashMap(params)
             if (blockSearch.finality == null) {
                 if (blockSearch.blockId == null) {
