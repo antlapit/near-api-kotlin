@@ -25,7 +25,7 @@ class BlockRpcProvider(private val jsonRpcProvider: JsonRpcProvider) : BlockProv
             timeout
         )
 
-    override suspend fun getBlock(finality: Finality, timeout: Long) = getBlock(ofFinality(finality), timeout)
+    override suspend fun getLatestBlock(finality: Finality, timeout: Long) = getBlock(ofFinality(finality), timeout)
 
     override suspend fun getBlock(blockId: BlockHeight, timeout: Long) = getBlock(fromBlockId(blockId), timeout)
 
@@ -53,10 +53,10 @@ class BlockRpcProvider(private val jsonRpcProvider: JsonRpcProvider) : BlockProv
         timeout
     )
 
-    override suspend fun getChunk(blockId: BlockHeight, shardId: ShardId, timeout: Long) =
+    override suspend fun getChunkInBlock(blockId: BlockHeight, shardId: ShardId, timeout: Long) =
         getChunk(fromBlockId(blockId), shardId, timeout)
 
-    override suspend fun getChunk(blockHash: CryptoHash, shardId: ShardId, timeout: Long) =
+    override suspend fun getChunkInBlock(blockHash: CryptoHash, shardId: ShardId, timeout: Long) =
         getChunk(fromBlockHash(blockHash), shardId, timeout)
 
 }

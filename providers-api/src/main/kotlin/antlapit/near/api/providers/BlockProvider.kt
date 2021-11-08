@@ -12,7 +12,7 @@ interface BlockProvider {
      * Returns block details.
      * @param finality Finality param for last block
      */
-    suspend fun getBlock(finality: Finality, timeout: Long = Constants.DEFAULT_TIMEOUT): Block
+    suspend fun getLatestBlock(finality: Finality, timeout: Long = Constants.DEFAULT_TIMEOUT): Block
 
     /**
      * Returns block details.
@@ -37,14 +37,14 @@ interface BlockProvider {
      * @param blockId Numeric block identifier
      * @param shardId Numeric shard identifier
      */
-    suspend fun getChunk(blockId: BlockHeight, shardId: ShardId, timeout: Long = Constants.DEFAULT_TIMEOUT): Chunk
+    suspend fun getChunkInBlock(blockId: BlockHeight, shardId: ShardId, timeout: Long = Constants.DEFAULT_TIMEOUT): Chunk
 
     /**
      * Returns details of a specific chunk.
      * @param blockHash String block hash
      * @param shardId Numeric shard identifier
      */
-    suspend fun getChunk(blockHash: CryptoHash, shardId: ShardId, timeout: Long = Constants.DEFAULT_TIMEOUT): Chunk
+    suspend fun getChunkInBlock(blockHash: CryptoHash, shardId: ShardId, timeout: Long = Constants.DEFAULT_TIMEOUT): Chunk
 
     // TODO Changes in Block
 }
