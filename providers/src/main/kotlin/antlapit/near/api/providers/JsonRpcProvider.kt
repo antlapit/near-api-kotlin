@@ -1,12 +1,7 @@
 package antlapit.near.api.providers
 
 import antlapit.near.api.providers.exception.ProviderException
-import antlapit.near.api.providers.mixins.AccessKeyPermissionMixin
-import antlapit.near.api.providers.mixins.ActionMixin
-import antlapit.near.api.providers.mixins.ReceiptEnumMixin
-import antlapit.near.api.providers.model.accesskey.AccessKeyPermission
-import antlapit.near.api.providers.model.block.Action
-import antlapit.near.api.providers.model.block.ReceiptEnum
+import antlapit.near.api.providers.mixins.RpcEnumDeserializationModule
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
@@ -35,14 +30,12 @@ class JsonRpcProvider(
     val address: String
 ) {
 
-    private val objectMapper: ObjectMapper = jacksonMapperBuilder()
+    val objectMapper: ObjectMapper = jacksonMapperBuilder()
         .addModule(JavaTimeModule())
         .addModule(Jdk8Module())
+        .addModule(RpcEnumDeserializationModule())
         .propertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
         .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-        .addMixIn(ReceiptEnum::class.java, ReceiptEnumMixin::class.java)
-        .addMixIn(Action::class.java, ActionMixin::class.java)
-        .addMixIn(AccessKeyPermission::class.java, AccessKeyPermissionMixin::class.java)
         .build()
 
     // TODO close client after execution

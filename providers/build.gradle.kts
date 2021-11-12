@@ -52,8 +52,12 @@ dependencies {
     testImplementation("ch.qos.logback:logback-classic:$logbackVersion")
 
     // Use the Kotlin JUnit integration.
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
     testImplementation("org.junit.jupiter:junit-jupiter:5.7.0")
+    val kotestVersion = "5.0.0.M3"
+    testImplementation("io.kotest:kotest-runner-junit5:$kotestVersion")
+    testImplementation("io.kotest:kotest-framework-datatest:$kotestVersion")
+    testImplementation("io.kotest:kotest-assertions-core:$kotestVersion")
+    testImplementation("io.kotest:kotest-property:$kotestVersion")
 }
 
 java {
@@ -65,4 +69,8 @@ sourceSets{
     main {
         java.srcDirs("src/main/kotlin")
     }
+}
+
+tasks.withType<Test> {
+    useJUnitPlatform()
 }

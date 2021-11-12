@@ -10,4 +10,4 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo
     JsonSubTypes.Type(value = ActionReceipt::class, name = "Action"),
     JsonSubTypes.Type(value = DataReceipt::class, name = "Data")
 )
-internal abstract class ReceiptEnumMixin
+internal abstract class ReceiptInfoMixin

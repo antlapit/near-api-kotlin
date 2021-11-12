@@ -1,19 +1,29 @@
 package antlapit.near.api.providers.model.accesskey
 
-import antlapit.near.api.providers.primitives.Balance
+import antlapit.near.api.providers.primitives.BlockHeight
+import antlapit.near.api.providers.primitives.CryptoHash
 import antlapit.near.api.providers.primitives.Nonce
+import antlapit.near.api.providers.primitives.PublicKey
 
 data class AccessKey(
     val nonce: Nonce,
     val permission: AccessKeyPermission
 )
 
-open class AccessKeyPermission
+data class AccessKeyInfo(
+    val publicKey: PublicKey,
+    val accessKey: AccessKey
+)
 
-data class FunctionCallAccessKeyPermission(
-    val allowance: Balance?,
-    val receiverId: String,
-    val methodNames: List<String> = emptyList(),
-) : AccessKeyPermission()
+data class AccessKeyInBlock(
+    val blockHeight: BlockHeight,
+    val blockHash: CryptoHash,
+    val nonce: Nonce,
+    val permission: AccessKeyPermission
+)
 
-class FullAccessAccessKeyPermission : AccessKeyPermission()
+data class AccessKeysContainer(
+    val blockHeight: BlockHeight,
+    val blockHash: CryptoHash,
+    val keys: List<AccessKeyInfo> = emptyList()
+)

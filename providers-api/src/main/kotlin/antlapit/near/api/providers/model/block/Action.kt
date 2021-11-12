@@ -6,44 +6,48 @@ import antlapit.near.api.providers.primitives.Balance
 import antlapit.near.api.providers.primitives.Gas
 import antlapit.near.api.providers.primitives.PublicKey
 
-open class Action
+interface Action
 
-class CreateAccountAction : Action()
+enum class NotParametrizedAction : Action {
+    CreateAccount
+}
 
-data class DeployContractAction(
+interface ParametrizedAction : Action
+
+data class DeployContract(
     val code: String
-) : Action()
+) : ParametrizedAction
 
-data class FunctionCallAction(
+data class FunctionCall(
     val methodName: String,
     val args: String,
     val gas: Gas,
     val deposit: Balance,
-) : Action()
+) : ParametrizedAction
 
-data class TransferAction(
+data class Transfer(
     val deposit: Balance
-) : Action()
+) : ParametrizedAction
 
-data class StakeAction(
+data class Stake(
     val stake: Balance,
     val publicKey: PublicKey,
-) : Action()
+) : ParametrizedAction
 
-data class AddKeyAction(
+data class AddKey(
     val publicKey: PublicKey,
     val accessKey: AccessKey,
-) : Action()
+) : ParametrizedAction
 
-data class DeleteKeyAction(
+data class DeleteKey(
     val publicKey: PublicKey,
-) : Action()
+) : ParametrizedAction
 
-data class DeleteAccountAction(
+data class DeleteAccount(
     val beneficiaryId: AccountId,
-) : Action()
+) : ParametrizedAction
 
-data class StakeChunkOnlyAction(
+data class StakeChunkOnly(
     val stake: Balance,
     val publicKey: PublicKey,
-) : Action()
+) : ParametrizedAction

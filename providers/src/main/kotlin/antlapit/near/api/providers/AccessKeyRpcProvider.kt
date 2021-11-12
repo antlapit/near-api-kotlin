@@ -3,6 +3,8 @@ package antlapit.near.api.providers
 import antlapit.near.api.providers.BlockSearch.Companion.fromBlockHash
 import antlapit.near.api.providers.BlockSearch.Companion.fromBlockId
 import antlapit.near.api.providers.BlockSearch.Companion.ofFinality
+import antlapit.near.api.providers.model.accesskey.AccessKeyInBlock
+import antlapit.near.api.providers.model.accesskey.AccessKeysContainer
 import antlapit.near.api.providers.primitives.AccountId
 import antlapit.near.api.providers.primitives.BlockHeight
 import antlapit.near.api.providers.primitives.CryptoHash
@@ -20,7 +22,7 @@ class AccessKeyRpcProvider(private val jsonRpcProvider: JsonRpcProvider) : Acces
      * @param blockSearch Block search strategy for querying blocks
      * @link https://docs.near.org/docs/api/rpc/access-keys#view-access-key
      */
-    private suspend fun getAccessKey(accountId: AccountId, publicKey: PublicKey, blockSearch: BlockSearch) : Any = jsonRpcProvider.query(
+    private suspend fun getAccessKey(accountId: AccountId, publicKey: PublicKey, blockSearch: BlockSearch) : AccessKeyInBlock = jsonRpcProvider.query(
         mapOf(
             "request_type" to "view_access_key",
             "account_id" to accountId,
@@ -40,7 +42,7 @@ class AccessKeyRpcProvider(private val jsonRpcProvider: JsonRpcProvider) : Acces
      * @param blockSearch Block search strategy for querying blocks
      * @link https://docs.near.org/docs/api/rpc/access-keys#view-access-key-list
      */
-    private suspend fun getAccessKeyList(accountId: AccountId, blockSearch: BlockSearch = BlockSearch.BLOCK_OPTIMISTIC) : Any = jsonRpcProvider.query(
+    private suspend fun getAccessKeyList(accountId: AccountId, blockSearch: BlockSearch = BlockSearch.BLOCK_OPTIMISTIC) : AccessKeysContainer = jsonRpcProvider.query(
         mapOf(
             "request_type" to "view_access_key_list",
             "account_id" to accountId

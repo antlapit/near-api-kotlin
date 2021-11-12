@@ -9,10 +9,10 @@ data class Receipt(
     val predecessorId: AccountId,
     val receiverId: AccountId,
     val receiptId: CryptoHash,
-    val receipt: ReceiptEnum
+    val receipt: ReceiptInfo
 )
 
-open class ReceiptEnum
+interface ReceiptInfo
 
 data class ActionReceipt(
     val signerId: AccountId,
@@ -21,12 +21,12 @@ data class ActionReceipt(
     val outputDataReceivers: List<DataReceiver> = emptyList(),
     val inputDataIds: List<CryptoHash> = emptyList(),
     val actions: List<Action> = emptyList(),
-) : ReceiptEnum()
+) : ReceiptInfo
 
 data class DataReceipt(
     val dataId: CryptoHash,
     val data: String?
-) : ReceiptEnum()
+) : ReceiptInfo
 
 data class DataReceiver(
     val dataId: CryptoHash,
