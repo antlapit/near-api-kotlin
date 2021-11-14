@@ -16,7 +16,12 @@ interface AccessKeyProvider {
      * @param publicKey Public key
      * @param finality Finality param for last block
      */
-    suspend fun getAccessKey(accountId: AccountId, publicKey: PublicKey, finality: Finality = Finality.OPTIMISTIC): AccessKeyInBlock
+    suspend fun getAccessKey(
+        accountId: AccountId,
+        publicKey: PublicKey,
+        finality: Finality = Finality.OPTIMISTIC,
+        timeout: Long = Constants.DEFAULT_TIMEOUT
+    ): AccessKeyInBlock
 
 
     /**
@@ -26,7 +31,12 @@ interface AccessKeyProvider {
      * @param publicKey Public key
      * @param blockId Numeric block identifier
      */
-    suspend fun getAccessKey(accountId: AccountId, publicKey: PublicKey, blockId: BlockHeight): AccessKeyInBlock
+    suspend fun getAccessKey(
+        accountId: AccountId,
+        publicKey: PublicKey,
+        blockId: BlockHeight,
+        timeout: Long = Constants.DEFAULT_TIMEOUT
+    ): AccessKeyInBlock
 
     /**
      * Returns information about a single access key for given account.
@@ -35,7 +45,12 @@ interface AccessKeyProvider {
      * @param publicKey Public key
      * @param blockHash String block hash
      */
-    suspend fun getAccessKey(accountId: AccountId, publicKey: PublicKey, blockHash: CryptoHash): AccessKeyInBlock
+    suspend fun getAccessKey(
+        accountId: AccountId,
+        publicKey: PublicKey,
+        blockHash: CryptoHash,
+        timeout: Long = Constants.DEFAULT_TIMEOUT
+    ): AccessKeyInBlock
 
     /**
      * Returns <b>all</b> access keys for a given account.
@@ -43,7 +58,11 @@ interface AccessKeyProvider {
      * @param accountId Account Identifier
      * @param finality Finality param for last block
      */
-    suspend fun getAccessKeyList(accountId: AccountId, finality: Finality): AccessKeysContainer
+    suspend fun getAccessKeyList(
+        accountId: AccountId,
+        finality: Finality,
+        timeout: Long = Constants.DEFAULT_TIMEOUT
+    ): AccessKeysContainer
 
     /**
      * Returns <b>all</b> access keys for a given account.
@@ -51,7 +70,11 @@ interface AccessKeyProvider {
      * @param accountId Account Identifier
      * @param blockId Numeric block identifier
      */
-    suspend fun getAccessKeyList(accountId: AccountId, blockId: BlockHeight): AccessKeysContainer
+    suspend fun getAccessKeyList(
+        accountId: AccountId,
+        blockId: BlockHeight,
+        timeout: Long = Constants.DEFAULT_TIMEOUT
+    ): AccessKeysContainer
 
     /**
      * Returns <b>all</b> access keys for a given account.
@@ -59,7 +82,11 @@ interface AccessKeyProvider {
      * @param accountId Account Identifier
      * @param blockHash String block hash
      */
-    suspend fun getAccessKeyList(accountId: AccountId, blockHash: CryptoHash): AccessKeysContainer
+    suspend fun getAccessKeyList(
+        accountId: AccountId,
+        blockHash: CryptoHash,
+        timeout: Long = Constants.DEFAULT_TIMEOUT
+    ): AccessKeysContainer
 
 
     // TODO single_access_key_changes

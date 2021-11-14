@@ -112,17 +112,31 @@ class JsonRpcProvider(
         }
     }
 
-    suspend inline fun <reified T> query(queryObj: Map<String, Any>, blockSearch: BlockSearch): T =
-        sendRpc(method = "query", params = mergeParams(queryObj, blockSearch))
+    /**
+     * @param queryObj Generic map with query params
+     * @param blockSearch Block searching params (id, hash, finality)
+     * @param timeout Request timeout in ms (default - Constants.DEFAULT_TIMEOUT)
+     *
+     * @see Constants
+     */
+    suspend inline fun <reified T> query(
+        queryObj: Map<String, Any>,
+        blockSearch: BlockSearch,
+        timeout: Long = Constants.DEFAULT_TIMEOUT
+    ): T =
+        sendRpc(method = "query", params = mergeParams(queryObj, blockSearch), timeout = timeout)
 
     /**
      * Some undocumented feature of RPC API - querying contract by path and data
      *
      * @param path Smart-contract path
      * @param data Some data to call with
+     * @param timeout Request timeout in ms (default - Constants.DEFAULT_TIMEOUT)
+     *
+     * @see Constants
      */
-    suspend inline fun <reified T> query(path: String, data: String) =
-        sendRpc<T>(method = "query", params = arrayListOf(path, data))
+    suspend inline fun <reified T> query(path: String, data: String, timeout: Long = Constants.DEFAULT_TIMEOUT) =
+        sendRpc<T>(method = "query", params = arrayListOf(path, data), timeout = timeout)
 
     data class RpcError(val name: String, val cause: RpcErrorCause)
 

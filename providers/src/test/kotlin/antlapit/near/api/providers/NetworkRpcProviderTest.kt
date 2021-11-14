@@ -8,8 +8,9 @@ import kotlin.test.assertNotNull
 
 // TODO attributes checking
 @ExperimentalCoroutinesApi
-internal class NetworkRpcProviderTest : BaseProviderTest() {
+internal class NetworkRpcProviderTest {
 
+    private val client = JsonRpcProvider("https://rpc.testnet.near.org")
     private lateinit var endpoint: NetworkRpcProvider
 
     @BeforeTest

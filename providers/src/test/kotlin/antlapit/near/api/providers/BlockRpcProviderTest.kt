@@ -7,8 +7,9 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 @ExperimentalCoroutinesApi
-class BlockRpcProviderTest : BaseProviderTest() {
+class BlockRpcProviderTest {
 
+    private val client = JsonRpcProvider("https://rpc.testnet.near.org")
     private lateinit var endpoint: BlockProvider
 
     @BeforeTest

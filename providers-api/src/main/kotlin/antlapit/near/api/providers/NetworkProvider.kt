@@ -11,27 +11,27 @@ interface NetworkProvider {
     /**
      * Returns general status of a given node (sync status, nearcore node version, protocol version, etc), and the current set of validators.
      */
-    suspend fun getNodeStatus(): NodeStatus
+    suspend fun getNodeStatus(timeout: Long = Constants.DEFAULT_TIMEOUT): NodeStatus
 
     /**
      * Returns the current state of node network connections (active peers, transmitted data, etc.)
      */
-    suspend fun getNetworkInfo(): NetworkInfo
+    suspend fun getNetworkInfo(timeout: Long = Constants.DEFAULT_TIMEOUT): NetworkInfo
 
     /**
      * Returns validation status of latest block.
      */
-    suspend fun getValidationStatus(): EpochValidatorInfo
+    suspend fun getValidationStatus(timeout: Long = Constants.DEFAULT_TIMEOUT): EpochValidatorInfo
 
     /**
      * Returns validation status of numeric block id.
      * @param blockId Numeric block number
      */
-    suspend fun getValidationStatus(blockId: BlockHeight): EpochValidatorInfo
+    suspend fun getValidationStatus(blockId: BlockHeight, timeout: Long = Constants.DEFAULT_TIMEOUT): EpochValidatorInfo
 
     /**
      * Returns validation status of block hash.
      * @param blockHash Block hash
      */
-    suspend fun getValidationStatus(blockHash: CryptoHash): EpochValidatorInfo
+    suspend fun getValidationStatus(blockHash: CryptoHash, timeout: Long = Constants.DEFAULT_TIMEOUT): EpochValidatorInfo
 }

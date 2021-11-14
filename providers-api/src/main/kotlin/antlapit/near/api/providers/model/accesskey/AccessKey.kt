@@ -1,5 +1,6 @@
 package antlapit.near.api.providers.model.accesskey
 
+import antlapit.near.api.providers.model.block.BlockReference
 import antlapit.near.api.providers.primitives.BlockHeight
 import antlapit.near.api.providers.primitives.CryptoHash
 import antlapit.near.api.providers.primitives.Nonce
@@ -16,14 +17,14 @@ data class AccessKeyInfo(
 )
 
 data class AccessKeyInBlock(
-    val blockHeight: BlockHeight,
-    val blockHash: CryptoHash,
     val nonce: Nonce,
-    val permission: AccessKeyPermission
-)
+    val permission: AccessKeyPermission,
+    override val blockHeight: BlockHeight,
+    override val blockHash: CryptoHash
+) : BlockReference(blockHeight, blockHash)
 
 data class AccessKeysContainer(
-    val blockHeight: BlockHeight,
-    val blockHash: CryptoHash,
+    override val blockHeight: BlockHeight,
+    override val blockHash: CryptoHash,
     val keys: List<AccessKeyInfo> = emptyList()
-)
+) : BlockReference(blockHeight, blockHash)

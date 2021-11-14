@@ -22,39 +22,61 @@ class AccessKeyRpcProvider(private val jsonRpcProvider: JsonRpcProvider) : Acces
      * @param blockSearch Block search strategy for querying blocks
      * @link https://docs.near.org/docs/api/rpc/access-keys#view-access-key
      */
-    private suspend fun getAccessKey(accountId: AccountId, publicKey: PublicKey, blockSearch: BlockSearch) : AccessKeyInBlock = jsonRpcProvider.query(
+    private suspend fun getAccessKey(
+        accountId: AccountId,
+        publicKey: PublicKey,
+        blockSearch: BlockSearch,
+        timeout: Long
+    ): AccessKeyInBlock = jsonRpcProvider.query(
         mapOf(
             "request_type" to "view_access_key",
             "account_id" to accountId,
             "public_key" to publicKey
         ),
-        blockSearch
+        blockSearch,
+        timeout
     )
 
-    override suspend fun getAccessKey(accountId: AccountId, publicKey: PublicKey, finality: Finality) = getAccessKey(accountId, publicKey, ofFinality(finality))
+    override suspend fun getAccessKey(accountId: AccountId, publicKey: PublicKey, finality: Finality, timeout: Long) =
+        getAccessKey(accountId, publicKey, ofFinality(finality), timeout)
 
-    override suspend fun getAccessKey(accountId: AccountId, publicKey: PublicKey, blockId: BlockHeight) = getAccessKey(accountId, publicKey, fromBlockId(blockId))
+    override suspend fun getAccessKey(accountId: AccountId, publicKey: PublicKey, blockId: BlockHeight, timeout: Long) =
+        getAccessKey(accountId, publicKey, fromBlockId(blockId), timeout)
 
-    override suspend fun getAccessKey(accountId: AccountId, publicKey: PublicKey, blockHash: CryptoHash) = getAccessKey(accountId, publicKey, fromBlockHash(blockHash))
+    override suspend fun getAccessKey(
+        accountId: AccountId,
+        publicKey: PublicKey,
+        blockHash: CryptoHash,
+        timeout: Long
+    ) =
+        getAccessKey(accountId, publicKey, fromBlockHash(blockHash), timeout)
 
     /**
      * @param accountId Account Identifier
      * @param blockSearch Block search strategy for querying blocks
      * @link https://docs.near.org/docs/api/rpc/access-keys#view-access-key-list
      */
-    private suspend fun getAccessKeyList(accountId: AccountId, blockSearch: BlockSearch = BlockSearch.BLOCK_OPTIMISTIC) : AccessKeysContainer = jsonRpcProvider.query(
+    private suspend fun getAccessKeyList(
+        accountId: AccountId,
+        blockSearch: BlockSearch = BlockSearch.BLOCK_OPTIMISTIC,
+        timeout: Long
+    ): AccessKeysContainer = jsonRpcProvider.query(
         mapOf(
             "request_type" to "view_access_key_list",
             "account_id" to accountId
         ),
-        blockSearch
+        blockSearch,
+        timeout
     )
 
-    override suspend fun getAccessKeyList(accountId: AccountId, finality: Finality) = getAccessKeyList(accountId, ofFinality(finality))
+    override suspend fun getAccessKeyList(accountId: AccountId, finality: Finality, timeout: Long) =
+        getAccessKeyList(accountId, ofFinality(finality), timeout)
 
-    override suspend fun getAccessKeyList(accountId: AccountId, blockId: BlockHeight) = getAccessKeyList(accountId, fromBlockId(blockId))
+    override suspend fun getAccessKeyList(accountId: AccountId, blockId: BlockHeight, timeout: Long) =
+        getAccessKeyList(accountId, fromBlockId(blockId), timeout)
 
-    override suspend fun getAccessKeyList(accountId: AccountId, blockHash: CryptoHash) = getAccessKeyList(accountId, fromBlockHash(blockHash))
+    override suspend fun getAccessKeyList(accountId: AccountId, blockHash: CryptoHash, timeout: Long) =
+        getAccessKeyList(accountId, fromBlockHash(blockHash), timeout)
 }
 
 

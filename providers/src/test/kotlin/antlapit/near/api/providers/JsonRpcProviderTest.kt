@@ -5,7 +5,9 @@ import kotlinx.coroutines.runBlocking
 import kotlin.test.Test
 
 @ExperimentalCoroutinesApi
-class JsonRpcProviderTest : BaseProviderTest() {
+class JsonRpcProviderTest {
+
+    private val client = JsonRpcProvider("https://rpc.testnet.near.org")
 
     @Test
     fun getAccount_whenPathParam_thenCorrect() = runBlocking {

@@ -4,10 +4,12 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import kotlin.test.BeforeTest
 import kotlin.test.Test
+import kotlin.test.assertEquals
 
 @ExperimentalCoroutinesApi
-class ContractRpcProviderTest : BaseProviderTest() {
+class ContractRpcProviderTest {
 
+    private val client = JsonRpcProvider("https://rpc.testnet.near.org")
     private lateinit var endpoint: ContractProvider
 
     @BeforeTest
@@ -23,9 +25,28 @@ class ContractRpcProviderTest : BaseProviderTest() {
     }
 
     @Test
-    fun viewAccount_thenCorrect() = runBlocking {
-        val resp = endpoint.getAccount("api_kotlin.testnet", Finality.OPTIMISTIC)
-        println(resp)
+    fun viewAccount_whenLatest_thenCorrect() = runBlocking {
+        val account = endpoint.getAccount("api_kotlin.testnet", Finality.OPTIMISTIC)
+        println(account)
+
+        val accountByBlockId = endpoint.getAccount("api_kotlin.testnet", account.blockHeight)
+        assertEquals(account, accountByBlockId)
+
+        val accountByBlockHash = endpoint.getAccount("api_kotlin.testnet", account.blockHash)
+        assertEquals(account, accountByBlockHash)
+        return@runBlocking
+    }
+
+    @Test
+    fun getContractCode_whenLatest_thenCorrect() = runBlocking {
+        val contractCode = endpoint.getContractCode("api_kotlin.testnet", Finality.OPTIMISTIC)
+        println(contractCode)
+
+        val contractCodeByBlockId = endpoint.getContractCode("api_kotlin.testnet", contractCode.blockHeight)
+        assertEquals(contractCode, contractCodeByBlockId)
+
+        val contractCodeByBlockHash = endpoint.getContractCode("api_kotlin.testnet", contractCode.blockHash)
+        assertEquals(contractCode, contractCodeByBlockHash)
         return@runBlocking
     }
 }

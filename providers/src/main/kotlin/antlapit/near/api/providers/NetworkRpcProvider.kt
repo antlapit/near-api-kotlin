@@ -15,25 +15,30 @@ class NetworkRpcProvider(private val jsonRpcProvider: JsonRpcProvider) : Network
     /**
      * @link https://docs.near.org/docs/api/rpc/network#node-status
      */
-    override suspend fun getNodeStatus() : NodeStatus = jsonRpcProvider.sendRpc(method = "status", emptyList<Any>())
+    override suspend fun getNodeStatus(timeout: Long): NodeStatus =
+        jsonRpcProvider.sendRpc(method = "status", params = emptyList<Any>(), timeout = timeout)
 
     /**
      * @link https://docs.near.org/docs/api/rpc/network#network-info
      */
-    override suspend fun getNetworkInfo() : NetworkInfo = jsonRpcProvider.sendRpc(method = "network_info", emptyList<Any>())
+    override suspend fun getNetworkInfo(timeout: Long): NetworkInfo =
+        jsonRpcProvider.sendRpc(method = "network_info", params = emptyList<Any>(), timeout = timeout)
 
     /**
      * @link https://docs.near.org/docs/api/rpc/network#validation-status
      */
-    override suspend fun getValidationStatus() : EpochValidatorInfo = jsonRpcProvider.sendRpc(method = "validators", listOf(null))
+    override suspend fun getValidationStatus(timeout: Long): EpochValidatorInfo =
+        jsonRpcProvider.sendRpc(method = "validators", params = listOf(null), timeout = timeout)
 
     /**
      * @link https://docs.near.org/docs/api/rpc/network#validation-status
      */
-    override suspend fun getValidationStatus(blockId: BlockHeight) : EpochValidatorInfo = jsonRpcProvider.sendRpc(method = "validators", params = listOf(blockId))
+    override suspend fun getValidationStatus(blockId: BlockHeight, timeout: Long): EpochValidatorInfo =
+        jsonRpcProvider.sendRpc(method = "validators", params = listOf(blockId), timeout = timeout)
 
     /**
      * @link https://docs.near.org/docs/api/rpc/network#validation-status
      */
-    override suspend fun getValidationStatus(blockHash: CryptoHash) : EpochValidatorInfo = jsonRpcProvider.sendRpc(method = "validators", params = listOf(blockHash))
+    override suspend fun getValidationStatus(blockHash: CryptoHash, timeout: Long): EpochValidatorInfo =
+        jsonRpcProvider.sendRpc(method = "validators", params = listOf(blockHash), timeout = timeout)
 }
