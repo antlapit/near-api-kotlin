@@ -75,3 +75,7 @@ typealias ProtocolVersion = Int // TODO UInt
 typealias Signature = String
 /// Hash used by to store state root.
 typealias StateRoot = CryptoHash
+
+
+/// Set of serialized TrieNodes that are encoded in base64. Represent proof of inclusion of some TrieNode in the MerkleTrie.
+typealias TrieProofPath = List<String>

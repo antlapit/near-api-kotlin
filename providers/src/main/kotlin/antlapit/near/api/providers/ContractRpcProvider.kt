@@ -4,7 +4,9 @@ import antlapit.near.api.providers.BlockSearch.Companion.fromBlockHash
 import antlapit.near.api.providers.BlockSearch.Companion.fromBlockId
 import antlapit.near.api.providers.BlockSearch.Companion.ofFinality
 import antlapit.near.api.providers.model.account.Account
+import antlapit.near.api.providers.model.account.CallResult
 import antlapit.near.api.providers.model.account.ContractCode
+import antlapit.near.api.providers.model.account.ContractState
 import antlapit.near.api.providers.primitives.AccountId
 import antlapit.near.api.providers.primitives.BlockHeight
 import antlapit.near.api.providers.primitives.CryptoHash
@@ -73,7 +75,7 @@ class ContractRpcProvider(private val jsonRpcProvider: JsonRpcProvider) : Contra
         accountId: AccountId,
         blockSearch: BlockSearch = BlockSearch.BLOCK_OPTIMISTIC,
         timeout: Long
-    ): Any =
+    ): ContractState =
         jsonRpcProvider.query(
             mapOf(
                 "request_type" to "view_state",
@@ -101,7 +103,7 @@ class ContractRpcProvider(private val jsonRpcProvider: JsonRpcProvider) : Contra
         methodName: String,
         args: String,
         blockSearch: BlockSearch = BlockSearch.BLOCK_OPTIMISTIC, timeout: Long
-    ): Any = jsonRpcProvider.query(
+    ): CallResult = jsonRpcProvider.query(
         mapOf(
             "request_type" to "call_function",
             "account_id" to accountId,

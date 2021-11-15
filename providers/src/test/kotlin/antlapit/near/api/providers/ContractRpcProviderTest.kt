@@ -18,13 +18,6 @@ class ContractRpcProviderTest {
     }
 
     @Test
-    fun callFunction_thenCorrect() = runBlocking {
-        val resp = endpoint.callFunction("guest-book.testnet", "getMessages", "{}", Finality.OPTIMISTIC)
-        println(resp)
-        return@runBlocking
-    }
-
-    @Test
     fun viewAccount_whenLatest_thenCorrect() = runBlocking {
         val account = endpoint.getAccount("api_kotlin.testnet", Finality.OPTIMISTIC)
         println(account)
@@ -47,6 +40,26 @@ class ContractRpcProviderTest {
 
         val contractCodeByBlockHash = endpoint.getContractCode("api_kotlin.testnet", contractCode.blockHash)
         assertEquals(contractCode, contractCodeByBlockHash)
+        return@runBlocking
+    }
+
+    @Test
+    fun getContractState_whenLatest_thenCorrect() = runBlocking {
+        val contractState = endpoint.getContractState("api_kotlin.testnet", Finality.OPTIMISTIC)
+        println(contractState)
+
+        val contractStateByBlockId = endpoint.getContractState("api_kotlin.testnet", contractState.blockHeight)
+        assertEquals(contractState, contractStateByBlockId)
+
+        val contractStateByBlockHash = endpoint.getContractState("api_kotlin.testnet", contractState.blockHash)
+        assertEquals(contractState, contractStateByBlockHash)
+        return@runBlocking
+    }
+
+    @Test
+    fun callFunction_thenCorrect() = runBlocking {
+        val resp = endpoint.callFunction("guest-book.testnet", "getMessages", "{}", Finality.OPTIMISTIC)
+        println(resp)
         return@runBlocking
     }
 }

@@ -1,7 +1,9 @@
 package antlapit.near.api.providers
 
 import antlapit.near.api.providers.model.account.Account
+import antlapit.near.api.providers.model.account.CallResult
 import antlapit.near.api.providers.model.account.ContractCode
+import antlapit.near.api.providers.model.account.ContractState
 import antlapit.near.api.providers.primitives.AccountId
 import antlapit.near.api.providers.primitives.BlockHeight
 import antlapit.near.api.providers.primitives.CryptoHash
@@ -79,7 +81,7 @@ interface ContractProvider {
     ): ContractCode
 
     /**
-     * Returns the state (key value pairs) of a contract based on the key prefix (base64 encoded)  by finality param.
+     * Returns the state (key value pairs) of a contract based on the key prefix (base64 encoded) by finality param.
      *
      * @param accountId Account Identifier
      * @param finality Finality param for last block
@@ -87,7 +89,7 @@ interface ContractProvider {
     suspend fun getContractState(
         accountId: AccountId, finality: Finality = Finality.OPTIMISTIC,
         timeout: Long = Constants.DEFAULT_TIMEOUT
-    ): Any
+    ): ContractState
 
     /**
      * Returns the state (key value pairs) of a contract based on the key prefix (base64 encoded) by numeric block id.
@@ -98,7 +100,7 @@ interface ContractProvider {
     suspend fun getContractState(
         accountId: AccountId, blockId: BlockHeight,
         timeout: Long = Constants.DEFAULT_TIMEOUT
-    ): Any
+    ): ContractState
 
     /**
      * Returns the state (key value pairs) of a contract based on the key prefix (base64 encoded) by block hash.
@@ -109,7 +111,7 @@ interface ContractProvider {
     suspend fun getContractState(
         accountId: AccountId, blockHash: CryptoHash,
         timeout: Long = Constants.DEFAULT_TIMEOUT
-    ): Any
+    ): ContractState
 
     /**
      * Allows you to call a contract method as a <a href="https://docs.near.org/docs/develop/contracts/as/intro#view-and-change-functions">view function</a>  by finality param.
@@ -122,7 +124,7 @@ interface ContractProvider {
     suspend fun callFunction(
         accountId: AccountId, methodName: String, args: String, finality: Finality = Finality.OPTIMISTIC,
         timeout: Long = Constants.DEFAULT_TIMEOUT
-    ): Any
+    ): CallResult
 
     /**
      * Allows you to call a contract method as a <a href="https://docs.near.org/docs/develop/contracts/as/intro#view-and-change-functions">view function</a> by numeric block id.
@@ -135,7 +137,7 @@ interface ContractProvider {
     suspend fun callFunction(
         accountId: AccountId, methodName: String, args: String, blockId: BlockHeight,
         timeout: Long = Constants.DEFAULT_TIMEOUT
-    ): Any
+    ): CallResult
 
     /**
      * Allows you to call a contract method as a <a href="https://docs.near.org/docs/develop/contracts/as/intro#view-and-change-functions">view function</a> by block hash.
@@ -148,7 +150,7 @@ interface ContractProvider {
     suspend fun callFunction(
         accountId: AccountId, methodName: String, args: String, blockHash: CryptoHash,
         timeout: Long = Constants.DEFAULT_TIMEOUT
-    ): Any
+    ): CallResult
 
     // TODO View account changes
     // TODO View contract state changes
