@@ -22,6 +22,8 @@ repositories {
 dependencies {
     implementation(project(":providers-api"))
 
+    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
+
     // Align versions of all Kotlin components
     implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
 

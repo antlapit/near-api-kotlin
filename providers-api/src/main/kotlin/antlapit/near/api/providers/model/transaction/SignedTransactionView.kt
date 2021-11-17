@@ -1,5 +1,6 @@
-package antlapit.near.api.providers.model.block
+package antlapit.near.api.providers.model.transaction
 
+import antlapit.near.api.providers.model.block.Action
 import antlapit.near.api.providers.primitives.*
 
 data class SignedTransactionView(

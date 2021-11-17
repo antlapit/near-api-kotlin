@@ -7,6 +7,9 @@ import antlapit.near.api.providers.model.block.Action
 import antlapit.near.api.providers.model.block.NotParametrizedAction
 import antlapit.near.api.providers.model.block.ParametrizedAction
 import antlapit.near.api.providers.model.block.ReceiptInfo
+import antlapit.near.api.providers.model.transaction.*
+import antlapit.near.api.providers.primitives.ActionErrorKind
+import antlapit.near.api.providers.primitives.TxExecutionError
 import com.fasterxml.jackson.core.Version
 import com.fasterxml.jackson.databind.Module
 import com.fasterxml.jackson.databind.module.SimpleDeserializers
@@ -21,14 +24,37 @@ class RpcEnumDeserializationModule : Module() {
         return "RpcEnumDeserialization"
     }
 
-    override fun setupModule(context: SetupContext?) {
-        context!!.setMixInAnnotations(ReceiptInfo::class.java, ReceiptInfoMixin::class.java)
-        context.setMixInAnnotations(ParametrizedAction::class.java, ParametrizedActionMixin::class.java)
-        context.setMixInAnnotations(
+    override fun setupModule(ctx: SetupContext?) {
+        ctx!!
+        ctx.setMixInAnnotations(ReceiptInfo::class.java, ReceiptInfoMixin::class.java)
+        ctx.setMixInAnnotations(ParametrizedAction::class.java, ParametrizedActionMixin::class.java)
+        ctx.setMixInAnnotations(
             ParametrizedAccessKeyPermission::class.java,
             ParametrizedAccessKeyPermissionMixin::class.java
         )
-        context.addDeserializers(object : SimpleDeserializers() {
+        ctx.setMixInAnnotations(
+            SuccessValue::class.java, SuccessValueMixin::class.java
+        )
+        ctx.setMixInAnnotations(
+            SuccessReceiptId::class.java, SuccessReceiptIdMixin::class.java
+        )
+        ctx.setMixInAnnotations(
+            Failure::class.java, FailureMixin::class.java
+        )
+        ctx.setMixInAnnotations(
+            TxExecutionError::class.java, TxExecutionErrorMixin::class.java
+        )
+        ctx.setMixInAnnotations(
+            ActionErrorKind::class.java, ActionErrorKindMixin::class.java
+        )
+        ctx.setMixInAnnotations(
+            ParamExecutionStatus::class.java, ParamExecutionStatusMixin::class.java
+        )
+        ctx.setMixInAnnotations(
+            ParamFinalExecutionStatus::class.java, ParamFinalExecutionStatusMixin::class.java
+        )
+
+        ctx.addDeserializers(object : SimpleDeserializers() {
             init {
                 addDeserializer(
                     Action::class.java, RustEnumDeserializer(ParametrizedAction::class, NotParametrizedAction::class)
@@ -39,6 +65,14 @@ class RpcEnumDeserializationModule : Module() {
                         ParametrizedAccessKeyPermission::class,
                         NotParametrizedAccessKeyPermission::class
                     )
+                )
+                addDeserializer(
+                    ExecutionStatus::class.java,
+                    RustEnumDeserializer(ParamExecutionStatus::class, SimpleExecutionStatus::class)
+                )
+                addDeserializer(
+                    FinalExecutionStatus::class.java,
+                    RustEnumDeserializer(ParamFinalExecutionStatus::class, SimpleFinalExecutionStatus::class)
                 )
             }
         })

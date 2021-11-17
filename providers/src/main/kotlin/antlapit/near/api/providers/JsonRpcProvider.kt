@@ -30,13 +30,7 @@ class JsonRpcProvider(
     val address: String
 ) {
 
-    val objectMapper: ObjectMapper = jacksonMapperBuilder()
-        .addModule(JavaTimeModule())
-        .addModule(Jdk8Module())
-        .addModule(RpcEnumDeserializationModule())
-        .propertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
-        .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-        .build()
+    val objectMapper: ObjectMapper = defaultMapper()
 
     // TODO close client after execution
     val client: HttpClient = HttpClient(CIO) {
@@ -56,9 +50,6 @@ class JsonRpcProvider(
         rpcAddr: String,
         port: Int,
     ) : this(address = "http://$rpcAddr:$port")
-
-    suspend fun sendRpcDefault(method: String, params: Any?, timeout: Long = Constants.DEFAULT_TIMEOUT) =
-        sendRpc<Map<String, Any>>(method, params, timeout)
 
     suspend inline fun <reified T> sendRpc(
         method: String,
@@ -162,6 +153,16 @@ class JsonRpcProvider(
                 paramsMap["finality"] = blockSearch.finality!!.code
             }
             return paramsMap
+        }
+
+        fun defaultMapper(): ObjectMapper {
+            return jacksonMapperBuilder()
+                .addModule(JavaTimeModule())
+                .addModule(Jdk8Module())
+                .addModule(RpcEnumDeserializationModule())
+                .propertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
+                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+                .build()
         }
     }
 }

@@ -1,5 +1,6 @@
 package antlapit.near.api.providers.model.block
 
+import antlapit.near.api.providers.model.transaction.SignedTransactionView
 import antlapit.near.api.providers.primitives.AccountId
 
 data class Chunk(
