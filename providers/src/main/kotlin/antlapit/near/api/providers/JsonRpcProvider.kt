@@ -1,12 +1,13 @@
 package antlapit.near.api.providers
 
+import antlapit.near.api.deser.RpcEnumDeserializationModule
 import antlapit.near.api.providers.exception.ProviderException
-import antlapit.near.api.providers.mixins.RpcEnumDeserializationModule
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
+import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.fasterxml.jackson.module.kotlin.jacksonMapperBuilder
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
@@ -159,6 +160,7 @@ class JsonRpcProvider(
             return jacksonMapperBuilder()
                 .addModule(JavaTimeModule())
                 .addModule(Jdk8Module())
+                .addModule(KotlinModule())
                 .addModule(RpcEnumDeserializationModule())
                 .propertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
                 .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)

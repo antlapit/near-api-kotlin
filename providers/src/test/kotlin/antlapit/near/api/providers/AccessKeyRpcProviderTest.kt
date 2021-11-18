@@ -1,10 +1,9 @@
 package antlapit.near.api.providers
 
 import antlapit.near.api.providers.model.accesskey.AccessKeyPermission
-import antlapit.near.api.providers.model.accesskey.FunctionCall
-import antlapit.near.api.providers.model.accesskey.NotParametrizedAccessKeyPermission
 import antlapit.near.api.providers.primitives.AccountId
 import antlapit.near.api.providers.primitives.PublicKey
+import io.kotest.assertions.throwables.shouldNotThrow
 import io.kotest.common.ExperimentalKotest
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.datatest.withData
@@ -30,7 +29,9 @@ class AccessKeyRpcProviderTest : FunSpec({
             { "${it.accountId}, ${it.finality}" },
             listOf(GetAccessKeyListData("api_kotlin.testnet", Finality.FINAL))
         ) { (a, b) ->
-            endpoint.getAccessKeyList(a, b).keys.size shouldBeGreaterThan 0
+            shouldNotThrow<Throwable> {
+                endpoint.getAccessKeyList(a, b).keys.size shouldBeGreaterThan 0
+            }
         }
     }
 
@@ -46,20 +47,22 @@ class AccessKeyRpcProviderTest : FunSpec({
             { "${it.accountId}, ${it.permission}" },
             GetAccessKeyData(
                 "api_kotlin.testnet", "ed25519:7jytAYzviGM2a3dcXYAD5YTtCcYJ3XiYSwLcHYdEx1uk", Finality.FINAL,
-                NotParametrizedAccessKeyPermission.FullAccess
+                AccessKeyPermission.FullAccess
             ),
             GetAccessKeyData(
                 "api_kotlin.testnet",
                 "ed25519:AAdMiXP3j2M775c1TihUrDyPHt7uvt6x8knS1QSSMZTn",
                 Finality.FINAL,
-                FunctionCall(
+                AccessKeyPermission.FunctionCall(
                     allowance = BigInteger("250000000000000000000000"),
                     receiverId = "skyward.testnet",
                     methodNames = emptyList()
                 )
             )
         ) { (a, b, c, d) ->
-            endpoint.getAccessKey(a, b, c).permission shouldBe d
+            shouldNotThrow<Throwable> {
+                endpoint.getAccessKey(a, b, c).permission shouldBe d
+            }
         }
     }
 })

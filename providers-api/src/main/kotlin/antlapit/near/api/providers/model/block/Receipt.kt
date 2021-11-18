@@ -12,21 +12,22 @@ data class Receipt(
     val receipt: ReceiptInfo
 )
 
-interface ReceiptInfo
+sealed class ReceiptInfo {
 
-data class ActionReceipt(
-    val signerId: AccountId,
-    val signerPublicKey: PublicKey,
-    val gasPrice: Balance,
-    val outputDataReceivers: List<DataReceiver> = emptyList(),
-    val inputDataIds: List<CryptoHash> = emptyList(),
-    val actions: List<Action> = emptyList(),
-) : ReceiptInfo
+    data class Action(
+        val signerId: AccountId,
+        val signerPublicKey: PublicKey,
+        val gasPrice: Balance,
+        val outputDataReceivers: List<DataReceiver> = emptyList(),
+        val inputDataIds: List<CryptoHash> = emptyList(),
+        val actions: List<antlapit.near.api.providers.model.block.Action> = emptyList(),
+    ) : ReceiptInfo()
 
-data class DataReceipt(
-    val dataId: CryptoHash,
-    val data: String?
-) : ReceiptInfo
+    data class Data(
+        val dataId: CryptoHash,
+        val data: String?
+    ) : ReceiptInfo()
+}
 
 data class DataReceiver(
     val dataId: CryptoHash,

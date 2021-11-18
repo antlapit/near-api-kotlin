@@ -2,45 +2,49 @@ package antlapit.near.api.providers.model.transaction
 
 import antlapit.near.api.providers.primitives.CryptoHash
 import antlapit.near.api.providers.primitives.TxExecutionError
+import antlapit.near.api.providers.util.RustEnum
+import antlapit.near.api.providers.util.RustSinglePropertyEnumItem
 
-interface ExecutionStatus
+@RustEnum
+sealed interface ExecutionStatus {
+    object Unknown : ExecutionStatus
 
-interface ParamExecutionStatus : ExecutionStatus
+    /**
+     * The execution has failed.
+     **/
+    @RustSinglePropertyEnumItem
+    data class SuccessReceiptId(val receiptId: CryptoHash) : ExecutionStatus
 
-/**
- * The execution has failed.
- **/
-data class SuccessReceiptId(
-    val receiptId: CryptoHash
-) : ParamExecutionStatus
+    /**
+     * The final action succeeded and returned some value or an empty vec encoded in base64.
+     **/
+    @RustSinglePropertyEnumItem
+    data class SuccessValue(val value: String?) : ExecutionStatus
 
-enum class SimpleExecutionStatus : ExecutionStatus {
-    // The execution is pending or unknown.
-    Unknown
+    /**
+     * Execution failure
+     */
+    @RustSinglePropertyEnumItem
+    data class Failure(val txError: TxExecutionError) : ExecutionStatus
 }
 
-interface FinalExecutionStatus
-
-interface ParamFinalExecutionStatus : FinalExecutionStatus
-
-enum class SimpleFinalExecutionStatus : FinalExecutionStatus {
+@RustEnum
+sealed interface FinalExecutionStatus {
     // The execution has not yet started.
-    NotStarted,
+    object NotStarted : FinalExecutionStatus
 
     // The execution has started and still going.
-    Started,
+    object Started : FinalExecutionStatus
+
+    /**
+     * The final action succeeded and returned some value or an empty vec encoded in base64.
+     **/
+    @RustSinglePropertyEnumItem
+    data class SuccessValue(val value: String?) : FinalExecutionStatus
+
+    /**
+     * Execution failure
+     */
+    @RustSinglePropertyEnumItem
+    data class Failure(val txError: TxExecutionError) : FinalExecutionStatus
 }
-
-/**
- * The final action succeeded and returned some value or an empty vec encoded in base64.
- **/
-data class SuccessValue(
-    val value: String
-) : ParamExecutionStatus, ParamFinalExecutionStatus
-
-/**
- * Execution failure
- */
-data class Failure(
-    val txError: TxExecutionError
-) : ParamExecutionStatus, ParamFinalExecutionStatus
