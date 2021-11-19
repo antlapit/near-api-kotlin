@@ -1,6 +1,6 @@
 package antlapit.near.api.providers.model.transaction
 
-import antlapit.near.api.providers.primitives.*
+import antlapit.near.api.providers.model.primitives.*
 
 data class FinalExecutionOutcome(
     /// Execution status. Contains the result in case of successful execution.

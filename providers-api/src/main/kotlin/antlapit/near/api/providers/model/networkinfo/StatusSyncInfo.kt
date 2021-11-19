@@ -1,7 +1,7 @@
 package antlapit.near.api.providers.model.networkinfo
 
-import antlapit.near.api.providers.primitives.BlockHeight
-import antlapit.near.api.providers.primitives.CryptoHash
+import antlapit.near.api.providers.model.primitives.BlockHeight
+import antlapit.near.api.providers.model.primitives.CryptoHash
 import java.time.ZonedDateTime
 
 data class StatusSyncInfo(

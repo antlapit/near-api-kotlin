@@ -3,6 +3,7 @@ package antlapit.near.api.providers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import kotlin.test.BeforeTest
+import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -31,6 +32,7 @@ class ContractRpcProviderTest {
     }
 
     @Test
+    @Ignore
     fun getContractCode_whenLatest_thenCorrect() = runBlocking {
         val contractCode = endpoint.getContractCode("api_kotlin.testnet", Finality.OPTIMISTIC)
         println(contractCode)

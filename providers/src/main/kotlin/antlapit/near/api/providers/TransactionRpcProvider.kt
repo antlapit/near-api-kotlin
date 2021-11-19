@@ -1,7 +1,7 @@
 package antlapit.near.api.providers
 
+import antlapit.near.api.providers.model.primitives.CryptoHash
 import antlapit.near.api.providers.model.transaction.FinalExecutionOutcome
-import antlapit.near.api.providers.primitives.CryptoHash
 
 /**
  * RPC endpoint for transactions

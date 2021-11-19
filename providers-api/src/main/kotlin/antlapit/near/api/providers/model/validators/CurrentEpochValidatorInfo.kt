@@ -1,6 +1,6 @@
 package antlapit.near.api.providers.model.validators
 
-import antlapit.near.api.providers.primitives.*
+import antlapit.near.api.providers.model.primitives.*
 
 data class CurrentEpochValidatorInfo(
     val accountId: AccountId,

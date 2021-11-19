@@ -7,9 +7,9 @@ import antlapit.near.api.providers.model.account.Account
 import antlapit.near.api.providers.model.account.CallResult
 import antlapit.near.api.providers.model.account.ContractCode
 import antlapit.near.api.providers.model.account.ContractState
-import antlapit.near.api.providers.primitives.AccountId
-import antlapit.near.api.providers.primitives.BlockHeight
-import antlapit.near.api.providers.primitives.CryptoHash
+import antlapit.near.api.providers.model.primitives.AccountId
+import antlapit.near.api.providers.model.primitives.BlockHeight
+import antlapit.near.api.providers.model.primitives.CryptoHash
 
 /**
  * RPC endpoint for working with Accounts / Contracts

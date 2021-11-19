@@ -14,6 +14,7 @@ import kotlin.reflect.jvm.jvmErasure
 class RustEnumDeserializer<T : Any>(private val kClass: KClass<out T>) : JsonDeserializer<T>() {
 
     private val subclasses: HashMap<String, KClass<out T>> = HashMap()
+    private val deserializers: HashMap<KClass<*>, JsonDeserializer<Any>> = HashMap()
 
     init {
         kClass.sealedSubclasses
@@ -38,18 +39,19 @@ class RustEnumDeserializer<T : Any>(private val kClass: KClass<out T>) : JsonDes
                 val subclass = getEnumItemClass(p, typeId)
                 p.nextToken()
 
-
                 val ann = subclass.annotations.find { it is RustSinglePropertyEnumItem }
-                val deser = if (ann == null) {
-                    findDeserializer(ctxt, subclass)
+                val res = if (ann == null) {
+                    val deser = findDeserializer(ctxt, subclass)
+                    deser.deserialize(p, ctxt) as T
                 } else {
                     val primaryConstructorParams = subclass.primaryConstructor!!.parameters
                     if (primaryConstructorParams.size != 1) {
                         throw RuntimeException("Class with RustSinglePropertyEnumItem annotation should have primary constructor with single parameter")
                     }
-                    findDeserializer(ctxt, primaryConstructorParams[0].type.jvmErasure)
+                    val deser = findDeserializer(ctxt, primaryConstructorParams[0].type.jvmErasure)
+                    val value = deser.deserialize(p, ctxt)
+                    subclass.primaryConstructor!!.call(value)
                 }
-                val value: T = deser.deserialize(p, ctxt) as T
                 // And then need the closing END_OBJECT
                 if (p.nextToken() != JsonToken.END_OBJECT && p.nextToken() != JsonToken.END_OBJECT) {
                     ctxt.reportWrongTokenException(
@@ -57,11 +59,7 @@ class RustEnumDeserializer<T : Any>(private val kClass: KClass<out T>) : JsonDes
                         "expected closing END_OBJECT after type information and deserialized value"
                     )
                 }
-                if (ann == null) {
-                    value
-                } else {
-                    subclass.primaryConstructor!!.call(value)
-                }
+                res
             }
             else -> {
                 throw JsonParseException(p, "Unexpected JSON token \"$t\" on deserializing class ${baseTypeName()}")
@@ -73,9 +71,11 @@ class RustEnumDeserializer<T : Any>(private val kClass: KClass<out T>) : JsonDes
 
     private fun baseType() = kClass::class.java
 
-    private fun findDeserializer(ctxt: DeserializationContext, subclass: KClass<out Any>): JsonDeserializer<Any> {
-        val javaType = ctxt.constructType(subclass.java)
-        return ctxt.findRootValueDeserializer(javaType)
+    private fun findDeserializer(ctxt: DeserializationContext, subclass: KClass<*>): JsonDeserializer<Any> {
+        return deserializers.getOrPut(subclass) {
+            val javaType = ctxt.constructType(subclass.java)
+            return ctxt.findRootValueDeserializer(javaType)
+        }
     }
 
     private fun getEnumItemClass(p: JsonParser, typeId: String): KClass<out T> {

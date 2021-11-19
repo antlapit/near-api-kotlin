@@ -1,6 +1,6 @@
 package antlapit.near.api.providers.model.validators
 
-import antlapit.near.api.providers.primitives.AccountId
+import antlapit.near.api.providers.model.primitives.AccountId
 
 data class ValidatorInfo(
     val accountId: AccountId,

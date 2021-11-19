@@ -1,6 +1,6 @@
 package antlapit.near.api.providers.model.validators
 
-import antlapit.near.api.providers.primitives.BlockHeight
+import antlapit.near.api.providers.model.primitives.BlockHeight
 
 data class EpochValidatorInfo(
     //val currentValidators: List<CurrentEpochValidatorInfo> = emptyList(),

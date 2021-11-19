@@ -1,6 +1,6 @@
 package antlapit.near.api.providers
 
-import antlapit.near.api.deser.RpcEnumDeserializationModule
+import antlapit.near.api.deser.RustEnumDeserializationModule
 import antlapit.near.api.providers.exception.ProviderException
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -161,7 +161,7 @@ class JsonRpcProvider(
                 .addModule(JavaTimeModule())
                 .addModule(Jdk8Module())
                 .addModule(KotlinModule())
-                .addModule(RpcEnumDeserializationModule())
+                .addModule(RustEnumDeserializationModule())
                 .propertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
                 .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
                 .build()

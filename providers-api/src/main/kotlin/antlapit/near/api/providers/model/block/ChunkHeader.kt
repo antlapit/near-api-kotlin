@@ -1,7 +1,7 @@
 package antlapit.near.api.providers.model.block
 
+import antlapit.near.api.providers.model.primitives.*
 import antlapit.near.api.providers.model.validators.ValidatorStakeView
-import antlapit.near.api.providers.primitives.*
 
 data class ChunkHeader(
     val chunkHash: CryptoHash,

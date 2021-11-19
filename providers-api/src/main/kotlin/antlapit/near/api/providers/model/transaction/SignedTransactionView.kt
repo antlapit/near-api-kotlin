@@ -1,7 +1,7 @@
 package antlapit.near.api.providers.model.transaction
 
 import antlapit.near.api.providers.model.block.Action
-import antlapit.near.api.providers.primitives.*
+import antlapit.near.api.providers.model.primitives.*
 
 data class SignedTransactionView(
     val signerId: AccountId,

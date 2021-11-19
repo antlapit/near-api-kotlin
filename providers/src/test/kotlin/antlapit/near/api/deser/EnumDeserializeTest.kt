@@ -4,9 +4,9 @@ import antlapit.near.api.providers.JsonRpcProvider
 import antlapit.near.api.providers.model.accesskey.AccessKey
 import antlapit.near.api.providers.model.accesskey.AccessKeyPermission
 import antlapit.near.api.providers.model.accesskey.AccessKeyPermission.FunctionCall
+import antlapit.near.api.providers.model.primitives.ActionErrorKind
+import antlapit.near.api.providers.model.primitives.TxExecutionError
 import antlapit.near.api.providers.model.transaction.ExecutionStatus
-import antlapit.near.api.providers.primitives.ActionErrorKind
-import antlapit.near.api.providers.primitives.TxExecutionError
 import com.fasterxml.jackson.module.kotlin.readValue
 import io.kotest.assertions.throwables.shouldNotThrow
 import io.kotest.common.ExperimentalKotest

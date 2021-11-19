@@ -1,9 +1,10 @@
 package antlapit.near.api.providers.model.block
 
-import antlapit.near.api.providers.primitives.AccountId
-import antlapit.near.api.providers.primitives.Balance
-import antlapit.near.api.providers.primitives.CryptoHash
-import antlapit.near.api.providers.primitives.PublicKey
+import antlapit.near.api.providers.model.primitives.AccountId
+import antlapit.near.api.providers.model.primitives.Balance
+import antlapit.near.api.providers.model.primitives.CryptoHash
+import antlapit.near.api.providers.model.primitives.PublicKey
+import antlapit.near.api.providers.util.RustEnum
 
 data class Receipt(
     val predecessorId: AccountId,
@@ -12,7 +13,8 @@ data class Receipt(
     val receipt: ReceiptInfo
 )
 
-sealed class ReceiptInfo {
+@RustEnum
+sealed interface ReceiptInfo {
 
     data class Action(
         val signerId: AccountId,
@@ -21,12 +23,12 @@ sealed class ReceiptInfo {
         val outputDataReceivers: List<DataReceiver> = emptyList(),
         val inputDataIds: List<CryptoHash> = emptyList(),
         val actions: List<antlapit.near.api.providers.model.block.Action> = emptyList(),
-    ) : ReceiptInfo()
+    ) : ReceiptInfo
 
     data class Data(
         val dataId: CryptoHash,
         val data: String?
-    ) : ReceiptInfo()
+    ) : ReceiptInfo
 }
 
 data class DataReceiver(

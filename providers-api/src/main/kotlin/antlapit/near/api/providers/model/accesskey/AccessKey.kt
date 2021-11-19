@@ -1,10 +1,10 @@
 package antlapit.near.api.providers.model.accesskey
 
 import antlapit.near.api.providers.model.block.BlockReference
-import antlapit.near.api.providers.primitives.BlockHeight
-import antlapit.near.api.providers.primitives.CryptoHash
-import antlapit.near.api.providers.primitives.Nonce
-import antlapit.near.api.providers.primitives.PublicKey
+import antlapit.near.api.providers.model.primitives.BlockHeight
+import antlapit.near.api.providers.model.primitives.CryptoHash
+import antlapit.near.api.providers.model.primitives.Nonce
+import antlapit.near.api.providers.model.primitives.PublicKey
 
 data class AccessKey(
     val nonce: Nonce,

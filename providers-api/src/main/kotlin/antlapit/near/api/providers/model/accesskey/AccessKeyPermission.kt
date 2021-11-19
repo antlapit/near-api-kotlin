@@ -1,12 +1,14 @@
 package antlapit.near.api.providers.model.accesskey
 
-import antlapit.near.api.providers.primitives.Balance
+import antlapit.near.api.providers.model.primitives.Balance
+import antlapit.near.api.providers.util.RustEnum
 
-sealed class AccessKeyPermission {
-    object FullAccess : AccessKeyPermission()
+@RustEnum
+sealed interface AccessKeyPermission {
+    object FullAccess : AccessKeyPermission
     data class FunctionCall(
         val allowance: Balance?,
         val receiverId: String,
         val methodNames: List<String> = emptyList(),
-    ) : AccessKeyPermission()
+    ) : AccessKeyPermission
 }

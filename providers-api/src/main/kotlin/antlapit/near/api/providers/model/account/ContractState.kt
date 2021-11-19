@@ -1,9 +1,9 @@
 package antlapit.near.api.providers.model.account
 
 import antlapit.near.api.providers.model.block.BlockReference
-import antlapit.near.api.providers.primitives.BlockHeight
-import antlapit.near.api.providers.primitives.CryptoHash
-import antlapit.near.api.providers.primitives.TrieProofPath
+import antlapit.near.api.providers.model.primitives.BlockHeight
+import antlapit.near.api.providers.model.primitives.CryptoHash
+import antlapit.near.api.providers.model.primitives.TrieProofPath
 
 data class ContractState(
     override val blockHeight: BlockHeight,

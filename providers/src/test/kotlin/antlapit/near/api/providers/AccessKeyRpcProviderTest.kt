@@ -1,8 +1,8 @@
 package antlapit.near.api.providers
 
 import antlapit.near.api.providers.model.accesskey.AccessKeyPermission
-import antlapit.near.api.providers.primitives.AccountId
-import antlapit.near.api.providers.primitives.PublicKey
+import antlapit.near.api.providers.model.primitives.AccountId
+import antlapit.near.api.providers.model.primitives.PublicKey
 import io.kotest.assertions.throwables.shouldNotThrow
 import io.kotest.common.ExperimentalKotest
 import io.kotest.core.spec.style.FunSpec

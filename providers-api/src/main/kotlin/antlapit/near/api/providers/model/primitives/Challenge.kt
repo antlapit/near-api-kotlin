@@ -1,4 +1,4 @@
-package antlapit.near.api.providers.primitives
+package antlapit.near.api.providers.model.primitives
 
 typealias ChallengesResult = List<SlashedValidator>
 

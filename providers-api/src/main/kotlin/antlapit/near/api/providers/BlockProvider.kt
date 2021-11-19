@@ -2,9 +2,9 @@ package antlapit.near.api.providers
 
 import antlapit.near.api.providers.model.block.Block
 import antlapit.near.api.providers.model.block.Chunk
-import antlapit.near.api.providers.primitives.BlockHeight
-import antlapit.near.api.providers.primitives.CryptoHash
-import antlapit.near.api.providers.primitives.ShardId
+import antlapit.near.api.providers.model.primitives.BlockHeight
+import antlapit.near.api.providers.model.primitives.CryptoHash
+import antlapit.near.api.providers.model.primitives.ShardId
 
 interface BlockProvider {
 

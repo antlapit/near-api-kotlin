@@ -1,7 +1,7 @@
 package antlapit.near.api.providers.model.transaction
 
-import antlapit.near.api.providers.primitives.CryptoHash
-import antlapit.near.api.providers.primitives.TxExecutionError
+import antlapit.near.api.providers.model.primitives.CryptoHash
+import antlapit.near.api.providers.model.primitives.TxExecutionError
 import antlapit.near.api.providers.util.RustEnum
 import antlapit.near.api.providers.util.RustSinglePropertyEnumItem
 

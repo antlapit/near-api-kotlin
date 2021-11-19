@@ -5,10 +5,10 @@ import antlapit.near.api.providers.BlockSearch.Companion.fromBlockId
 import antlapit.near.api.providers.BlockSearch.Companion.ofFinality
 import antlapit.near.api.providers.model.accesskey.AccessKeyInBlock
 import antlapit.near.api.providers.model.accesskey.AccessKeysContainer
-import antlapit.near.api.providers.primitives.AccountId
-import antlapit.near.api.providers.primitives.BlockHeight
-import antlapit.near.api.providers.primitives.CryptoHash
-import antlapit.near.api.providers.primitives.PublicKey
+import antlapit.near.api.providers.model.primitives.AccountId
+import antlapit.near.api.providers.model.primitives.BlockHeight
+import antlapit.near.api.providers.model.primitives.CryptoHash
+import antlapit.near.api.providers.model.primitives.PublicKey
 
 /**
  * RPC endpoint for accessing Access Keys
