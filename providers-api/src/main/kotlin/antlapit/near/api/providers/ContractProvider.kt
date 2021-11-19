@@ -1,5 +1,13 @@
 package antlapit.near.api.providers
 
+import antlapit.near.api.providers.model.account.Account
+import antlapit.near.api.providers.model.account.CallResult
+import antlapit.near.api.providers.model.account.ContractCode
+import antlapit.near.api.providers.model.account.ContractState
+import antlapit.near.api.providers.model.primitives.AccountId
+import antlapit.near.api.providers.model.primitives.BlockHeight
+import antlapit.near.api.providers.model.primitives.CryptoHash
+
 interface ContractProvider {
 
     /**
@@ -8,7 +16,10 @@ interface ContractProvider {
      * @param accountId Account Identifier
      * @param finality Finality param for last block
      */
-    suspend fun getAccount(accountId: String, finality: Finality = Finality.OPTIMISTIC): Any
+    suspend fun getAccount(
+        accountId: AccountId, finality: Finality = Finality.OPTIMISTIC,
+        timeout: Long = Constants.DEFAULT_TIMEOUT
+    ): Account
 
     /**
      * Returns basic account information by numeric block id.
@@ -16,7 +27,10 @@ interface ContractProvider {
      * @param accountId Account Identifier
      * @param blockId Numeric block identifier
      */
-    suspend fun getAccount(accountId: String, blockId: Long) : Any
+    suspend fun getAccount(
+        accountId: AccountId, blockId: BlockHeight,
+        timeout: Long = Constants.DEFAULT_TIMEOUT
+    ): Account
 
     /**
      * Returns basic account information by block hash.
@@ -24,7 +38,10 @@ interface ContractProvider {
      * @param accountId Account Identifier
      * @param blockHash String block hash
      */
-    suspend fun getAccount(accountId: String, blockHash: String) : Any
+    suspend fun getAccount(
+        accountId: AccountId, blockHash: CryptoHash,
+        timeout: Long = Constants.DEFAULT_TIMEOUT
+    ): Account
 
     /**
      * Returns the contract code (Wasm binary) deployed to the account by finality param.
@@ -33,7 +50,10 @@ interface ContractProvider {
      * @param accountId Account Identifier
      * @param finality Finality param for last block
      */
-    suspend fun getContractCode(accountId: String, finality: Finality = Finality.OPTIMISTIC): Any
+    suspend fun getContractCode(
+        accountId: AccountId, finality: Finality = Finality.OPTIMISTIC,
+        timeout: Long = Constants.DEFAULT_TIMEOUT
+    ): ContractCode
 
     /**
      * Returns the contract code (Wasm binary) deployed to the account by numeric block id.
@@ -42,7 +62,10 @@ interface ContractProvider {
      * @param accountId Account Identifier
      * @param blockId Numeric block identifier
      */
-    suspend fun getContractCode(accountId: String, blockId: Long): Any
+    suspend fun getContractCode(
+        accountId: AccountId, blockId: BlockHeight,
+        timeout: Long = Constants.DEFAULT_TIMEOUT
+    ): ContractCode
 
     /**
      * Returns the contract code (Wasm binary) deployed to the account by block hash.
@@ -52,15 +75,21 @@ interface ContractProvider {
      * @param accountId Account Identifier
      * @param blockHash String block hash
      */
-    suspend fun getContractCode(accountId: String, blockHash: String): Any
+    suspend fun getContractCode(
+        accountId: AccountId, blockHash: CryptoHash,
+        timeout: Long = Constants.DEFAULT_TIMEOUT
+    ): ContractCode
 
     /**
-     * Returns the state (key value pairs) of a contract based on the key prefix (base64 encoded)  by finality param.
+     * Returns the state (key value pairs) of a contract based on the key prefix (base64 encoded) by finality param.
      *
      * @param accountId Account Identifier
      * @param finality Finality param for last block
      */
-    suspend fun getContractState(accountId: String, finality: Finality = Finality.OPTIMISTIC): Any
+    suspend fun getContractState(
+        accountId: AccountId, finality: Finality = Finality.OPTIMISTIC,
+        timeout: Long = Constants.DEFAULT_TIMEOUT
+    ): ContractState
 
     /**
      * Returns the state (key value pairs) of a contract based on the key prefix (base64 encoded) by numeric block id.
@@ -68,7 +97,10 @@ interface ContractProvider {
      * @param accountId Account Identifier
      * @param blockId Numeric block identifier
      */
-    suspend fun getContractState(accountId: String, blockId: Long): Any
+    suspend fun getContractState(
+        accountId: AccountId, blockId: BlockHeight,
+        timeout: Long = Constants.DEFAULT_TIMEOUT
+    ): ContractState
 
     /**
      * Returns the state (key value pairs) of a contract based on the key prefix (base64 encoded) by block hash.
@@ -76,7 +108,10 @@ interface ContractProvider {
      * @param accountId Account Identifier
      * @param blockHash String block hash
      */
-    suspend fun getContractState(accountId: String, blockHash: String): Any
+    suspend fun getContractState(
+        accountId: AccountId, blockHash: CryptoHash,
+        timeout: Long = Constants.DEFAULT_TIMEOUT
+    ): ContractState
 
     /**
      * Allows you to call a contract method as a <a href="https://docs.near.org/docs/develop/contracts/as/intro#view-and-change-functions">view function</a>  by finality param.
@@ -86,7 +121,10 @@ interface ContractProvider {
      * @param args Serialized JSON method arguments
      * @param finality Finality param for last block
      */
-    suspend fun callFunction(accountId: String, methodName: String, args: String, finality: Finality): Any
+    suspend fun callFunction(
+        accountId: AccountId, methodName: String, args: String, finality: Finality = Finality.OPTIMISTIC,
+        timeout: Long = Constants.DEFAULT_TIMEOUT
+    ): CallResult
 
     /**
      * Allows you to call a contract method as a <a href="https://docs.near.org/docs/develop/contracts/as/intro#view-and-change-functions">view function</a> by numeric block id.
@@ -96,7 +134,10 @@ interface ContractProvider {
      * @param args Serialized JSON method arguments
      * @param blockId Numeric block identifier
      */
-    suspend fun callFunction(accountId: String, methodName: String, args: String, blockId: Long): Any
+    suspend fun callFunction(
+        accountId: AccountId, methodName: String, args: String, blockId: BlockHeight,
+        timeout: Long = Constants.DEFAULT_TIMEOUT
+    ): CallResult
 
     /**
      * Allows you to call a contract method as a <a href="https://docs.near.org/docs/develop/contracts/as/intro#view-and-change-functions">view function</a> by block hash.
@@ -106,7 +147,10 @@ interface ContractProvider {
      * @param args Serialized JSON method arguments
      * @param blockHash String block hash
      */
-    suspend fun callFunction(accountId: String, methodName: String, args: String, blockHash: String): Any
+    suspend fun callFunction(
+        accountId: AccountId, methodName: String, args: String, blockHash: CryptoHash,
+        timeout: Long = Constants.DEFAULT_TIMEOUT
+    ): CallResult
 
     // TODO View account changes
     // TODO View contract state changes

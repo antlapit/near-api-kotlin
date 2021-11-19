@@ -1,11 +1,13 @@
 package antlapit.near.api.providers
 
+import antlapit.near.api.deser.RustEnumDeserializationModule
 import antlapit.near.api.providers.exception.ProviderException
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
+import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.fasterxml.jackson.module.kotlin.jacksonMapperBuilder
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
@@ -29,18 +31,13 @@ class JsonRpcProvider(
     val address: String
 ) {
 
-    private val objectMapper: ObjectMapper = jacksonMapperBuilder()
-        .addModule(JavaTimeModule())
-        .addModule(Jdk8Module())
-        .propertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
-        .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-        .build()
+    val objectMapper: ObjectMapper = defaultMapper()
 
     // TODO close client after execution
     val client: HttpClient = HttpClient(CIO) {
         install(Logging) {
             logger = Logger.DEFAULT
-            level = LogLevel.HEADERS
+            level = LogLevel.BODY
         }
         install(JsonFeature) {
             serializer = JacksonSerializer(
@@ -55,17 +52,37 @@ class JsonRpcProvider(
         port: Int,
     ) : this(address = "http://$rpcAddr:$port")
 
-    suspend fun sendRpcDefault(method: String, params: Any?, timeout: Long = 10_000) =
-        sendRpc<Map<String, Any>>(method, params, timeout)
+    suspend inline fun <reified T> sendRpc(
+        method: String,
+        blockSearch: BlockSearch,
+        params: Map<String, Any?>,
+        timeout: Long = Constants.DEFAULT_TIMEOUT
+    ): T {
+        return sendRpc(method = method, params = mergeParams(params, blockSearch), timeout)
+    }
+
+    suspend inline fun <reified T> sendRpc(
+        method: String,
+        blockSearch: BlockSearch,
+        timeout: Long = Constants.DEFAULT_TIMEOUT
+    ): T {
+        return sendRpc(method = method, params = mergeParams(emptyMap(), blockSearch), timeout)
+    }
 
     /**
      * Base method for sending RPC request
      *
      * @param method Method code
      * @param params Method params (array, object, ...)
-     * @param timeout Request timeout in ms (default - 10_000)
+     * @param timeout Request timeout in ms (default - Constants.DEFAULT_TIMEOUT)
+     *
+     * @see Constants
      */
-    suspend inline fun <reified T> sendRpc(method: String, params: Any? = null, timeout: Long = 10_000): T {
+    suspend inline fun <reified T> sendRpc(
+        method: String,
+        params: Any? = null,
+        timeout: Long = Constants.DEFAULT_TIMEOUT
+    ): T {
         val response = client.post<GenericRpcResponse<T>>(address) {
             contentType(ContentType.Application.Json)
             body = GenericRpcRequest(method, params)
@@ -87,32 +104,35 @@ class JsonRpcProvider(
         }
     }
 
-    suspend inline fun <reified T> query(queryObj: Map<String, Any>, blockSearch: BlockSearch): T {
-        val paramsMap = LinkedHashMap(queryObj)
-        if (blockSearch.finality == null) {
-            if (blockSearch.blockId == null) {
-                paramsMap["blockId"] = blockSearch.blockHash!!
-            } else {
-                paramsMap["blockId"] = blockSearch.blockId!!
-            }
-        } else {
-            paramsMap["finality"] = blockSearch.finality!!.code
-        }
-        return sendRpc(method = "query", params = paramsMap)
-    }
+    /**
+     * @param queryObj Generic map with query params
+     * @param blockSearch Block searching params (id, hash, finality)
+     * @param timeout Request timeout in ms (default - Constants.DEFAULT_TIMEOUT)
+     *
+     * @see Constants
+     */
+    suspend inline fun <reified T> query(
+        queryObj: Map<String, Any>,
+        blockSearch: BlockSearch,
+        timeout: Long = Constants.DEFAULT_TIMEOUT
+    ): T =
+        sendRpc(method = "query", params = mergeParams(queryObj, blockSearch), timeout = timeout)
 
     /**
      * Some undocumented feature of RPC API - querying contract by path and data
      *
      * @param path Smart-contract path
      * @param data Some data to call with
+     * @param timeout Request timeout in ms (default - Constants.DEFAULT_TIMEOUT)
+     *
+     * @see Constants
      */
-    suspend inline fun <reified T> query(path: String, data: String) =
-        sendRpc<T>(method = "query", params = arrayListOf(path, data))
+    suspend inline fun <reified T> query(path: String, data: String, timeout: Long = Constants.DEFAULT_TIMEOUT) =
+        sendRpc<T>(method = "query", params = arrayListOf(path, data), timeout = timeout)
 
     data class RpcError(val name: String, val cause: RpcErrorCause)
 
-    data class RpcErrorCause(val name: String, val info: Map<String, Any>)
+    data class RpcErrorCause(val name: String, val info: Map<String, Any?>?)
 
     data class GenericRpcRequest(val method: String, val params: Any?) {
         val jsonrpc = "2.0"
@@ -120,4 +140,31 @@ class JsonRpcProvider(
     }
 
     data class GenericRpcResponse<T>(val id: String, val jsonrpc: String, val error: RpcError?, val result: T?)
+
+    companion object {
+        fun mergeParams(params: Map<String, Any?>, blockSearch: BlockSearch): Map<String, Any?> {
+            val paramsMap = LinkedHashMap(params)
+            if (blockSearch.finality == null) {
+                if (blockSearch.blockId == null) {
+                    paramsMap["block_id"] = blockSearch.blockHash!!
+                } else {
+                    paramsMap["block_id"] = blockSearch.blockId!!
+                }
+            } else {
+                paramsMap["finality"] = blockSearch.finality!!.code
+            }
+            return paramsMap
+        }
+
+        fun defaultMapper(): ObjectMapper {
+            return jacksonMapperBuilder()
+                .addModule(JavaTimeModule())
+                .addModule(Jdk8Module())
+                .addModule(KotlinModule())
+                .addModule(RustEnumDeserializationModule())
+                .propertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
+                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+                .build()
+        }
+    }
 }

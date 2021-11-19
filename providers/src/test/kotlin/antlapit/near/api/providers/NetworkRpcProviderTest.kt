@@ -6,9 +6,11 @@ import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertNotNull
 
+// TODO attributes checking
 @ExperimentalCoroutinesApi
-internal class NetworkRpcProviderTest : BaseProviderTest() {
+internal class NetworkRpcProviderTest {
 
+    private val client = JsonRpcProvider("https://rpc.testnet.near.org")
     private lateinit var endpoint: NetworkRpcProvider
 
     @BeforeTest
@@ -26,17 +28,19 @@ internal class NetworkRpcProviderTest : BaseProviderTest() {
 
     @Test
     fun getNetworkInfo_thenCorrect() = runBlocking {
-        val resp = endpoint.getNetworkInfo() as Map<*, *>
+        val resp = endpoint.getNetworkInfo()
         println(resp)
-        assertNotNull(resp["active_peers"])
+        assertNotNull(resp.activePeers)
         return@runBlocking
     }
 
     @Test
     fun getValidationStatus_thenCorrect() = runBlocking {
-        val resp = endpoint.getValidationStatus() as Map<*, *>
+        val resp = endpoint.getValidationStatus()
         println(resp)
-        assertNotNull(resp["current_proposals"])
+        assertNotNull(resp.epochStartHeight)
         return@runBlocking
     }
+
+    // TODO Validation by block id ????
 }

@@ -3,6 +3,11 @@ package antlapit.near.api.providers
 import antlapit.near.api.providers.BlockSearch.Companion.fromBlockHash
 import antlapit.near.api.providers.BlockSearch.Companion.fromBlockId
 import antlapit.near.api.providers.BlockSearch.Companion.ofFinality
+import antlapit.near.api.providers.model.block.Block
+import antlapit.near.api.providers.model.block.Chunk
+import antlapit.near.api.providers.model.primitives.BlockHeight
+import antlapit.near.api.providers.model.primitives.CryptoHash
+import antlapit.near.api.providers.model.primitives.ShardId
 
 /**
  * RPC endpoint for working with Blocks / Chunks
@@ -13,20 +18,45 @@ class BlockRpcProvider(private val jsonRpcProvider: JsonRpcProvider) : BlockProv
     /**
      * @link https://docs.near.org/docs/api/rpc/block-chunk#block-details
      */
-    private suspend fun getBlock(blockSearch: BlockSearch = BlockSearch.BLOCK_OPTIMISTIC) = jsonRpcProvider.sendRpcDefault(
-        method = "block",
-        blockSearch
-    )
+    private suspend fun getBlock(blockSearch: BlockSearch = BlockSearch.BLOCK_OPTIMISTIC, timeout: Long): Block =
+        jsonRpcProvider.sendRpc(
+            method = "block",
+            blockSearch,
+            timeout
+        )
 
-    override suspend fun getBlock(finality: Finality) = getBlock(ofFinality(finality))
+    override suspend fun getLatestBlock(finality: Finality, timeout: Long) = getBlock(ofFinality(finality), timeout)
 
-    override suspend fun getBlock(blockId: Long) = getBlock(fromBlockId(blockId))
+    override suspend fun getBlock(blockId: BlockHeight, timeout: Long) = getBlock(fromBlockId(blockId), timeout)
 
-    override suspend fun getBlock(blockHash: String) = getBlock(fromBlockHash(blockHash))
+    override suspend fun getBlock(blockHash: CryptoHash, timeout: Long) = getBlock(fromBlockHash(blockHash), timeout)
 
     /**
      * @link https://docs.near.org/docs/api/rpc/block-chunk#chunk-details
      */
-    override suspend fun getChunk(chunkHash: String) = jsonRpcProvider.sendRpcDefault(method = "chunk", params = listOf(chunkHash))
+    override suspend fun getChunk(chunkHash: CryptoHash, timeout: Long): Chunk = jsonRpcProvider.sendRpc(
+        method = "chunk",
+        params = mapOf("chunk_id" to chunkHash)
+    )
+
+    /**
+     * @link https://docs.near.org/docs/api/rpc/block-chunk#chunk-details
+     */
+    private suspend fun getChunk(
+        blockSearch: BlockSearch = BlockSearch.BLOCK_OPTIMISTIC,
+        shardId: ShardId,
+        timeout: Long
+    ): Chunk = jsonRpcProvider.sendRpc(
+        method = "chunk",
+        blockSearch,
+        params = mapOf("shard_id" to shardId),
+        timeout
+    )
+
+    override suspend fun getChunkInBlock(blockId: BlockHeight, shardId: ShardId, timeout: Long) =
+        getChunk(fromBlockId(blockId), shardId, timeout)
+
+    override suspend fun getChunkInBlock(blockHash: CryptoHash, shardId: ShardId, timeout: Long) =
+        getChunk(fromBlockHash(blockHash), shardId, timeout)
 
 }

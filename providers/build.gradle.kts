@@ -9,8 +9,6 @@
 plugins {
     // Apply the org.jetbrains.kotlin.jvm Plugin to add support for Kotlin.
     kotlin("jvm") version "1.5.31"
-    kotlin("plugin.serialization") version "1.5.31"
-
 
     // Apply the java-library plugin for API and implementation separation.
     `java-library`
@@ -23,6 +21,8 @@ repositories {
 
 dependencies {
     implementation(project(":providers-api"))
+
+    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
 
     // Align versions of all Kotlin components
     implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
@@ -54,6 +54,25 @@ dependencies {
     testImplementation("ch.qos.logback:logback-classic:$logbackVersion")
 
     // Use the Kotlin JUnit integration.
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
     testImplementation("org.junit.jupiter:junit-jupiter:5.7.0")
+    val kotestVersion = "5.0.0.M3"
+    testImplementation("io.kotest:kotest-runner-junit5:$kotestVersion")
+    testImplementation("io.kotest:kotest-framework-datatest:$kotestVersion")
+    testImplementation("io.kotest:kotest-assertions-core:$kotestVersion")
+    testImplementation("io.kotest:kotest-property:$kotestVersion")
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
+
+sourceSets{
+    main {
+        java.srcDirs("src/main/kotlin")
+    }
+}
+
+tasks.withType<Test> {
+    useJUnitPlatform()
 }
