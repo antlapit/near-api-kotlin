@@ -11,7 +11,7 @@ enum class ErrorCause(val type: ErrorType) {
     UNKNOWN_ACCESS_KEY(ErrorType.HANDLER_ERROR),
     UNAVAILABLE_SHARD(ErrorType.HANDLER_ERROR),
     NO_SYNCED_BLOCKS(ErrorType.HANDLER_ERROR),
-    REQUEST_VALIDATION_ERROR(ErrorType.REQUEST_VALIDATION_ERROR),
+    PARSE_ERROR(ErrorType.REQUEST_VALIDATION_ERROR),
     INTERNAL_ERROR(ErrorType.INTERNAL_ERROR);
 
     companion object {
@@ -37,7 +37,7 @@ open class ProviderException(
                 ErrorCause.UNKNOWN_ACCESS_KEY -> UnknownAccessKeyException(info)
                 ErrorCause.UNAVAILABLE_SHARD -> UnavailableShardException(info)
                 ErrorCause.NO_SYNCED_BLOCKS -> NoSyncedBlocksException(info)
-                ErrorCause.REQUEST_VALIDATION_ERROR -> RequestValidationErrorException(info)
+                ErrorCause.PARSE_ERROR -> ParseErrorException(info)
                 ErrorCause.INTERNAL_ERROR -> InternalErrorException(info)
             }
         }
@@ -111,7 +111,7 @@ class NoSyncedBlocksException(info: Map<String, Any?>?) : ProviderException(Erro
  *    <li>Check info for more details</li>
  * </ul>
  */
-class RequestValidationErrorException(info: Map<String, Any?>?) : ProviderException(ErrorCause.REQUEST_VALIDATION_ERROR, info)
+class ParseErrorException(info: Map<String, Any?>?) : ProviderException(ErrorCause.PARSE_ERROR, info)
 
 /**
  * Reason: Something went wrong with the node itself or overloaded
