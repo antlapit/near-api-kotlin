@@ -69,7 +69,7 @@ java {
     targetCompatibility = JavaVersion.VERSION_11
 }
 
-sourceSets{
+sourceSets {
     main {
         java.srcDirs("src/main/kotlin")
     }
@@ -83,26 +83,23 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
     kotlinOptions.jvmTarget = "11"
 }
 
-subprojects {
-    apply(plugin = "maven-publish")
-    configure<PublishingExtension> {
-        repositories {
-            maven {
-                name = "GitHubPackages"
-                url = uri("https://maven.pkg.github.com/antlapit/near-api-kotlin")
-                credentials {
-                    username = System.getenv("GITHUB_ACTOR")
-                    password = System.getenv("GITHUB_TOKEN")
-                }
+publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/antlapit/near-api-kotlin")
+            credentials {
+                username = System.getenv("GITHUB_ACTOR")
+                password = System.getenv("GITHUB_TOKEN")
             }
         }
-        publications {
-            register<MavenPublication>("gpr") {
-                groupId = "antlapit.near.api"
-                artifactId = "providers"
-                version = "1.0.0-SNAPSHOT"
-                from(components["java"])
-            }
+    }
+    publications {
+        register<MavenPublication>("gpr") {
+            groupId = "antlapit.near.api"
+            artifactId = "providers"
+            version = "1.0.0-SNAPSHOT"
+            from(components["java"])
         }
     }
 }
