@@ -58,5 +58,13 @@ subprojects {
                 }
             }
         }
+        publications {
+            register<MavenPublication>("gpr") {
+                groupId = "antlapit.near.api"
+                artifactId = "providers-api"
+                version = "1.0.0-SNAPSHOT"
+                from(components["java"])
+            }
+        }
     }
 }
