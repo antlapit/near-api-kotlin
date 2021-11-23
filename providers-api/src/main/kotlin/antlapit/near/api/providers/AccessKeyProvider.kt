@@ -60,7 +60,7 @@ interface AccessKeyProvider {
      */
     suspend fun getAccessKeyList(
         accountId: AccountId,
-        finality: Finality,
+        finality: Finality = Finality.OPTIMISTIC,
         timeout: Long = Constants.DEFAULT_TIMEOUT
     ): AccessKeysContainer
 

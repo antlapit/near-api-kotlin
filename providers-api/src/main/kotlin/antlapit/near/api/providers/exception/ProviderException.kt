@@ -6,11 +6,16 @@ enum class ErrorType {
 
 enum class ErrorCause(val type: ErrorType) {
     UNKNOWN_BLOCK(ErrorType.HANDLER_ERROR),
+    UNKNOWN_CHUNK(ErrorType.HANDLER_ERROR),
+    INVALID_SHARD_ID(ErrorType.HANDLER_ERROR),
+    NOT_SYNCED_YET(ErrorType.HANDLER_ERROR),
     INVALID_ACCOUNT(ErrorType.HANDLER_ERROR),
     UNKNOWN_ACCOUNT(ErrorType.HANDLER_ERROR),
     UNKNOWN_ACCESS_KEY(ErrorType.HANDLER_ERROR),
     UNAVAILABLE_SHARD(ErrorType.HANDLER_ERROR),
     NO_SYNCED_BLOCKS(ErrorType.HANDLER_ERROR),
+    INVALID_TRANSACTION(ErrorType.HANDLER_ERROR),
+    TIMEOUT_ERROR(ErrorType.HANDLER_ERROR),
     PARSE_ERROR(ErrorType.REQUEST_VALIDATION_ERROR),
     INTERNAL_ERROR(ErrorType.INTERNAL_ERROR);
 
@@ -32,11 +37,16 @@ open class ProviderException(
         fun byCause(errorCause: ErrorCause, info: Map<String, Any?>?) : ProviderException {
             return when (errorCause) {
                 ErrorCause.UNKNOWN_BLOCK -> UnknownBlockException(info)
+                ErrorCause.UNKNOWN_CHUNK -> UnknownChunkException(info)
+                ErrorCause.INVALID_SHARD_ID -> InvalidShardIdException(info)
+                ErrorCause.NOT_SYNCED_YET -> NotSyncedException(info)
                 ErrorCause.INVALID_ACCOUNT -> InvalidAccountException(info)
                 ErrorCause.UNKNOWN_ACCOUNT -> UnknownAccountException(info)
                 ErrorCause.UNKNOWN_ACCESS_KEY -> UnknownAccessKeyException(info)
                 ErrorCause.UNAVAILABLE_SHARD -> UnavailableShardException(info)
                 ErrorCause.NO_SYNCED_BLOCKS -> NoSyncedBlocksException(info)
+                ErrorCause.INVALID_TRANSACTION -> InvalidTransactionException(info)
+                ErrorCause.TIMEOUT_ERROR -> TimeoutErrorException(info)
                 ErrorCause.PARSE_ERROR -> ParseErrorException(info)
                 ErrorCause.INTERNAL_ERROR -> InternalErrorException(info)
             }
@@ -54,6 +64,38 @@ open class ProviderException(
  * </ul>
  */
 class UnknownBlockException(info: Map<String, Any?>?) : ProviderException(ErrorCause.UNKNOWN_BLOCK, info)
+
+/**
+ * Reason: The requested chunk can't be found in a database
+ * <br />
+ * Solution:
+ * <ul>
+ *    <li>Check that the requested chunk is legit</li>
+ *    <li>If the chunk had been produced more than 5 epochs ago, try to send your request to an archival node</li>
+ * </ul>
+ */
+class UnknownChunkException(info: Map<String, Any?>?) : ProviderException(ErrorCause.UNKNOWN_CHUNK, info)
+
+/**
+ * Reason: Provided shard_id does not exist
+ * <br />
+ * Solution:
+ * <ul>
+ *    <li>Provide shard_id for an existing shard</li>
+ * </ul>
+ */
+class InvalidShardIdException(info: Map<String, Any?>?) : ProviderException(ErrorCause.INVALID_SHARD_ID, info)
+
+/**
+ * Reason: The node is still syncing and the requested chunk is not in the database yet
+ * <br />
+ * Solution:
+ * <ul>
+ *    <li>Wait until the node finish syncing</li>
+ *    <li>Send a request to a different node which is synced</li>
+ * </ul>
+ */
+class NotSyncedException(info: Map<String, Any?>?) : ProviderException(ErrorCause.NOT_SYNCED_YET, info)
 
 /**
  * Reason: The requested <b>account_id</b> is invalid
@@ -101,6 +143,30 @@ class UnavailableShardException(info: Map<String, Any?>?) : ProviderException(Er
  * </ul>
  */
 class NoSyncedBlocksException(info: Map<String, Any?>?) : ProviderException(ErrorCause.NO_SYNCED_BLOCKS, info)
+
+/**
+ * Reason: An error happened during transaction execution
+ * <br />
+ * Solution:
+ * <ul>
+ *    <li>See error.cause.info for details</li>
+ * </ul>
+ */
+class InvalidTransactionException(info: Map<String, Any?>?) : ProviderException(ErrorCause.INVALID_TRANSACTION, info)
+
+
+/**
+ * Reason: Transaction was routed, but has not been recorded on chain in 10 seconds.
+ * <br />
+ * Solution:
+ * <ul>
+ *    <li>Re-submit the request with the identical transaction (in NEAR Protocol unique transactions apply exactly once, so if the previously sent transaction gets applied, this request will just return the known result, otherwise, it will route the transaction to the chain once again)</li>
+ *    <li>Check that your transaction is valid</li>
+ *    <li>Check that the signer account id has enough tokens to cover the transaction fees (keep in mind that some tokens on each account are locked to cover the storage cost)</li>
+ * </ul>
+ */
+class TimeoutErrorException(info: Map<String, Any?>?) : ProviderException(ErrorCause.TIMEOUT_ERROR, info)
+
 
 /**
  * Reason: Passed arguments can't be parsed by JSON RPC server (missing arguments, wrong format, etc.)

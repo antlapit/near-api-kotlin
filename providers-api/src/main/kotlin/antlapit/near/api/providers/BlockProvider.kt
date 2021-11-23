@@ -12,7 +12,7 @@ interface BlockProvider {
      * Returns block details.
      * @param finality Finality param for last block
      */
-    suspend fun getLatestBlock(finality: Finality, timeout: Long = Constants.DEFAULT_TIMEOUT): Block
+    suspend fun getLatestBlock(finality: Finality = Finality.OPTIMISTIC, timeout: Long = Constants.DEFAULT_TIMEOUT): Block
 
     /**
      * Returns block details.
