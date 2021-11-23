@@ -1,5 +1,7 @@
 package antlapit.near.api.providers
 
+import antlapit.near.api.providers.config.JsonRpcConfig
+import antlapit.near.api.providers.config.Network
 import antlapit.near.api.providers.model.accesskey.AccessKeyPermission
 import antlapit.near.api.providers.model.primitives.AccountId
 import antlapit.near.api.providers.model.primitives.PublicKey
@@ -16,7 +18,7 @@ import java.math.BigInteger
 @ExperimentalCoroutinesApi
 class AccessKeyRpcProviderTest : FunSpec({
 
-    val client = JsonRpcProvider("https://rpc.testnet.near.org")
+    val client = JsonRpcProvider(JsonRpcConfig(Network.TESTNET))
     val endpoint = AccessKeyRpcProvider(client)
 
     context("getAccessKeyList") {

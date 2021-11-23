@@ -1,5 +1,7 @@
 package antlapit.near.api.providers
 
+import antlapit.near.api.providers.config.JsonRpcConfig
+import antlapit.near.api.providers.config.Network
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import kotlin.test.BeforeTest
@@ -9,7 +11,7 @@ import kotlin.test.Test
 @ExperimentalCoroutinesApi
 internal class TransactionRpcProviderTest {
 
-    private val client = JsonRpcProvider("https://archival-rpc.testnet.near.org")
+    private val client = JsonRpcProvider(JsonRpcConfig(Network.TESTNET_ARCHIVAL))
     private lateinit var endpoint: TransactionRpcProvider
 
     @BeforeTest

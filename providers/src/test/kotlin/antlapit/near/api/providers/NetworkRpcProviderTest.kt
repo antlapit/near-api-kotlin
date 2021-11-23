@@ -1,16 +1,19 @@
 package antlapit.near.api.providers
 
+import antlapit.near.api.providers.config.JsonRpcConfig
+import antlapit.near.api.providers.config.Network
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import kotlin.test.BeforeTest
 import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
 // TODO attributes checking
 @ExperimentalCoroutinesApi
 internal class NetworkRpcProviderTest {
 
-    private val client = JsonRpcProvider("https://rpc.testnet.near.org")
+    private val client = JsonRpcProvider(JsonRpcConfig(Network.TESTNET))
     private lateinit var endpoint: NetworkRpcProvider
 
     @BeforeTest
@@ -36,11 +39,10 @@ internal class NetworkRpcProviderTest {
 
     @Test
     fun getValidationStatus_thenCorrect() = runBlocking {
-        val resp = endpoint.getValidationStatus()
-        println(resp)
-        assertNotNull(resp.epochStartHeight)
+        val latestStatus = endpoint.getValidationStatus()
+
+        val statusByBlockId = endpoint.getValidationStatus(latestStatus.epochHeight)
+        assertEquals(latestStatus, statusByBlockId)
         return@runBlocking
     }
-
-    // TODO Validation by block id ????
 }

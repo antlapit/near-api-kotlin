@@ -6,6 +6,7 @@ import antlapit.near.api.providers.model.block.ReceiptInfo
 import antlapit.near.api.providers.model.primitives.*
 import antlapit.near.api.providers.model.transaction.ExecutionStatus
 import antlapit.near.api.providers.model.transaction.FinalExecutionStatus
+import antlapit.near.api.providers.model.validators.ValidatorKickoutReason
 import com.fasterxml.jackson.core.Version
 import com.fasterxml.jackson.databind.Module
 import com.fasterxml.jackson.databind.module.SimpleDeserializers
@@ -50,6 +51,12 @@ class RustEnumDeserializationModule : Module() {
                 addDeserializer(
                     FinalExecutionStatus::class.java,
                     RustEnumDeserializer(FinalExecutionStatus::class)
+                )
+
+                // validators
+                addDeserializer(
+                    ValidatorKickoutReason::class.java,
+                    RustEnumDeserializer(ValidatorKickoutReason::class)
                 )
             }
         })

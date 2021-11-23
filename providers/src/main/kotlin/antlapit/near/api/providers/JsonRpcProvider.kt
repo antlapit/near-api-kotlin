@@ -1,6 +1,7 @@
 package antlapit.near.api.providers
 
 import antlapit.near.api.deser.RustEnumDeserializationModule
+import antlapit.near.api.providers.config.JsonRpcConfig
 import antlapit.near.api.providers.exception.ProviderException
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -21,17 +22,13 @@ import java.util.*
 /**
  * Main Client for accessing NEAR RPC API
  * <br>
- * Possible initialization cases:
- * <ul>
- *      <li>full RPC API address</li>
- *      <li>HTTP scheme with Address and Port</li>
- * </ul>
+ * Should be initialized from config class
  */
 class JsonRpcProvider(
-    val address: String
+    val config: JsonRpcConfig
 ) {
 
-    val objectMapper: ObjectMapper = defaultMapper()
+    private val objectMapper: ObjectMapper = defaultMapper()
 
     // TODO close client after execution
     val client: HttpClient = HttpClient(CIO) {
@@ -46,11 +43,6 @@ class JsonRpcProvider(
         }
         install(HttpTimeout)
     }
-
-    constructor(
-        rpcAddr: String,
-        port: Int,
-    ) : this(address = "http://$rpcAddr:$port")
 
     suspend inline fun <reified T> sendRpc(
         method: String,
@@ -83,7 +75,7 @@ class JsonRpcProvider(
         params: Any? = null,
         timeout: Long = Constants.DEFAULT_TIMEOUT
     ): T {
-        val response = client.post<GenericRpcResponse<T>>(address) {
+        val response = client.post<GenericRpcResponse<T>>(config.getAddress()) {
             contentType(ContentType.Application.Json)
             body = GenericRpcRequest(method, params)
 

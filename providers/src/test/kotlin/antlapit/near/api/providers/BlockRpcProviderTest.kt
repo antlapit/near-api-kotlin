@@ -1,5 +1,7 @@
 package antlapit.near.api.providers
 
+import antlapit.near.api.providers.config.JsonRpcConfig
+import antlapit.near.api.providers.config.Network
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import kotlin.test.BeforeTest
@@ -9,7 +11,7 @@ import kotlin.test.assertEquals
 @ExperimentalCoroutinesApi
 class BlockRpcProviderTest {
 
-    private val client = JsonRpcProvider("https://rpc.testnet.near.org")
+    private val client = JsonRpcProvider(JsonRpcConfig(Network.TESTNET))
     private lateinit var endpoint: BlockProvider
 
     @BeforeTest
