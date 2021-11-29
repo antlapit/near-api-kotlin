@@ -1,7 +1,7 @@
 package antlapit.near.api.providers
 
 import antlapit.near.api.providers.config.JsonRpcConfig
-import antlapit.near.api.providers.config.Network
+import antlapit.near.api.providers.config.NetworkEnum
 import antlapit.near.api.providers.model.accesskey.AccessKeyPermission
 import antlapit.near.api.providers.model.primitives.AccountId
 import antlapit.near.api.providers.model.primitives.PublicKey
@@ -18,7 +18,7 @@ import java.math.BigInteger
 @ExperimentalCoroutinesApi
 class AccessKeyRpcProviderTest : FunSpec({
 
-    val client = JsonRpcProvider(JsonRpcConfig(Network.TESTNET))
+    val client = JsonRpcProvider(JsonRpcConfig(NetworkEnum.TESTNET))
     val endpoint = AccessKeyRpcProvider(client)
 
     context("getAccessKeyList") {
@@ -53,7 +53,7 @@ class AccessKeyRpcProviderTest : FunSpec({
             ),
             GetAccessKeyData(
                 "api_kotlin.testnet",
-                "ed25519:AAdMiXP3j2M775c1TihUrDyPHt7uvt6x8knS1QSSMZTn",
+                "ed25519:6PKfSu4zZarrFVk1Z4uf8kjiNwbMHSaiUmBgaWYF1dCj",
                 Finality.FINAL,
                 AccessKeyPermission.FunctionCall(
                     allowance = BigInteger("250000000000000000000000"),

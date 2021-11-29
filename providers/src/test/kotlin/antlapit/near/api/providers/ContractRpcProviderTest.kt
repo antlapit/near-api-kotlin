@@ -1,7 +1,7 @@
 package antlapit.near.api.providers
 
 import antlapit.near.api.providers.config.JsonRpcConfig
-import antlapit.near.api.providers.config.Network
+import antlapit.near.api.providers.config.NetworkEnum
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import java.io.File
@@ -13,7 +13,7 @@ import kotlin.test.assertEquals
 @ExperimentalCoroutinesApi
 class ContractRpcProviderTest {
 
-    private val client = JsonRpcProvider(JsonRpcConfig(Network.TESTNET))
+    private val client = JsonRpcProvider(JsonRpcConfig(NetworkEnum.TESTNET))
     private lateinit var endpoint: ContractProvider
 
     @BeforeTest

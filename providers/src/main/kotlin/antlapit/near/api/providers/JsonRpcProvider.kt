@@ -85,7 +85,24 @@ class JsonRpcProvider(
         }
         when {
             response.error != null -> {
-                throw Utils.constructException(response.error)
+                when (response.error) {
+                    is String -> {
+                        throw ProviderException(response.error)
+                    }
+                    is Map<*, *> -> {
+                        val causeMap = response.error["cause"] as Map<String, Any?>
+                        val rpcError = RpcError(
+                            response.error["name"] as String, RpcErrorCause(
+                                name = causeMap["name"] as String,
+                                info = causeMap["info"] as Map<String, Any?>?
+                            )
+                        )
+                        throw Utils.constructException(rpcError)
+                    }
+                    else -> {
+                        throw ProviderException("Undefined response error")
+                    }
+                }
             }
             response.result == null -> {
                 throw ProviderException("Empty result in response without specifying error")
@@ -131,7 +148,7 @@ class JsonRpcProvider(
         val id = UUID.randomUUID().toString()
     }
 
-    data class GenericRpcResponse<T>(val id: String, val jsonrpc: String, val error: RpcError?, val result: T?)
+    data class GenericRpcResponse<T>(val id: String, val jsonrpc: String, val error: Any?, val result: T?)
 
     companion object {
         fun mergeParams(params: Map<String, Any?>, blockSearch: BlockSearch): Map<String, Any?> {
