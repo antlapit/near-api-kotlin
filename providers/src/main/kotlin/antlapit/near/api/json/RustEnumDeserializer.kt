@@ -1,4 +1,4 @@
-package antlapit.near.api.deser
+package antlapit.near.api.json
 
 import antlapit.near.api.providers.util.RustSinglePropertyEnumItem
 import com.fasterxml.jackson.core.JsonParseException

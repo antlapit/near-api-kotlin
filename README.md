@@ -7,7 +7,21 @@ API Docs https://docs.near.org/docs/api/rpc
 # Implementation Details
 * Ktor for making requests
 * Jackson for serializing/deserializing requests and models
-* Kotest for testing
+* Kotest and JUnit for testing
+
+# Testing
+All tests are divided into several groups:
+* End-to-end tests
+* Deserialization unit tests
+
+### End-to-end tests
+These tests perform calls to NEAR testnet using special account (api_kotlin.testnet) if needed.
+This is useful for testing the equality of responses by different request parameters.
+Also end-to-end tests are designed to fail in case of changing RPC API in testnet without backward compatibility.
+
+### Deserialization unit tests
+These tests use prepared JSON responses based on a real for many variants.
+This stabilizes API and prevents the appearance of bugs during refactoring of future improvements.
 
 # Examples
 
