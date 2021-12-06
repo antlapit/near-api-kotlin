@@ -11,24 +11,19 @@ import io.kotest.datatest.withData
 import io.kotest.matchers.shouldBe
 
 @ExperimentalKotest
-class EnumDeserializeTest : FunSpec({
+class TransactionDeserializeTest : FunSpec({
 
     val mapper = ObjectMapperFactory.newInstance()
 
-    data class DeserializeCase(
-        val raw: String,
-        val typed: Any
-    )
-
     context("ExecutionStatus") {
-        withData<DeserializeCase>(
-            { "${it.typed}" },
-            DeserializeCase(
+        withData(
+            nameFn = { "${it.typed}" },
+            DeserializationTestData(
                 """
             "Unknown"
             """.trimIndent(), ExecutionStatus.Unknown
             ),
-            DeserializeCase(
+            DeserializationTestData(
                 """
                 {"SuccessReceiptId":"BLV2q6p8DX7pVgXRtGtBkyUNrnqkNyU7iSksXG7BjVZh"}        
                 """.trimIndent(),
@@ -37,7 +32,7 @@ class EnumDeserializeTest : FunSpec({
                 )
 
             ),
-            DeserializeCase(
+            DeserializationTestData(
                 """
                 {"SuccessValue":"result"}        
                 """.trimIndent(),
@@ -45,7 +40,7 @@ class EnumDeserializeTest : FunSpec({
                     value = "result"
                 )
             ),
-            DeserializeCase(
+            DeserializationTestData(
                 """
                 {"SuccessValue":""}        
                 """.trimIndent(),
@@ -53,7 +48,7 @@ class EnumDeserializeTest : FunSpec({
                     value = ""
                 )
             ),
-            DeserializeCase(
+            DeserializationTestData(
                 """
                 {
                     "Failure": {
@@ -79,7 +74,7 @@ class EnumDeserializeTest : FunSpec({
             )
         ) { (str, obj) ->
             shouldNotThrow<Throwable> {
-                mapper.readValue<ExecutionStatus>(str) shouldBe obj
+                mapper.readValue(str) as ExecutionStatus shouldBe obj
             }
         }
     }

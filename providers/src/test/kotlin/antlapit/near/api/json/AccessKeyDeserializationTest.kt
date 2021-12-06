@@ -7,24 +7,20 @@ import io.kotest.common.ExperimentalKotest
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.datatest.withData
 import io.kotest.matchers.shouldBe
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import java.math.BigInteger
 
+/**
+ * Access keys deserialization test
+ */
 @ExperimentalKotest
-@ExperimentalCoroutinesApi
 class AccessKeyDeserializationTest : FunSpec({
 
     val objectMapper = ObjectMapperFactory.newInstance()
 
-    context("getAccessKeyList") {
-        data class GetAccessKeyListData(
-            val raw: String,
-            val accessKeys: AccessKeysContainer
-        )
-
-        withData<GetAccessKeyListData>(
-            { "${it.accessKeys.keys[0].publicKey} ${it.accessKeys.keys[0].accessKey.permission}" },
-            GetAccessKeyListData(
+    context("Access Keys Container") {
+        withData(
+            nameFn = { "${it.typed.keys[0].publicKey} ${it.typed.keys[0].accessKey.permission}" },
+            DeserializationTestData(
                 """
                 {
                     "block_height": 73947176,
@@ -54,7 +50,7 @@ class AccessKeyDeserializationTest : FunSpec({
                     )
                 )
             ),
-            GetAccessKeyListData(
+            DeserializationTestData(
                 """
                 {
                     "block_height": 73947176,
@@ -101,15 +97,10 @@ class AccessKeyDeserializationTest : FunSpec({
         }
     }
 
-    context("getAccessKey") {
-        data class GetAccessKeyData(
-            val raw: String,
-            val accessKey: AccessKeyInBlock
-        )
-
-        withData<GetAccessKeyData>(
-            { "${it.accessKey.permission}" },
-            GetAccessKeyData(
+    context("Access Key") {
+        withData(
+            nameFn = { "${it.typed.permission}" },
+            DeserializationTestData(
                 """
                 {
                     "nonce": 69877007000001,
@@ -125,7 +116,7 @@ class AccessKeyDeserializationTest : FunSpec({
                     blockHash = "jav58J75jTCkAouUyT8fEzoRTqoNaZpX1hGQZNKbU7c"
                 )
             ),
-            GetAccessKeyData(
+            DeserializationTestData(
                 """
                 {
                     "nonce": 69877007000001,

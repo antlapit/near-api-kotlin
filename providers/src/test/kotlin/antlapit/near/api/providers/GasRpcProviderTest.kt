@@ -34,7 +34,6 @@ class GasRpcProviderTest {
     fun getGasPrice_byBlock_thenCorrect() = runBlocking {
         val block = blockProvider.getLatestBlock()
 
-
         // latest queried block by hash
         val priceByHash = endpoint.getGasPrice(block.header.hash)
 
