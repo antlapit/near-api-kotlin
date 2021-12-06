@@ -39,10 +39,8 @@ class GasRpcProviderTest {
 
         // latest queried block by id
         val priceById = endpoint.getGasPrice(block.header.height)
-        assertEquals(priceByHash, priceById)
+        assertEquals(priceByHash, priceById, "gas price should equals by block id and hash")
         return@runBlocking
     }
-
-    // TODO gas price attributes checking of concrete block
 
 }
