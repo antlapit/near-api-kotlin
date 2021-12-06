@@ -34,8 +34,6 @@ class BlockRpcProviderTest {
         return@runBlocking
     }
 
-    // TODO block attributes checking of concrete block
-
     @Test
     fun getChunk_whenLatest_thenCorrect() = runBlocking {
         // latest block
@@ -50,6 +48,4 @@ class BlockRpcProviderTest {
         val chunkByHash = endpoint.getChunk(chunkByBlockId.header.chunkHash)
         assertEquals(chunkByHash, chunkByBlockHash)
     }
-
-    // TODO chunk attributes checking of concrete chunk
 }
