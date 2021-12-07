@@ -1,8 +1,13 @@
-package antlapit.near.api.providers
+package antlapit.near.api.providers.endpoints
 
-import antlapit.near.api.providers.BlockSearch.Companion.fromBlockHash
-import antlapit.near.api.providers.BlockSearch.Companion.fromBlockId
-import antlapit.near.api.providers.BlockSearch.Companion.ofFinality
+import antlapit.near.api.providers.ContractProvider
+import antlapit.near.api.providers.Finality
+import antlapit.near.api.providers.Utils
+import antlapit.near.api.providers.base.BlockSearch
+import antlapit.near.api.providers.base.BlockSearch.Companion.fromBlockHash
+import antlapit.near.api.providers.base.BlockSearch.Companion.fromBlockId
+import antlapit.near.api.providers.base.BlockSearch.Companion.ofFinality
+import antlapit.near.api.providers.base.JsonRpcProvider
 import antlapit.near.api.providers.model.account.Account
 import antlapit.near.api.providers.model.account.CallResult
 import antlapit.near.api.providers.model.account.ContractCode

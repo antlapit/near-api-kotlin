@@ -15,7 +15,6 @@ data class ChunkHeader(
     val shardId: ShardId,
     val gasUsed: Gas,
     val gasLimit: Gas,
-    val validatorReward: Balance,
     val balanceBurnt: Balance,
     val outgoingReceiptsRoot: CryptoHash,
     val txRoot: CryptoHash,

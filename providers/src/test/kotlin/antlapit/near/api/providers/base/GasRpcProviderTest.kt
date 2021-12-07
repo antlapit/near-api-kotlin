@@ -1,7 +1,11 @@
-package antlapit.near.api.providers
+package antlapit.near.api.providers.base
 
-import antlapit.near.api.providers.config.JsonRpcConfig
-import antlapit.near.api.providers.config.NetworkEnum
+import antlapit.near.api.providers.BlockProvider
+import antlapit.near.api.providers.GasProvider
+import antlapit.near.api.providers.base.config.JsonRpcConfig
+import antlapit.near.api.providers.base.config.NetworkEnum
+import antlapit.near.api.providers.endpoints.BlockRpcProvider
+import antlapit.near.api.providers.endpoints.GasRpcProvider
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import kotlin.test.BeforeTest
@@ -34,16 +38,13 @@ class GasRpcProviderTest {
     fun getGasPrice_byBlock_thenCorrect() = runBlocking {
         val block = blockProvider.getLatestBlock()
 
-
         // latest queried block by hash
         val priceByHash = endpoint.getGasPrice(block.header.hash)
 
         // latest queried block by id
         val priceById = endpoint.getGasPrice(block.header.height)
-        assertEquals(priceByHash, priceById)
+        assertEquals(priceByHash, priceById, "gas price should equals by block id and hash")
         return@runBlocking
     }
-
-    // TODO gas price attributes checking of concrete block
 
 }

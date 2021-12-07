@@ -1,5 +1,6 @@
-package antlapit.near.api.deser
+package antlapit.near.api.json
 
+import antlapit.near.api.providers.base.RustEnumDeserializer
 import antlapit.near.api.providers.model.accesskey.AccessKeyPermission
 import antlapit.near.api.providers.model.block.Action
 import antlapit.near.api.providers.model.block.ReceiptInfo

@@ -13,28 +13,29 @@ sealed interface TxExecutionError {
         val index: Long?,
         val kind: ActionErrorKind
     ) : TxExecutionError
+
 }
 
 @RustEnum
 sealed interface InvalidTxError : TxExecutionError {
     /// Happens if a wrong AccessKey used or AccessKey has not enough permissions
     @RustSinglePropertyEnumItem
-    data class InvalidAccessKeyError(val error: InvalidAccessKeyErrorType)
+    data class InvalidAccessKeyError(val error: InvalidAccessKeyErrorType) : InvalidTxError
 
     /// TX signer_id is not a valid [`AccountId`]
-    data class InvalidSignerId(val signerId: String)
+    data class InvalidSignerId(val signerId: String) : InvalidTxError
 
     /// TX signer_id is not found in a storage
-    data class SignerDoesNotExist(val signerId: AccountId)
+    data class SignerDoesNotExist(val signerId: AccountId) : InvalidTxError
 
     /// Transaction nonce must be `account[access_key].nonce + 1`.
-    data class InvalidNonce(val txNonce: Nonce, val akNonce: Nonce)
+    data class InvalidNonce(val txNonce: Nonce, val akNonce: Nonce) : InvalidTxError
 
     /// Transaction nonce is larger than the upper bound given by the block height
-    data class NonceTooLarge(val txNonce: Nonce, val upperBound: Nonce)
+    data class NonceTooLarge(val txNonce: Nonce, val upperBound: Nonce) : InvalidTxError
 
     /// TX receiver_id is not a valid AccountId
-    data class InvalidReceiverId(val receiverId: String)
+    data class InvalidReceiverId(val receiverId: String) : InvalidTxError
 
     /// TX signature is not valid
     object InvalidSignature : InvalidTxError
@@ -44,7 +45,7 @@ sealed interface InvalidTxError : TxExecutionError {
         val signerId: AccountId,
         val balance: Balance,
         val cost: Balance
-    )
+    ) : InvalidTxError
 
     /// Signer account doesn't have enough balance after transaction.
     data class LackBalanceForState(
@@ -52,7 +53,7 @@ sealed interface InvalidTxError : TxExecutionError {
         val signerId: AccountId,
         /// Required balance to cover the state.
         val amount: Balance
-    )
+    ) : InvalidTxError
 
     /// An integer overflow occurred during transaction cost estimation.
     object CostOverflow : InvalidTxError
@@ -65,10 +66,10 @@ sealed interface InvalidTxError : TxExecutionError {
 
     /// An error occurred while validating actions of a Transaction.
     @RustSinglePropertyEnumItem
-    data class ActionsValidation(val error: ActionsValidationError)
+    data class ActionsValidation(val error: ActionsValidationError) : InvalidTxError
 
     /// The size of serialized transaction exceeded the limit.
-    data class TransactionSizeExceeded(val size: Long, val limit: Long)
+    data class TransactionSizeExceeded(val size: Long, val limit: Long) : InvalidTxError
 }
 
 @RustEnum
@@ -191,12 +192,12 @@ sealed interface ContractCallError {
     data class MethodResolveError(val type: MethodResolveErrorType) : ContractCallError
 
     @RustSinglePropertyEnumItem
-    data class WasmTrap(val type: WasmTrapType)
+    data class WasmTrap(val type: WasmTrapType) : ContractCallError
 
     object WasmUnknownError : ContractCallError
 
     @RustSinglePropertyEnumItem
-    data class HostError(val type: HostErrorType)
+    data class HostError(val type: HostErrorType) : ContractCallError
 
     @RustSinglePropertyEnumItem
     data class ExecutionError(val msg: String) : ContractCallError
@@ -302,6 +303,7 @@ sealed interface InvalidAccessKeyErrorType {
     ) : InvalidAccessKeyErrorType
 
     /// Having a deposit with a function call action is not allowed with a function call access key.
+    @Suppress("unused")
     object DepositWithFunctionCall : InvalidAccessKeyErrorType
 }
 
@@ -325,6 +327,7 @@ sealed interface ActionsValidationError {
     data class AddKeyMethodNameLengthExceeded(val length: Long, val limit: Long) : ActionsValidationError
 
     /// Integer overflow during a compute.
+    @Suppress("unused")
     object IntegerOverflow : ActionsValidationError
 
     /// Invalid account ID.
@@ -375,36 +378,45 @@ sealed interface ReceiptValidationError {
 @RustEnum
 sealed interface HostErrorType {
     /// String encoding is bad UTF-16 sequence
+    @Suppress("unused")
     object BadUTF16 : HostErrorType
 
     /// String encoding is bad UTF-8 sequence
+    @Suppress("unused")
     object BadUTF8 : HostErrorType
 
     /// Exceeded the prepaid gas
+    @Suppress("unused")
     object GasExceeded : HostErrorType
 
     /// Exceeded the maximum amount of gas allowed to burn per contract
+    @Suppress("unused")
     object GasLimitExceeded : HostErrorType
 
     /// Exceeded the account balance
+    @Suppress("unused")
     object BalanceExceeded : HostErrorType
 
     /// Tried to call an empty method name
+    @Suppress("unused")
     object EmptyMethodName : HostErrorType
 
     /// Smart contract panicked
     data class GuestPanic(val panicMsg: String) : HostErrorType
 
     /// IntegerOverflow happened during a contract execution
+    @Suppress("unused")
     object IntegerOverflow : HostErrorType
 
     /// `promise_idx` does not correspond to existing promises
     data class InvalidPromiseIndex(val promiseIdx: Long) : HostErrorType
 
     /// Actions can only be appended to non-joint promise.
+    @Suppress("unused")
     object CannotAppendActionToJointPromise : HostErrorType
 
     /// Returning joint promise is currently prohibited
+    @Suppress("unused")
     object CannotReturnJointPromise : HostErrorType
 
     /// Accessed invalid promise result index
@@ -417,6 +429,7 @@ sealed interface HostErrorType {
     data class IteratorWasInvalidated(val iteratorIndex: Long) : HostErrorType
 
     /// Accessed memory outside the bounds
+    @Suppress("unused")
     object MemoryAccessViolation : HostErrorType
 
     /// VM Logic returned an invalid receipt index
@@ -426,12 +439,15 @@ sealed interface HostErrorType {
     data class InvalidIteratorIndex(val iteratorIndex: Long) : HostErrorType
 
     /// VM Logic returned an invalid account id
+    @Suppress("unused")
     object InvalidAccountId : HostErrorType
 
     /// VM Logic returned an invalid method name
+    @Suppress("unused")
     object InvalidMethodName : HostErrorType
 
     /// VM Logic provided an invalid public key
+    @Suppress("unused")
     object InvalidPublicKey : HostErrorType
 
     /// `method_name` is not allowed in view calls
@@ -450,10 +466,10 @@ sealed interface HostErrorType {
     data class TotalLogLengthExceeded(val length: Long, val limit: Long) : HostErrorType
 
     /// The maximum number of promises within a FunctionCall exceeded the limit.
-    data class NumberPromisesExceeded(val number_of_promises: Long, val limit: Long) : HostErrorType
+    data class NumberPromisesExceeded(val numberOfPromises: Long, val limit: Long) : HostErrorType
 
     /// The maximum number of input data dependencies exceeded the limit.
-    data class NumberInputDataDependenciesExceeded(val number_of_input_data_dependencies: Long, val limit: Long) :
+    data class NumberInputDataDependenciesExceeded(val numberOfInputDataDependencies: Long, val limit: Long) :
         HostErrorType
 
     /// The returned value length exceeded the limit.
@@ -463,7 +479,7 @@ sealed interface HostErrorType {
     data class ContractSizeExceeded(val size: Long, val limit: Long) : HostErrorType
 
     /// The host function was deprecated.
-    data class Deprecated(val method_name: String) : HostErrorType
+    data class Deprecated(val methodName: String) : HostErrorType
 
     /// General errors for ECDSA recover.
     data class ECRecoverError(val msg: String) : HostErrorType

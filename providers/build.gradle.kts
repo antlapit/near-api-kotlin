@@ -31,6 +31,7 @@ dependencies {
 
     // Use the Kotlin JDK 8 standard library.
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    implementation("org.testng:testng:7.1.0")
 
     // Ktor for making requests
     val ktorVersion = "1.6.2"

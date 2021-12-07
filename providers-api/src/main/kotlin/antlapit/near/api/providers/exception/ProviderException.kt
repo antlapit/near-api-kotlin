@@ -16,6 +16,7 @@ enum class ErrorCause(val type: ErrorType) {
     NO_SYNCED_BLOCKS(ErrorType.HANDLER_ERROR),
     INVALID_TRANSACTION(ErrorType.HANDLER_ERROR),
     TIMEOUT_ERROR(ErrorType.HANDLER_ERROR),
+    UNKNOWN_EPOCH(ErrorType.HANDLER_ERROR),
     PARSE_ERROR(ErrorType.REQUEST_VALIDATION_ERROR),
     INTERNAL_ERROR(ErrorType.INTERNAL_ERROR);
 
@@ -47,6 +48,7 @@ open class ProviderException(
                 ErrorCause.NO_SYNCED_BLOCKS -> NoSyncedBlocksException(info)
                 ErrorCause.INVALID_TRANSACTION -> InvalidTransactionException(info)
                 ErrorCause.TIMEOUT_ERROR -> TimeoutErrorException(info)
+                ErrorCause.UNKNOWN_EPOCH -> UnknownEpochException(info)
                 ErrorCause.PARSE_ERROR -> ParseErrorException(info)
                 ErrorCause.INTERNAL_ERROR -> InternalErrorException(info)
             }
@@ -167,6 +169,16 @@ class InvalidTransactionException(info: Map<String, Any?>?) : ProviderException(
  */
 class TimeoutErrorException(info: Map<String, Any?>?) : ProviderException(ErrorCause.TIMEOUT_ERROR, info)
 
+/**
+ * Reason: An epoch for the provided block can't be found in a database
+ * <br />
+ * Solution:
+ * <ul>
+ *    <li>Check that the requested block is legit</li>
+ *    <li>If the block had been produced more than 5 epochs ago, try to send your request to an archival node</li>
+ * </ul>
+ */
+class UnknownEpochException(info: Map<String, Any?>?) : ProviderException(ErrorCause.UNKNOWN_EPOCH, info)
 
 /**
  * Reason: Passed arguments can't be parsed by JSON RPC server (missing arguments, wrong format, etc.)

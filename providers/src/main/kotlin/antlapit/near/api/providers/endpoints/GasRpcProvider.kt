@@ -1,5 +1,7 @@
-package antlapit.near.api.providers
+package antlapit.near.api.providers.endpoints
 
+import antlapit.near.api.providers.GasProvider
+import antlapit.near.api.providers.base.JsonRpcProvider
 import antlapit.near.api.providers.model.gas.GasPrice
 import antlapit.near.api.providers.model.primitives.BlockHeight
 import antlapit.near.api.providers.model.primitives.CryptoHash

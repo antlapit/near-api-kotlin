@@ -1,15 +1,11 @@
-package antlapit.near.api.providers
+package antlapit.near.api.providers.base
 
-import antlapit.near.api.deser.RustEnumDeserializationModule
-import antlapit.near.api.providers.config.JsonRpcConfig
+import antlapit.near.api.json.ObjectMapperFactory
+import antlapit.near.api.providers.Constants
+import antlapit.near.api.providers.base.config.JsonRpcConfig
+import antlapit.near.api.providers.exception.ErrorCause
 import antlapit.near.api.providers.exception.ProviderException
-import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.PropertyNamingStrategies
-import com.fasterxml.jackson.datatype.jdk8.Jdk8Module
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
-import com.fasterxml.jackson.module.kotlin.KotlinModule
-import com.fasterxml.jackson.module.kotlin.jacksonMapperBuilder
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.features.*
@@ -28,7 +24,7 @@ class JsonRpcProvider(
     val config: JsonRpcConfig
 ) {
 
-    private val objectMapper: ObjectMapper = defaultMapper()
+    private val objectMapper: ObjectMapper = ObjectMapperFactory.newInstance()
 
     // TODO close client after execution
     val client: HttpClient = HttpClient(CIO) {
@@ -97,7 +93,7 @@ class JsonRpcProvider(
                                 info = causeMap["info"] as Map<String, Any?>?
                             )
                         )
-                        throw Utils.constructException(rpcError)
+                        throw constructException(rpcError)
                     }
                     else -> {
                         throw ProviderException("Undefined response error")
@@ -144,7 +140,9 @@ class JsonRpcProvider(
     data class RpcErrorCause(val name: String, val info: Map<String, Any?>?)
 
     data class GenericRpcRequest(val method: String, val params: Any?) {
+        @Suppress("unused")
         val jsonrpc = "2.0"
+        @Suppress("unused")
         val id = UUID.randomUUID().toString()
     }
 
@@ -165,15 +163,15 @@ class JsonRpcProvider(
             return paramsMap
         }
 
-        fun defaultMapper(): ObjectMapper {
-            return jacksonMapperBuilder()
-                .addModule(JavaTimeModule())
-                .addModule(Jdk8Module())
-                .addModule(KotlinModule())
-                .addModule(RustEnumDeserializationModule())
-                .propertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
-                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-                .build()
+        @JvmStatic
+        fun constructException(error: RpcError) : ProviderException {
+            val errorCause = ErrorCause.findByCode(error.cause.name)
+            val info = error.cause.info
+            return if (errorCause == null) {
+                ProviderException(error.name, error.cause.name, info)
+            } else {
+                ProviderException.byCause(errorCause, info)
+            }
         }
     }
 }
