@@ -1,4 +1,4 @@
-package antlapit.near.api.providers.config
+package antlapit.near.api.providers.base.config
 
 data class JsonRpcConfig(
     val network: Network = NetworkEnum.MAINNET

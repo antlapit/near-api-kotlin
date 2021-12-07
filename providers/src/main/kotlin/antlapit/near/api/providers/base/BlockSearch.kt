@@ -1,5 +1,6 @@
-package antlapit.near.api.providers
+package antlapit.near.api.providers.base
 
+import antlapit.near.api.providers.Finality
 import antlapit.near.api.providers.model.primitives.BlockHeight
 import antlapit.near.api.providers.model.primitives.CryptoHash
 

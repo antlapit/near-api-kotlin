@@ -1,7 +1,8 @@
-package antlapit.near.api.providers
+package antlapit.near.api.providers.endpoints
 
-import antlapit.near.api.providers.config.JsonRpcConfig
-import antlapit.near.api.providers.config.NetworkEnum
+import antlapit.near.api.providers.base.JsonRpcProvider
+import antlapit.near.api.providers.base.config.JsonRpcConfig
+import antlapit.near.api.providers.base.config.NetworkEnum
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import kotlin.test.BeforeTest

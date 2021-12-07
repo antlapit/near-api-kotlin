@@ -1,7 +1,9 @@
-package antlapit.near.api.providers
+package antlapit.near.api.providers.base
 
 import antlapit.near.api.json.ObjectMapperFactory
-import antlapit.near.api.providers.config.JsonRpcConfig
+import antlapit.near.api.providers.Constants
+import antlapit.near.api.providers.base.config.JsonRpcConfig
+import antlapit.near.api.providers.exception.ErrorCause
 import antlapit.near.api.providers.exception.ProviderException
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.ktor.client.*
@@ -91,7 +93,7 @@ class JsonRpcProvider(
                                 info = causeMap["info"] as Map<String, Any?>?
                             )
                         )
-                        throw Utils.constructException(rpcError)
+                        throw constructException(rpcError)
                     }
                     else -> {
                         throw ProviderException("Undefined response error")
@@ -157,6 +159,17 @@ class JsonRpcProvider(
                 paramsMap["finality"] = blockSearch.finality!!.code
             }
             return paramsMap
+        }
+
+        @JvmStatic
+        fun constructException(error: JsonRpcProvider.RpcError) : ProviderException {
+            val errorCause = ErrorCause.findByCode(error.cause.name)
+            val info = error.cause.info
+            return if (errorCause == null) {
+                ProviderException(error.name, error.cause.name, info)
+            } else {
+                ProviderException.byCause(errorCause, info)
+            }
         }
     }
 }

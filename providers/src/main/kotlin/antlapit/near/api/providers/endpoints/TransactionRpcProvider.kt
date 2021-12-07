@@ -1,5 +1,8 @@
-package antlapit.near.api.providers
+package antlapit.near.api.providers.endpoints
 
+import antlapit.near.api.providers.TransactionProvider
+import antlapit.near.api.providers.Utils
+import antlapit.near.api.providers.base.JsonRpcProvider
 import antlapit.near.api.providers.model.primitives.CryptoHash
 import antlapit.near.api.providers.model.transaction.FinalExecutionOutcome
 

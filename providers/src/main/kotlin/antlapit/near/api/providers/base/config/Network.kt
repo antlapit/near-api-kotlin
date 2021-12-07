@@ -1,4 +1,4 @@
-package antlapit.near.api.providers.config
+package antlapit.near.api.providers.base.config
 
 interface Network {
     fun getUrl() : String

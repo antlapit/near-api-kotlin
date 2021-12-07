@@ -1,7 +1,9 @@
-package antlapit.near.api.providers
+package antlapit.near.api.providers.endpoints
 
-import antlapit.near.api.providers.config.JsonRpcConfig
-import antlapit.near.api.providers.config.NetworkEnum
+import antlapit.near.api.providers.Finality
+import antlapit.near.api.providers.base.JsonRpcProvider
+import antlapit.near.api.providers.base.config.JsonRpcConfig
+import antlapit.near.api.providers.base.config.NetworkEnum
 import antlapit.near.api.providers.model.accesskey.AccessKeyPermission
 import io.kotest.common.ExperimentalKotest
 import kotlinx.coroutines.ExperimentalCoroutinesApi

@@ -20,8 +20,9 @@ class AccessKeyDeserializationTest : FunSpec({
     context("Access Keys Container") {
         withData(
             nameFn = { "${it.typed.keys[0].publicKey} ${it.typed.keys[0].accessKey.permission}" },
-            DeserializationTestData(
-                """
+            listOf(
+                DeserializationTestData(
+                    """
                 {
                     "block_height": 73947176,
                     "block_hash": "jav58J75jTCkAouUyT8fEzoRTqoNaZpX1hGQZNKbU7c",
@@ -36,54 +37,15 @@ class AccessKeyDeserializationTest : FunSpec({
                     ]
                 }
                 """,
-                AccessKeysContainer(
-                    blockHeight = 73947176,
-                    blockHash = "jav58J75jTCkAouUyT8fEzoRTqoNaZpX1hGQZNKbU7c",
-                    keys = listOf(
-                        AccessKeyInfo(
-                            publicKey = "ed25519:6PKfSu4zZarrFVk1Z4uf8kjiNwbMHSaiUmBgaWYF1dCj",
-                            accessKey = AccessKey(
-                                nonce = 69877007000001,
-                                permission = AccessKeyPermission.FullAccess,
-                            )
-                        )
-                    )
-                )
-            ),
-            DeserializationTestData(
-                """
-                {
-                    "block_height": 73947176,
-                    "block_hash": "jav58J75jTCkAouUyT8fEzoRTqoNaZpX1hGQZNKbU7c",
-                    "keys": [
-                        {
-                            "public_key": "ed25519:6PKfSu4zZarrFVk1Z4uf8kjiNwbMHSaiUmBgaWYF1dCj",
-                            "access_key": {
-                                "nonce": 69877007000001,
-                                "permission": {
-                                    "FunctionCall": {
-                                        "allowance":"250000000000000000000000",
-                                        "receiver_id":"dummy.testnet",
-                                        "method_names":["test"]
-                                    }
-                                }
-                            }
-                        }
-                    ]
-                }
-                """,
-                AccessKeysContainer(
-                    blockHeight = 73947176,
-                    blockHash = "jav58J75jTCkAouUyT8fEzoRTqoNaZpX1hGQZNKbU7c",
-                    keys = listOf(
-                        AccessKeyInfo(
-                            publicKey = "ed25519:6PKfSu4zZarrFVk1Z4uf8kjiNwbMHSaiUmBgaWYF1dCj",
-                            accessKey = AccessKey(
-                                nonce = 69877007000001,
-                                permission = AccessKeyPermission.FunctionCall(
-                                    allowance = BigInteger("250000000000000000000000"),
-                                    receiverId = "dummy.testnet",
-                                    methodNames = listOf("test")
+                    AccessKeysContainer(
+                        blockHeight = 73947176,
+                        blockHash = "jav58J75jTCkAouUyT8fEzoRTqoNaZpX1hGQZNKbU7c",
+                        keys = listOf(
+                            AccessKeyInfo(
+                                publicKey = "ed25519:6PKfSu4zZarrFVk1Z4uf8kjiNwbMHSaiUmBgaWYF1dCj",
+                                accessKey = AccessKey(
+                                    nonce = 69877007000001,
+                                    permission = AccessKeyPermission.FullAccess,
                                 )
                             )
                         )
@@ -100,8 +62,9 @@ class AccessKeyDeserializationTest : FunSpec({
     context("Access Key") {
         withData(
             nameFn = { "${it.typed.permission}" },
-            DeserializationTestData(
-                """
+            listOf(
+                DeserializationTestData(
+                    """
                 {
                     "nonce": 69877007000001,
                     "permission": "FullAccess",
@@ -109,42 +72,47 @@ class AccessKeyDeserializationTest : FunSpec({
                     "block_hash": "jav58J75jTCkAouUyT8fEzoRTqoNaZpX1hGQZNKbU7c"
                 }
                 """,
-                AccessKeyInBlock(
-                    nonce = 69877007000001,
-                    permission = AccessKeyPermission.FullAccess,
-                    blockHeight = 73947176,
-                    blockHash = "jav58J75jTCkAouUyT8fEzoRTqoNaZpX1hGQZNKbU7c"
-                )
-            ),
-            DeserializationTestData(
-                """
-                {
-                    "nonce": 69877007000001,
-                    "permission": {
-                        "FunctionCall": {
-                            "allowance":"250000000000000000000000",
-                            "receiver_id":"dummy.testnet",
-                            "method_names":["test"]
-                        }
-                    },
-                    "block_height": 73947176,
-                    "block_hash": "jav58J75jTCkAouUyT8fEzoRTqoNaZpX1hGQZNKbU7c"
-                }
-                """,
-                AccessKeyInBlock(
-                    nonce = 69877007000001,
-                    permission = AccessKeyPermission.FunctionCall(
-                        allowance = BigInteger("250000000000000000000000"),
-                        receiverId = "dummy.testnet",
-                        methodNames = listOf("test")
-                    ),
-                    blockHeight = 73947176,
-                    blockHash = "jav58J75jTCkAouUyT8fEzoRTqoNaZpX1hGQZNKbU7c"
+                    AccessKeyInBlock(
+                        nonce = 69877007000001,
+                        permission = AccessKeyPermission.FullAccess,
+                        blockHeight = 73947176,
+                        blockHash = "jav58J75jTCkAouUyT8fEzoRTqoNaZpX1hGQZNKbU7c"
+                    )
                 )
             )
         ) { (a, b) ->
             shouldNotThrow<Throwable> {
                 objectMapper.readValue(a) as AccessKeyInBlock shouldBe b
+            }
+        }
+    }
+
+    context("Access Key Permission") {
+        withData(
+            nameFn = { "${it.typed}" },
+            DeserializationTestData(
+                "\"FullAccess\"",
+                AccessKeyPermission.FullAccess
+            ),
+            DeserializationTestData(
+                """
+                {
+                    "FunctionCall": {
+                        "allowance":"250000000000000000000000",
+                        "receiver_id":"dummy.testnet",
+                        "method_names":["test"]
+                    }
+                }
+                """,
+                AccessKeyPermission.FunctionCall(
+                    allowance = BigInteger("250000000000000000000000"),
+                    receiverId = "dummy.testnet",
+                    methodNames = listOf("test")
+                )
+            )
+        ) { (a, b) ->
+            shouldNotThrow<Throwable> {
+                objectMapper.readValue(a) as AccessKeyPermission shouldBe b
             }
         }
     }

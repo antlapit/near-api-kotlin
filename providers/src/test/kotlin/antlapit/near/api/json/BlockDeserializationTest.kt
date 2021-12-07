@@ -1,9 +1,10 @@
 package antlapit.near.api.json
 
-import antlapit.near.api.providers.model.block.Block
-import antlapit.near.api.providers.model.block.BlockHeader
-import antlapit.near.api.providers.model.block.ChunkHeader
+import antlapit.near.api.providers.model.accesskey.AccessKey
+import antlapit.near.api.providers.model.accesskey.AccessKeyPermission
+import antlapit.near.api.providers.model.block.*
 import antlapit.near.api.providers.model.primitives.SlashedValidator
+import antlapit.near.api.providers.model.transaction.SignedTransactionView
 import antlapit.near.api.providers.model.validators.ValidatorStakeStructVersion
 import antlapit.near.api.providers.model.validators.ValidatorStakeView
 import com.fasterxml.jackson.module.kotlin.readValue
@@ -191,6 +192,220 @@ class BlockDeserializationTest : FunSpec({
                 objectMapper.readValue(a) as Block shouldBe b
             }
 
+        }
+    }
+
+    context("Chunk") {
+        withData(
+            nameFn = { "$it.typed" },
+            listOf(
+                DeserializationTestData(
+                    """
+                {
+                   "author":"shardlabs.pool.f863973.m0",
+                   "header":{
+                      "chunk_hash":"5u7LRrVvN8mczkjwryqNKtGW8ZnR5EF5UxXXbn2nbb4Z",
+                      "prev_block_hash":"34g44Rvnq3dqictWNJKctdNB3hEF2HFwdpST3Gn25pw6",
+                      "outcome_root":"11111111111111111111111111111111",
+                      "prev_state_root":"3igzPCpjceAwS5jFhfZytbFmt5CD5iHxFiz5RwKMeW7w",
+                      "encoded_merkle_root":"7tJSLDF5NwipvDxLPdgXSqUdnHvrUdBuE5DarZLg9GQP",
+                      "encoded_length":284,
+                      "height_created":74113803,
+                      "height_included":74113803,
+                      "shard_id":0,
+                      "gas_used":0,
+                      "gas_limit":1000000000000000,
+                      "rent_paid":"0",
+                      "validator_reward":"0",
+                      "balance_burnt":"0",
+                      "outgoing_receipts_root":"8s41rye686T2ronWmFE38ji19vgeb6uPxjYMPt8y8pSV",
+                      "tx_root":"8gg9hRerEF9D3NiR9yCDNY81sPK7ann79K1D7T3iDAuW",
+                      "validator_proposals":[
+                         {
+                            "account_id":"node0",
+                            "public_key":"ed25519:ydgzeXHJ5Xyt7M1gXLxqLBW1Ejx6scNV5Nx2pxFM8su",
+                            "stake":"1"
+                        }
+                      ],
+                      "signature":"ed25519:2SybLgXLFcFVpDqtKn3WX7ySkLpWwfgecAFeBZByyJvbB4ZfgHirSGxBWAmdCetJtQsM31NASDcQvkG9MPySfdzF"
+                   },
+                   "transactions":[
+                      {
+                         "signer_id":"art.artcoin.testnet",
+                         "public_key":"ed25519:4o6mz55p1mNmfwg5EeTDXdtYFxQev672eU5wy5RjRCbw",
+                         "nonce":428216,
+                         "receiver_id":"art.artcoin.testnet",
+                         "actions":["CreateAccount"],
+                         "signature":"ed25519:SkvGRgDPF2vPM8uiusmYNAoXtv5421yptvwS82cXQZvtkPb5ynyqXhyPaPoaLw9LE86bHahjgkC4VrSgr6aXEog",
+                         "hash":"EBns1TFfY2MiM4TjFUhcNSV5h21UiGem94vQNPPEXpAz"
+                      }
+                   ],
+                   "receipts":[
+                      
+                   ]
+                }    
+                """.trimIndent(),
+                    Chunk(
+                        author = "shardlabs.pool.f863973.m0",
+                        header = ChunkHeader(
+                            chunkHash = "5u7LRrVvN8mczkjwryqNKtGW8ZnR5EF5UxXXbn2nbb4Z",
+                            prevBlockHash = "34g44Rvnq3dqictWNJKctdNB3hEF2HFwdpST3Gn25pw6",
+                            outcomeRoot = "11111111111111111111111111111111",
+                            prevStateRoot = "3igzPCpjceAwS5jFhfZytbFmt5CD5iHxFiz5RwKMeW7w",
+                            encodedMerkleRoot = "7tJSLDF5NwipvDxLPdgXSqUdnHvrUdBuE5DarZLg9GQP",
+                            encodedLength = 284,
+                            heightCreated = 74113803,
+                            heightIncluded = 74113803,
+                            shardId = 0,
+                            gasUsed = 0,
+                            gasLimit = 1000000000000000,
+                            balanceBurnt = BigInteger("0"),
+                            outgoingReceiptsRoot = "8s41rye686T2ronWmFE38ji19vgeb6uPxjYMPt8y8pSV",
+                            txRoot = "8gg9hRerEF9D3NiR9yCDNY81sPK7ann79K1D7T3iDAuW",
+                            validatorProposals = listOf(
+                                ValidatorStakeView(
+                                    validatorStakeStructVersion = ValidatorStakeStructVersion.V1,
+                                    accountId = "node0",
+                                    publicKey = "ed25519:ydgzeXHJ5Xyt7M1gXLxqLBW1Ejx6scNV5Nx2pxFM8su",
+                                    stake = BigInteger("1")
+                                )
+                            ),
+                            signature = "ed25519:2SybLgXLFcFVpDqtKn3WX7ySkLpWwfgecAFeBZByyJvbB4ZfgHirSGxBWAmdCetJtQsM31NASDcQvkG9MPySfdzF"
+                        ),
+                        transactions = listOf(
+                            SignedTransactionView(
+                                signerId = "art.artcoin.testnet",
+                                publicKey = "ed25519:4o6mz55p1mNmfwg5EeTDXdtYFxQev672eU5wy5RjRCbw",
+                                nonce = 428216,
+                                receiverId = "art.artcoin.testnet",
+                                actions = listOf(Action.CreateAccount),
+                                signature = "ed25519:SkvGRgDPF2vPM8uiusmYNAoXtv5421yptvwS82cXQZvtkPb5ynyqXhyPaPoaLw9LE86bHahjgkC4VrSgr6aXEog",
+                                hash = "EBns1TFfY2MiM4TjFUhcNSV5h21UiGem94vQNPPEXpAz"
+                            )
+                        ),
+                        receipts = listOf()
+                    )
+                )
+            )
+        ) { (a, b) ->
+            shouldNotThrow<Throwable> {
+                objectMapper.readValue(a) as Chunk shouldBe b
+            }
+        }
+    }
+
+    context("Action") {
+        withData(
+            nameFn = { "$it.typed" },
+            DeserializationTestData("\"CreateAccount\"", Action.CreateAccount),
+            DeserializationTestData(
+                """
+                {
+                    "DeployContract": {
+                        "code": "contractcode"
+                    }
+                }
+            """.trimIndent(), Action.DeployContract(code = "contractcode")
+            ),
+            DeserializationTestData(
+                """
+                {
+                    "FunctionCall": {
+                        "method_name": "test",
+                        "args": "args",
+                        "gas": 1,
+                        "deposit": 10
+                    }
+                }
+            """.trimIndent(), Action.FunctionCall(
+                    methodName = "test",
+                    args = "args",
+                    gas = 1,
+                    deposit = BigInteger.TEN
+                )
+            ),
+            DeserializationTestData(
+                """
+                {
+                    "Transfer": {
+                        "deposit": 100
+                    }
+                }
+            """.trimIndent(), Action.Transfer(
+                    deposit = BigInteger.valueOf(100)
+                )
+            ),
+            DeserializationTestData(
+                """
+                {
+                    "Stake": {
+                        "stake": 200,
+                        "public_key": "ed25519:SkvGRgDPF2vPM8uiusmYNAoXtv5421yptvwS82cXQZvtkPb5ynyqXhyPaPoaLw9LE86bHahjgkC4VrSgr6aXEog"
+                    }
+                }
+            """.trimIndent(), Action.Stake(
+                    stake = BigInteger.valueOf(200),
+                    publicKey = "ed25519:SkvGRgDPF2vPM8uiusmYNAoXtv5421yptvwS82cXQZvtkPb5ynyqXhyPaPoaLw9LE86bHahjgkC4VrSgr6aXEog"
+                )
+            ),
+            DeserializationTestData(
+                """
+                {
+                    "AddKey": {
+                        "public_key": "ed25519:SkvGRgDPF2vPM8uiusmYNAoXtv5421yptvwS82cXQZvtkPb5ynyqXhyPaPoaLw9LE86bHahjgkC4VrSgr6aXEog",
+                        "access_key": {
+                            "nonce": 69877007000001,
+                            "permission": "FullAccess"
+                        }
+                    }
+                }
+            """.trimIndent(), Action.AddKey(
+                    publicKey = "ed25519:SkvGRgDPF2vPM8uiusmYNAoXtv5421yptvwS82cXQZvtkPb5ynyqXhyPaPoaLw9LE86bHahjgkC4VrSgr6aXEog",
+                    accessKey = AccessKey(
+                        nonce = 69877007000001,
+                        permission = AccessKeyPermission.FullAccess
+                    )
+                )
+            ),
+            DeserializationTestData(
+                """
+                {
+                    "DeleteKey": {
+                        "public_key": "ed25519:SkvGRgDPF2vPM8uiusmYNAoXtv5421yptvwS82cXQZvtkPb5ynyqXhyPaPoaLw9LE86bHahjgkC4VrSgr6aXEog"
+                    }
+                }
+            """.trimIndent(), Action.DeleteKey(
+                    publicKey = "ed25519:SkvGRgDPF2vPM8uiusmYNAoXtv5421yptvwS82cXQZvtkPb5ynyqXhyPaPoaLw9LE86bHahjgkC4VrSgr6aXEog",
+                )
+            ),
+            DeserializationTestData(
+                """
+                {
+                    "DeleteAccount": {
+                        "beneficiary_id": "benefeciary"
+                    }
+                }
+            """.trimIndent(), Action.DeleteAccount(
+                    beneficiaryId = "benefeciary"
+                )
+            ),
+            DeserializationTestData(
+                """
+                {
+                    "StakeChunkOnly": {
+                        "stake": 100,
+                        "public_key": "ed25519:SkvGRgDPF2vPM8uiusmYNAoXtv5421yptvwS82cXQZvtkPb5ynyqXhyPaPoaLw9LE86bHahjgkC4VrSgr6aXEog"
+                    }
+                }
+            """.trimIndent(), Action.StakeChunkOnly(
+                    stake = BigInteger.valueOf(100),
+                    publicKey = "ed25519:SkvGRgDPF2vPM8uiusmYNAoXtv5421yptvwS82cXQZvtkPb5ynyqXhyPaPoaLw9LE86bHahjgkC4VrSgr6aXEog",
+                )
+            )
+        ) { (a, b) ->
+            shouldNotThrow<Throwable> {
+                objectMapper.readValue(a) as Action shouldBe b
+            }
         }
     }
 })
