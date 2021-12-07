@@ -18,7 +18,7 @@ class ContractDeserializationTest : FunSpec({
         withData(
             nameFn = { "${it.typed}" },
             listOf(
-                DeserializationTestData(
+                TestData(
                     """
                     {
                         "amount":"99998750632125700200000000",
@@ -29,7 +29,7 @@ class ContractDeserializationTest : FunSpec({
                         "block_height":74055091,
                         "block_hash":"5R1zy2VSPnmkgt5AvkTTnyFcNLArcUgYuDqAy3GZG7kU"
                     }
-                    """.trimIndent(),
+                    """,
                     Account(
                         amount = BigInteger("99998750632125700200000000"),
                         locked = BigInteger.ZERO,
@@ -51,9 +51,9 @@ class ContractDeserializationTest : FunSpec({
 
     context("Contract code") {
         withData(
-            nameFn = { "$it.typed" },
+            nameFn = { "${it.typed}" },
             listOf(
-                DeserializationTestData(
+                TestData(
                     """
                     {
                         "code_base64":"AG",
@@ -61,7 +61,7 @@ class ContractDeserializationTest : FunSpec({
                         "block_height":74055562,
                         "block_hash":"7ho4hhWACSKyffnxn43qjEsNzFXSkPoCYFpgVReSAUsC"
                     }
-                    """.trimIndent(),
+                    """,
                     ContractCode(
                         codeBase64 = "AG",
                         hash = "AFQCuhpYeMVvz6quXtNzSFhg2nPNkzP3yk5G4KtkQYn6",
@@ -80,9 +80,9 @@ class ContractDeserializationTest : FunSpec({
 
     context("Contract state") {
         withData(
-            nameFn = { "$it.typed" },
+            nameFn = { "${it.typed}" },
             listOf(
-                DeserializationTestData(
+                TestData(
                     """
                     {
                         "values":[{
@@ -94,7 +94,7 @@ class ContractDeserializationTest : FunSpec({
                         "block_height":74055920,
                         "block_hash":"GGZWQE2cXnxbKAMypEJ984B88NpDH93f3VFSNd4i1UFD"
                     }
-                    """.trimIndent(),
+                    """,
                     ContractState(
                         values = listOf(
                             ContractStateItem(
@@ -119,8 +119,8 @@ class ContractDeserializationTest : FunSpec({
 
     context("Call result") {
         withData(
-            nameFn = { "$it.typed" },
-            DeserializationTestData(
+            nameFn = { "${it.typed}" },
+            TestData(
                 """
                     {
                         "result":[34,123,92,34,97,99,99,111,117,110,116,73,100,92,34,58,92,34,97,112,105,95,107,111,116,108,105,110,46,116,101,115,116,110,101,116,92,34,125,34],
@@ -128,14 +128,14 @@ class ContractDeserializationTest : FunSpec({
                         "block_height":74056185,
                         "block_hash":"FXDS3AfDiBenpAnx1oTy5u7k6y5iMKnWKkq8CjXDFn6w"
                     }
-                """.trimIndent(),
+                """,
                 CallResult(
                     result = "\"{\\\"accountId\\\":\\\"api_kotlin.testnet\\\"}\"".toByteArray().asList(),
                     blockHeight = 74056185,
                     blockHash = "FXDS3AfDiBenpAnx1oTy5u7k6y5iMKnWKkq8CjXDFn6w"
                 )
             ),
-            DeserializationTestData(
+            TestData(
                 """
                     {
                         "result":[],
@@ -144,7 +144,7 @@ class ContractDeserializationTest : FunSpec({
                         "block_height":74056185,
                         "block_hash":"FXDS3AfDiBenpAnx1oTy5u7k6y5iMKnWKkq8CjXDFn6w"
                     }
-                """.trimIndent(),
+                """,
                 CallResult(
                     logs = listOf("something wrong"),
                     error = "error message",

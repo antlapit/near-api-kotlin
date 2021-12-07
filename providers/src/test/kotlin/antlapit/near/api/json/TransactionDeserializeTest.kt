@@ -3,6 +3,7 @@ package antlapit.near.api.json
 import antlapit.near.api.providers.model.primitives.ActionErrorKind
 import antlapit.near.api.providers.model.primitives.TxExecutionError
 import antlapit.near.api.providers.model.transaction.ExecutionStatus
+import antlapit.near.api.providers.model.transaction.FinalExecutionStatus
 import com.fasterxml.jackson.module.kotlin.readValue
 import io.kotest.assertions.throwables.shouldNotThrow
 import io.kotest.common.ExperimentalKotest
@@ -15,40 +16,26 @@ class TransactionDeserializeTest : FunSpec({
 
     val mapper = ObjectMapperFactory.newInstance()
 
-    context("ExecutionStatus") {
+    context("Execution status") {
         withData(
             nameFn = { "${it.typed}" },
-            DeserializationTestData(
-                """
-            "Unknown"
-            """.trimIndent(), ExecutionStatus.Unknown
+            TestData(
+                """"Unknown"""", ExecutionStatus.Unknown
             ),
-            DeserializationTestData(
-                """
-                {"SuccessReceiptId":"BLV2q6p8DX7pVgXRtGtBkyUNrnqkNyU7iSksXG7BjVZh"}        
-                """.trimIndent(),
-                ExecutionStatus.SuccessReceiptId(
-                    receiptId = "BLV2q6p8DX7pVgXRtGtBkyUNrnqkNyU7iSksXG7BjVZh"
-                )
+            TestData(
+                """{"SuccessReceiptId":"BLV2q6p8DX7pVgXRtGtBkyUNrnqkNyU7iSksXG7BjVZh"}""",
+                ExecutionStatus.SuccessReceiptId(receiptId = "BLV2q6p8DX7pVgXRtGtBkyUNrnqkNyU7iSksXG7BjVZh")
 
             ),
-            DeserializationTestData(
-                """
-                {"SuccessValue":"result"}        
-                """.trimIndent(),
-                ExecutionStatus.SuccessValue(
-                    value = "result"
-                )
+            TestData(
+                """{"SuccessValue":"result"}""",
+                ExecutionStatus.SuccessValue(value = "result")
             ),
-            DeserializationTestData(
-                """
-                {"SuccessValue":""}        
-                """.trimIndent(),
-                ExecutionStatus.SuccessValue(
-                    value = ""
-                )
+            TestData(
+                """{"SuccessValue":""}""",
+                ExecutionStatus.SuccessValue(value = "")
             ),
-            DeserializationTestData(
+            TestData(
                 """
                 {
                     "Failure": {
@@ -62,7 +49,7 @@ class TransactionDeserializeTest : FunSpec({
                         }
                     }
                 }        
-                """.trimIndent(),
+                """,
                 ExecutionStatus.Failure(
                     TxExecutionError.ActionError(
                         kind = ActionErrorKind.AccountAlreadyExists(
@@ -78,4 +65,49 @@ class TransactionDeserializeTest : FunSpec({
             }
         }
     }
+
+    context("Final execution status") {
+        withData(
+            nameFn = { "${it.typed}" },
+            TestData("\"NotStarted\"", FinalExecutionStatus.NotStarted),
+            TestData("\"Started\"", FinalExecutionStatus.Started),
+            TestData(
+                """{"SuccessValue":"result"}""",
+                FinalExecutionStatus.SuccessValue(value = "result")
+            ),
+            TestData(
+                """{"SuccessValue":""}""",
+                FinalExecutionStatus.SuccessValue(value = "")
+            ),
+            TestData(
+                """
+                {
+                    "Failure": {
+                        "ActionError": {
+                            "index": 1,
+                            "kind": {
+                                "AccountAlreadyExists": {
+                                    "account_id": "test"
+                                }
+                            }
+                        }
+                    }
+                }
+                """,
+                FinalExecutionStatus.Failure(
+                    TxExecutionError.ActionError(
+                        kind = ActionErrorKind.AccountAlreadyExists(
+                            accountId = "test"
+                        ),
+                        index = 1
+                    )
+                )
+            )
+        ) { (str, obj) ->
+            shouldNotThrow<Throwable> {
+                mapper.readValue(str) as FinalExecutionStatus shouldBe obj
+            }
+        }
+    }
+
 })

@@ -140,7 +140,9 @@ class JsonRpcProvider(
     data class RpcErrorCause(val name: String, val info: Map<String, Any?>?)
 
     data class GenericRpcRequest(val method: String, val params: Any?) {
+        @Suppress("unused")
         val jsonrpc = "2.0"
+        @Suppress("unused")
         val id = UUID.randomUUID().toString()
     }
 
@@ -162,7 +164,7 @@ class JsonRpcProvider(
         }
 
         @JvmStatic
-        fun constructException(error: JsonRpcProvider.RpcError) : ProviderException {
+        fun constructException(error: RpcError) : ProviderException {
             val errorCause = ErrorCause.findByCode(error.cause.name)
             val info = error.cause.info
             return if (errorCause == null) {

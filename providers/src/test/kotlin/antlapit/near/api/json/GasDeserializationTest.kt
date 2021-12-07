@@ -18,12 +18,12 @@ class GasDeserializationTest : FunSpec({
         withData(
             nameFn = { "${it.typed}" },
             listOf(
-                DeserializationTestData(
+                TestData(
                     """
                     {
                         "gas_price": "99998750632125700200000000"
                     }
-                    """.trimIndent(),
+                    """,
                     GasPrice(
                         gasPrice =  BigInteger("99998750632125700200000000"),
                     )

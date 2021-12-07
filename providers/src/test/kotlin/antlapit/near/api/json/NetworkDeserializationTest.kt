@@ -23,7 +23,7 @@ class NetworkDeserializationTest : FunSpec({
         withData(
             nameFn = { "${it.typed.version} ${it.typed.syncInfo}" },
             listOf(
-                DeserializationTestData(
+                TestData(
                     """
                     {
                        "version":{
@@ -52,7 +52,7 @@ class NetworkDeserializationTest : FunSpec({
                        },
                        "validator_account_id": "validator"
                     }
-                """.trimIndent(),
+                """,
                     NodeStatus(
                         version = NodeVersion(
                             version = "1.23.0-rc.1",
@@ -101,7 +101,7 @@ class NetworkDeserializationTest : FunSpec({
         withData(
             nameFn = { "${it.typed}" },
             listOf(
-                DeserializationTestData(
+                TestData(
                     """
                         {
                            "active_peers":[
@@ -123,7 +123,7 @@ class NetworkDeserializationTest : FunSpec({
                               }
                            ]
                         }
-                    """.trimIndent(),
+                    """,
                     NetworkInfo(
                         activePeers = listOf(
                             PeerInfo(
@@ -162,7 +162,7 @@ class NetworkDeserializationTest : FunSpec({
         withData(
             nameFn = { "${it.typed}" },
             listOf(
-                DeserializationTestData(
+                TestData(
                     """
                         {
                            "current_validators":[
@@ -217,7 +217,7 @@ class NetworkDeserializationTest : FunSpec({
                            "epoch_start_height":73999652,
                            "epoch_height":732
                         }
-                    """.trimIndent(),
+                    """,
                     EpochValidatorInfo(
                         epochStartHeight = 73999652,
                         epochHeight = 732,
@@ -281,8 +281,8 @@ class NetworkDeserializationTest : FunSpec({
     context("Validator kickout reason") {
         withData(
             nameFn = { "${it.typed}" },
-            DeserializationTestData("\"Slashed\"", ValidatorKickoutReason.Slashed),
-            DeserializationTestData(
+            TestData("\"Slashed\"", ValidatorKickoutReason.Slashed),
+            TestData(
                 """
                     {
                         "NotEnoughBlocks": {
@@ -290,13 +290,13 @@ class NetworkDeserializationTest : FunSpec({
                             "expected": 200
                         }
                     }
-                """.trimIndent(),
+                """,
                 ValidatorKickoutReason.NotEnoughBlocks(
                     produced = 100,
                     expected = 200
                 )
             ),
-            DeserializationTestData(
+            TestData(
                 """
                     {
                         "NotEnoughChunks": {
@@ -304,14 +304,14 @@ class NetworkDeserializationTest : FunSpec({
                             "expected": 200
                         }
                     }
-                """.trimIndent(),
+                """,
                 ValidatorKickoutReason.NotEnoughChunks(
                     produced = 100,
                     expected = 200
                 )
             ),
-            DeserializationTestData("\"Unstaked\"", ValidatorKickoutReason.Unstaked),
-            DeserializationTestData(
+            TestData("\"Unstaked\"", ValidatorKickoutReason.Unstaked),
+            TestData(
                 """
                     {
                         "NotEnoughStake": {
@@ -319,13 +319,13 @@ class NetworkDeserializationTest : FunSpec({
                             "threshold_u128": 200
                         }
                     }
-                """.trimIndent(),
+                """,
                 ValidatorKickoutReason.NotEnoughStake(
                     stakeU128 = BigInteger.valueOf(100),
                     thresholdU128 = BigInteger.valueOf(200)
                 )
             ),
-            DeserializationTestData("\"DidNotGetASeat\"", ValidatorKickoutReason.DidNotGetASeat)
+            TestData("\"DidNotGetASeat\"", ValidatorKickoutReason.DidNotGetASeat)
         ) { (a, b) ->
             shouldNotThrow<Throwable> {
                 objectMapper.readValue(a) as ValidatorKickoutReason shouldBe b

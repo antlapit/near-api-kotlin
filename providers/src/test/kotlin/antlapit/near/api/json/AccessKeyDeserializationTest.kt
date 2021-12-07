@@ -21,7 +21,7 @@ class AccessKeyDeserializationTest : FunSpec({
         withData(
             nameFn = { "${it.typed.keys[0].publicKey} ${it.typed.keys[0].accessKey.permission}" },
             listOf(
-                DeserializationTestData(
+                TestData(
                     """
                 {
                     "block_height": 73947176,
@@ -63,7 +63,7 @@ class AccessKeyDeserializationTest : FunSpec({
         withData(
             nameFn = { "${it.typed.permission}" },
             listOf(
-                DeserializationTestData(
+                TestData(
                     """
                 {
                     "nonce": 69877007000001,
@@ -90,11 +90,11 @@ class AccessKeyDeserializationTest : FunSpec({
     context("Access Key Permission") {
         withData(
             nameFn = { "${it.typed}" },
-            DeserializationTestData(
+            TestData(
                 "\"FullAccess\"",
                 AccessKeyPermission.FullAccess
             ),
-            DeserializationTestData(
+            TestData(
                 """
                 {
                     "FunctionCall": {

@@ -24,7 +24,7 @@ class BlockDeserializationTest : FunSpec({
         withData(
             nameFn = { "${it.typed}" },
             listOf(
-                DeserializationTestData(
+                TestData(
                     """
                     {
                        "author":"node0",
@@ -108,7 +108,7 @@ class BlockDeserializationTest : FunSpec({
                           }
                        ]
                     }
-                    """.trimIndent(),
+                    """,
                     Block(
                         author = "node0",
                         header = BlockHeader(
@@ -197,9 +197,9 @@ class BlockDeserializationTest : FunSpec({
 
     context("Chunk") {
         withData(
-            nameFn = { "$it.typed" },
+            nameFn = { "${it.typed}" },
             listOf(
-                DeserializationTestData(
+                TestData(
                     """
                 {
                    "author":"shardlabs.pool.f863973.m0",
@@ -254,7 +254,7 @@ class BlockDeserializationTest : FunSpec({
                       }
                    ]
                 }    
-                """.trimIndent(),
+                """,
                     Chunk(
                         author = "shardlabs.pool.f863973.m0",
                         header = ChunkHeader(
@@ -316,8 +316,8 @@ class BlockDeserializationTest : FunSpec({
 
     context("Receipt info") {
         withData(
-            nameFn = { "$it.typed" },
-            DeserializationTestData(
+            nameFn = { "${it.typed}" },
+            TestData(
                 """
                 {
                     "Data": {
@@ -325,12 +325,12 @@ class BlockDeserializationTest : FunSpec({
                         "data":"data"
                     }
                 }
-            """.trimIndent(), ReceiptInfo.Data(
+            """, ReceiptInfo.Data(
                     dataId = "ed25519:4o6mz55p1mNmfwg5EeTDXdtYFxQev672eU5wy5RjRCbw",
                     data = "data"
                 )
             ),
-            DeserializationTestData(
+            TestData(
                 """
                 {
                     "Action": {
@@ -345,7 +345,7 @@ class BlockDeserializationTest : FunSpec({
                         "actions": ["CreateAccount"]
                     }
                 }
-            """.trimIndent(), ReceiptInfo.Action(
+            """, ReceiptInfo.Action(
                     signerId = "signer",
                     signerPublicKey = "ed25519:4o6mz55p1mNmfwg5EeTDXdtYFxQev672eU5wy5RjRCbw",
                     gasPrice = BigInteger.ONE,
@@ -368,18 +368,18 @@ class BlockDeserializationTest : FunSpec({
 
     context("Action") {
         withData(
-            nameFn = { "$it.typed" },
-            DeserializationTestData("\"CreateAccount\"", Action.CreateAccount),
-            DeserializationTestData(
+            nameFn = { "${it.typed}" },
+            TestData("\"CreateAccount\"", Action.CreateAccount),
+            TestData(
                 """
                 {
                     "DeployContract": {
                         "code": "contractcode"
                     }
                 }
-            """.trimIndent(), Action.DeployContract(code = "contractcode")
+            """, Action.DeployContract(code = "contractcode")
             ),
-            DeserializationTestData(
+            TestData(
                 """
                 {
                     "FunctionCall": {
@@ -389,25 +389,25 @@ class BlockDeserializationTest : FunSpec({
                         "deposit": 10
                     }
                 }
-            """.trimIndent(), Action.FunctionCall(
+            """, Action.FunctionCall(
                     methodName = "test",
                     args = "args",
                     gas = 1,
                     deposit = BigInteger.TEN
                 )
             ),
-            DeserializationTestData(
+            TestData(
                 """
                 {
                     "Transfer": {
                         "deposit": 100
                     }
                 }
-            """.trimIndent(), Action.Transfer(
+            """, Action.Transfer(
                     deposit = BigInteger.valueOf(100)
                 )
             ),
-            DeserializationTestData(
+            TestData(
                 """
                 {
                     "Stake": {
@@ -415,12 +415,12 @@ class BlockDeserializationTest : FunSpec({
                         "public_key": "ed25519:SkvGRgDPF2vPM8uiusmYNAoXtv5421yptvwS82cXQZvtkPb5ynyqXhyPaPoaLw9LE86bHahjgkC4VrSgr6aXEog"
                     }
                 }
-            """.trimIndent(), Action.Stake(
+            """, Action.Stake(
                     stake = BigInteger.valueOf(200),
                     publicKey = "ed25519:SkvGRgDPF2vPM8uiusmYNAoXtv5421yptvwS82cXQZvtkPb5ynyqXhyPaPoaLw9LE86bHahjgkC4VrSgr6aXEog"
                 )
             ),
-            DeserializationTestData(
+            TestData(
                 """
                 {
                     "AddKey": {
@@ -431,7 +431,7 @@ class BlockDeserializationTest : FunSpec({
                         }
                     }
                 }
-            """.trimIndent(), Action.AddKey(
+            """, Action.AddKey(
                     publicKey = "ed25519:SkvGRgDPF2vPM8uiusmYNAoXtv5421yptvwS82cXQZvtkPb5ynyqXhyPaPoaLw9LE86bHahjgkC4VrSgr6aXEog",
                     accessKey = AccessKey(
                         nonce = 69877007000001,
@@ -439,29 +439,29 @@ class BlockDeserializationTest : FunSpec({
                     )
                 )
             ),
-            DeserializationTestData(
+            TestData(
                 """
                 {
                     "DeleteKey": {
                         "public_key": "ed25519:SkvGRgDPF2vPM8uiusmYNAoXtv5421yptvwS82cXQZvtkPb5ynyqXhyPaPoaLw9LE86bHahjgkC4VrSgr6aXEog"
                     }
                 }
-            """.trimIndent(), Action.DeleteKey(
+            """, Action.DeleteKey(
                     publicKey = "ed25519:SkvGRgDPF2vPM8uiusmYNAoXtv5421yptvwS82cXQZvtkPb5ynyqXhyPaPoaLw9LE86bHahjgkC4VrSgr6aXEog",
                 )
             ),
-            DeserializationTestData(
+            TestData(
                 """
                 {
                     "DeleteAccount": {
                         "beneficiary_id": "benefeciary"
                     }
                 }
-            """.trimIndent(), Action.DeleteAccount(
+            """, Action.DeleteAccount(
                     beneficiaryId = "benefeciary"
                 )
             ),
-            DeserializationTestData(
+            TestData(
                 """
                 {
                     "StakeChunkOnly": {
@@ -469,7 +469,7 @@ class BlockDeserializationTest : FunSpec({
                         "public_key": "ed25519:SkvGRgDPF2vPM8uiusmYNAoXtv5421yptvwS82cXQZvtkPb5ynyqXhyPaPoaLw9LE86bHahjgkC4VrSgr6aXEog"
                     }
                 }
-            """.trimIndent(), Action.StakeChunkOnly(
+            """, Action.StakeChunkOnly(
                     stake = BigInteger.valueOf(100),
                     publicKey = "ed25519:SkvGRgDPF2vPM8uiusmYNAoXtv5421yptvwS82cXQZvtkPb5ynyqXhyPaPoaLw9LE86bHahjgkC4VrSgr6aXEog",
                 )

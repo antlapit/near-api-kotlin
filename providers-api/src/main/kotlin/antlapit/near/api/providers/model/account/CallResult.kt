@@ -11,5 +11,6 @@ data class CallResult(
     override val blockHeight: BlockHeight,
     override val blockHash: CryptoHash
 ) : BlockReference(blockHeight, blockHash) {
+    @Suppress("unused")
     fun failed() = error != null
 }
