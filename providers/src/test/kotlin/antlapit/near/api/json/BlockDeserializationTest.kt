@@ -241,7 +241,17 @@ class BlockDeserializationTest : FunSpec({
                       }
                    ],
                    "receipts":[
-                      
+                      {
+                          "predecessor_id":"account1",
+                          "receiver_id":"account2",
+                          "receipt_id":"ed25519:SkvGRgDPF2vPM8uiusmYNAoXtv5421yptvwS82cXQZvtkPb5ynyqXhyPaPoaLw9LE86bHahjgkC4VrSgr6aXEog",
+                          "receipt": {
+                              "Data": {
+                                  "data_id":"ed25519:4o6mz55p1mNmfwg5EeTDXdtYFxQev672eU5wy5RjRCbw",
+                                  "data":"data"
+                              }
+                          }
+                      }
                    ]
                 }    
                 """.trimIndent(),
@@ -283,13 +293,75 @@ class BlockDeserializationTest : FunSpec({
                                 hash = "EBns1TFfY2MiM4TjFUhcNSV5h21UiGem94vQNPPEXpAz"
                             )
                         ),
-                        receipts = listOf()
+                        receipts = listOf(
+                            Receipt(
+                                predecessorId = "account1",
+                                receiverId = "account2",
+                                receiptId = "ed25519:SkvGRgDPF2vPM8uiusmYNAoXtv5421yptvwS82cXQZvtkPb5ynyqXhyPaPoaLw9LE86bHahjgkC4VrSgr6aXEog",
+                                receipt = ReceiptInfo.Data(
+                                    dataId = "ed25519:4o6mz55p1mNmfwg5EeTDXdtYFxQev672eU5wy5RjRCbw",
+                                    data = "data"
+                                )
+                            )
+                        )
                     )
                 )
             )
         ) { (a, b) ->
             shouldNotThrow<Throwable> {
                 objectMapper.readValue(a) as Chunk shouldBe b
+            }
+        }
+    }
+
+    context("Receipt info") {
+        withData(
+            nameFn = { "$it.typed" },
+            DeserializationTestData(
+                """
+                {
+                    "Data": {
+                        "data_id":"ed25519:4o6mz55p1mNmfwg5EeTDXdtYFxQev672eU5wy5RjRCbw",
+                        "data":"data"
+                    }
+                }
+            """.trimIndent(), ReceiptInfo.Data(
+                    dataId = "ed25519:4o6mz55p1mNmfwg5EeTDXdtYFxQev672eU5wy5RjRCbw",
+                    data = "data"
+                )
+            ),
+            DeserializationTestData(
+                """
+                {
+                    "Action": {
+                        "signer_id": "signer",
+                        "signer_public_key": "ed25519:4o6mz55p1mNmfwg5EeTDXdtYFxQev672eU5wy5RjRCbw",
+                        "gas_price": 1,
+                        "output_data_receivers": [{
+                            "data_id": "ed25519:4o6mz55p1mNmfwg5EeTDXdtYFxQev672eU5wy5RjRCbw",
+                            "receiver_id": "receiver"
+                        }],
+                        "input_data_ids": ["ed25519:4o6mz55p1mNmfwg5EeTDXdtYFxQev672eU5wy5RjRCbw"],
+                        "actions": ["CreateAccount"]
+                    }
+                }
+            """.trimIndent(), ReceiptInfo.Action(
+                    signerId = "signer",
+                    signerPublicKey = "ed25519:4o6mz55p1mNmfwg5EeTDXdtYFxQev672eU5wy5RjRCbw",
+                    gasPrice = BigInteger.ONE,
+                    outputDataReceivers = listOf(
+                        DataReceiver(
+                            dataId = "ed25519:4o6mz55p1mNmfwg5EeTDXdtYFxQev672eU5wy5RjRCbw",
+                            receiverId = "receiver"
+                        )
+                    ),
+                    inputDataIds = listOf("ed25519:4o6mz55p1mNmfwg5EeTDXdtYFxQev672eU5wy5RjRCbw"),
+                    actions = listOf(Action.CreateAccount),
+                )
+            )
+        ) { (a, b) ->
+            shouldNotThrow<Throwable> {
+                objectMapper.readValue(a) as ReceiptInfo shouldBe b
             }
         }
     }
