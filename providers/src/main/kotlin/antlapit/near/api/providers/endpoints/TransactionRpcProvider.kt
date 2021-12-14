@@ -1,5 +1,6 @@
 package antlapit.near.api.providers.endpoints
 
+import antlapit.near.api.borsh.toBorsh
 import antlapit.near.api.providers.TransactionProvider
 import antlapit.near.api.providers.Utils
 import antlapit.near.api.providers.base.JsonRpcProvider
@@ -26,8 +27,9 @@ class TransactionRpcProvider(private val jsonRpcProvider: JsonRpcProvider) : Tra
     )
 
     override suspend fun sendTxAsync(transaction: Transaction, signer: Signer, timeout: Long): CryptoHash {
-        val message = Borsh.serialize(transaction) // TODO use the borshj
+        val message = Borsh.serialize(transaction.toBorsh())
         val hash = String(message).sha256()
+        signer.sign(message)
         TODO("Not yet implemented")
         // const message = serialize(SCHEMA, transaction);
         // const hash = new Uint8Array(sha256.sha256.array(message));
