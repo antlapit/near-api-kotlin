@@ -19,10 +19,14 @@ plugins {
 repositories {
     // Use Maven Central for resolving dependencies.
     mavenCentral()
+
+    // Use jitpack for Kotlin Komputing projects
+    maven(url = "https://jitpack.io")
 }
 
 dependencies {
     implementation(project(":providers-api"))
+    implementation(fileTree("lib")) // TODO
 
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
 

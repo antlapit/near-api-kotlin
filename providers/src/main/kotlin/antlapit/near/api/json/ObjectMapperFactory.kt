@@ -19,7 +19,7 @@ class ObjectMapperFactory {
                 .addModule(JavaTimeModule())
                 .addModule(Jdk8Module())
                 .addModule(KotlinModule())
-                .addModule(RustEnumDeserializationModule())
+                .addModule(NearRpcModelsModule())
                 .propertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
                 .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
                 .build()

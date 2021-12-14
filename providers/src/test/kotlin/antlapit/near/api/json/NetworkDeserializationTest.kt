@@ -1,6 +1,7 @@
 package antlapit.near.api.json
 
 import antlapit.near.api.providers.model.networkinfo.*
+import antlapit.near.api.providers.model.primitives.PublicKey
 import antlapit.near.api.providers.model.validators.*
 import com.fasterxml.jackson.module.kotlin.readValue
 import io.kotest.assertions.throwables.shouldNotThrow
@@ -224,7 +225,7 @@ class NetworkDeserializationTest : FunSpec({
                         currentValidators = listOf(
                             CurrentEpochValidatorInfo(
                                 accountId = "node0",
-                                publicKey = "ed25519:ydgzeXHJ5Xyt7M1gXLxqLBW1Ejx6scNV5Nx2pxFM8su",
+                                publicKey = PublicKey("ed25519:ydgzeXHJ5Xyt7M1gXLxqLBW1Ejx6scNV5Nx2pxFM8su"),
                                 isSlashed = false,
                                 stake = BigInteger("12862979641809099040925847359251"),
                                 shards = listOf(0, 1),
@@ -235,7 +236,7 @@ class NetworkDeserializationTest : FunSpec({
                         nextValidators = listOf(
                             NextEpochValidatorInfo(
                                 accountId = "node0",
-                                publicKey = "ed25519:ydgzeXHJ5Xyt7M1gXLxqLBW1Ejx6scNV5Nx2pxFM8su",
+                                publicKey = PublicKey("ed25519:ydgzeXHJ5Xyt7M1gXLxqLBW1Ejx6scNV5Nx2pxFM8su"),
                                 stake = BigInteger("12878109767515481052269040578386"),
                                 shards = listOf(0, 1, 2, 3),
                             )
@@ -244,7 +245,7 @@ class NetworkDeserializationTest : FunSpec({
                             ValidatorStakeView(
                                 validatorStakeStructVersion = ValidatorStakeStructVersion.V1,
                                 accountId = "node0",
-                                publicKey = "ed25519:ydgzeXHJ5Xyt7M1gXLxqLBW1Ejx6scNV5Nx2pxFM8su",
+                                publicKey = PublicKey("ed25519:ydgzeXHJ5Xyt7M1gXLxqLBW1Ejx6scNV5Nx2pxFM8su"),
                                 stake = BigInteger("1")
                             )
                         ),
@@ -252,7 +253,7 @@ class NetworkDeserializationTest : FunSpec({
                             ValidatorStakeView(
                                 validatorStakeStructVersion = ValidatorStakeStructVersion.V1,
                                 accountId = "node0",
-                                publicKey = "ed25519:ydgzeXHJ5Xyt7M1gXLxqLBW1Ejx6scNV5Nx2pxFM8su",
+                                publicKey = PublicKey("ed25519:ydgzeXHJ5Xyt7M1gXLxqLBW1Ejx6scNV5Nx2pxFM8su"),
                                 stake = BigInteger("2")
                             )
                         ),
@@ -260,7 +261,7 @@ class NetworkDeserializationTest : FunSpec({
                             ValidatorStakeView(
                                 validatorStakeStructVersion = ValidatorStakeStructVersion.V1,
                                 accountId = "node0.pool.f863973.m0",
-                                publicKey = "ed25519:7qhA31M3SaT4ntXwFSdBHewYzMTw3GccsBp2D3NeCb1Y",
+                                publicKey = PublicKey("ed25519:7qhA31M3SaT4ntXwFSdBHewYzMTw3GccsBp2D3NeCb1Y"),
                                 stake = BigInteger("491390068923117066486017091877")
                             )
                         ),

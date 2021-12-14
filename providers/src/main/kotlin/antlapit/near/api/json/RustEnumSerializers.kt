@@ -1,12 +1,16 @@
-package antlapit.near.api.providers.base
+package antlapit.near.api.json
 
+import antlapit.near.api.providers.util.RustEnum
 import antlapit.near.api.providers.util.RustSinglePropertyEnumItem
+import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.core.JsonParseException
 import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.core.JsonToken
-import com.fasterxml.jackson.databind.DeserializationContext
-import com.fasterxml.jackson.databind.JsonDeserializer
+import com.fasterxml.jackson.databind.*
+import com.fasterxml.jackson.databind.ser.BeanSerializerModifier
+import com.fasterxml.jackson.databind.ser.PropertyWriter
 import kotlin.reflect.KClass
+import kotlin.reflect.full.allSuperclasses
 import kotlin.reflect.full.primaryConstructor
 import kotlin.reflect.jvm.jvmErasure
 
@@ -87,4 +91,56 @@ class RustEnumDeserializer<T : Any>(private val kClass: KClass<out T>) : JsonDes
         }
         return subclasses[typeId]!!
     }
+}
+
+class RustEnumSerializerModifier : BeanSerializerModifier() {
+    override fun modifySerializer(
+        config: SerializationConfig?,
+        beanDesc: BeanDescription?,
+        serializer: JsonSerializer<*>?
+    ): JsonSerializer<*>? {
+        serializer!!
+        val kClass = beanDesc!!.beanClass.kotlin
+        val isRustEnum = kClass.allSuperclasses
+            .flatMap { it.annotations }
+            .find { it is RustEnum } != null
+        return if (isRustEnum) {
+            RustEnumSerializer(serializer as JsonSerializer<Any>)
+        } else {
+            super.modifySerializer(config, beanDesc, serializer)
+        }
+    }
+}
+
+class RustSinglePropertyEnumItemSerializer(propertyWriter: PropertyWriter) : JsonSerializer<Any>() {
+    override fun serialize(value: Any, gen: JsonGenerator?, serializers: SerializerProvider?) {
+        gen!!
+        serializers!!
+
+    }
+
+}
+
+class RustEnumSerializer(private val beanSerializer: JsonSerializer<Any>) : JsonSerializer<Any>() {
+    override fun serialize(value: Any, gen: JsonGenerator?, serializers: SerializerProvider?) {
+        gen!!
+        serializers!!
+        val kClass = value::class
+        when {
+            kClass.objectInstance != null -> gen.writeString(kClass.simpleName!!)
+            else -> {
+                val isSinglePropertyEnumItem = kClass.annotations.find { it is RustSinglePropertyEnumItem } != null
+                gen.writeStartObject()
+                gen.writeFieldName(kClass.simpleName!!)
+                if (isSinglePropertyEnumItem && beanSerializer.properties().hasNext()) {
+                    val writer = beanSerializer.properties().next()
+                    writer.serializeAsElement(value, gen, serializers)
+                } else {
+                    beanSerializer.serialize(value, gen, serializers)
+                }
+                gen.writeEndObject()
+            }
+        }
+    }
+
 }

@@ -1,6 +1,5 @@
 package antlapit.near.api.json
 
-import antlapit.near.api.providers.base.RustEnumDeserializer
 import antlapit.near.api.providers.model.accesskey.AccessKeyPermission
 import antlapit.near.api.providers.model.block.Action
 import antlapit.near.api.providers.model.block.ReceiptInfo
@@ -11,21 +10,33 @@ import antlapit.near.api.providers.model.validators.ValidatorKickoutReason
 import com.fasterxml.jackson.core.Version
 import com.fasterxml.jackson.databind.Module
 import com.fasterxml.jackson.databind.module.SimpleDeserializers
+import com.fasterxml.jackson.databind.module.SimpleSerializers
 
 
-class RustEnumDeserializationModule : Module() {
+class NearRpcModelsModule : Module() {
     override fun version(): Version {
         return Version(0, 0, 1, "NONE", null, null)
     }
 
     override fun getModuleName(): String {
-        return "RustEnumDeserialization"
+        return "NearRpcModels"
     }
 
     override fun setupModule(ctx: SetupContext?) {
         ctx!!
+        ctx.addSerializers(object : SimpleSerializers() {
+            init {
+                addSerializer(PublicKey::class.java, PublicKeySerializer())
+            }
+        })
+
+        ctx.addBeanSerializerModifier(RustEnumSerializerModifier())
+
         ctx.addDeserializers(object : SimpleDeserializers() {
             init {
+                // public key
+                addDeserializer(PublicKey::class.java, PublicKeyDeserializer())
+
                 // access key
                 addDeserializer(AccessKeyPermission::class.java, RustEnumDeserializer(AccessKeyPermission::class))
 

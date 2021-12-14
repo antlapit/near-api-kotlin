@@ -6,7 +6,7 @@ data class FinalExecutionOutcome(
     /// Execution status. Contains the result in case of successful execution.
     val status: FinalExecutionStatus,
     /// Signed Transaction
-    val transaction: SignedTransactionView,
+    val transaction: SignedTransaction,
     /// The execution outcome of the signed transaction.
     val transactionOutcome: ExecutionOutcomeWithIdView,
     /// The execution outcome of receipts.

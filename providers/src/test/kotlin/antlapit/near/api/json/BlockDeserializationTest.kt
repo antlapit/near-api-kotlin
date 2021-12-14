@@ -3,8 +3,9 @@ package antlapit.near.api.json
 import antlapit.near.api.providers.model.accesskey.AccessKey
 import antlapit.near.api.providers.model.accesskey.AccessKeyPermission
 import antlapit.near.api.providers.model.block.*
+import antlapit.near.api.providers.model.primitives.PublicKey
 import antlapit.near.api.providers.model.primitives.SlashedValidator
-import antlapit.near.api.providers.model.transaction.SignedTransactionView
+import antlapit.near.api.providers.model.transaction.SignedTransaction
 import antlapit.near.api.providers.model.validators.ValidatorStakeStructVersion
 import antlapit.near.api.providers.model.validators.ValidatorStakeView
 import com.fasterxml.jackson.module.kotlin.readValue
@@ -131,7 +132,7 @@ class BlockDeserializationTest : FunSpec({
                                 ValidatorStakeView(
                                     validatorStakeStructVersion = ValidatorStakeStructVersion.V1,
                                     accountId = "node0",
-                                    publicKey = "ed25519:ydgzeXHJ5Xyt7M1gXLxqLBW1Ejx6scNV5Nx2pxFM8su",
+                                    publicKey = PublicKey("ed25519:ydgzeXHJ5Xyt7M1gXLxqLBW1Ejx6scNV5Nx2pxFM8su"),
                                     stake = BigInteger("1")
                                 )
                             ),
@@ -177,7 +178,7 @@ class BlockDeserializationTest : FunSpec({
                                     ValidatorStakeView(
                                         validatorStakeStructVersion = ValidatorStakeStructVersion.V1,
                                         accountId = "node0",
-                                        publicKey = "ed25519:ydgzeXHJ5Xyt7M1gXLxqLBW1Ejx6scNV5Nx2pxFM8su",
+                                        publicKey = PublicKey("ed25519:ydgzeXHJ5Xyt7M1gXLxqLBW1Ejx6scNV5Nx2pxFM8su"),
                                         stake = BigInteger("1")
                                     )
                                 ),
@@ -276,16 +277,16 @@ class BlockDeserializationTest : FunSpec({
                                 ValidatorStakeView(
                                     validatorStakeStructVersion = ValidatorStakeStructVersion.V1,
                                     accountId = "node0",
-                                    publicKey = "ed25519:ydgzeXHJ5Xyt7M1gXLxqLBW1Ejx6scNV5Nx2pxFM8su",
+                                    publicKey = PublicKey("ed25519:ydgzeXHJ5Xyt7M1gXLxqLBW1Ejx6scNV5Nx2pxFM8su"),
                                     stake = BigInteger("1")
                                 )
                             ),
                             signature = "ed25519:2SybLgXLFcFVpDqtKn3WX7ySkLpWwfgecAFeBZByyJvbB4ZfgHirSGxBWAmdCetJtQsM31NASDcQvkG9MPySfdzF"
                         ),
                         transactions = listOf(
-                            SignedTransactionView(
+                            SignedTransaction(
                                 signerId = "art.artcoin.testnet",
-                                publicKey = "ed25519:4o6mz55p1mNmfwg5EeTDXdtYFxQev672eU5wy5RjRCbw",
+                                publicKey = PublicKey("ed25519:4o6mz55p1mNmfwg5EeTDXdtYFxQev672eU5wy5RjRCbw"),
                                 nonce = 428216,
                                 receiverId = "art.artcoin.testnet",
                                 actions = listOf(Action.CreateAccount),
@@ -347,7 +348,7 @@ class BlockDeserializationTest : FunSpec({
                 }
             """, ReceiptInfo.Action(
                     signerId = "signer",
-                    signerPublicKey = "ed25519:4o6mz55p1mNmfwg5EeTDXdtYFxQev672eU5wy5RjRCbw",
+                    signerPublicKey = PublicKey("ed25519:4o6mz55p1mNmfwg5EeTDXdtYFxQev672eU5wy5RjRCbw"),
                     gasPrice = BigInteger.ONE,
                     outputDataReceivers = listOf(
                         DataReceiver(
@@ -417,7 +418,7 @@ class BlockDeserializationTest : FunSpec({
                 }
             """, Action.Stake(
                     stake = BigInteger.valueOf(200),
-                    publicKey = "ed25519:SkvGRgDPF2vPM8uiusmYNAoXtv5421yptvwS82cXQZvtkPb5ynyqXhyPaPoaLw9LE86bHahjgkC4VrSgr6aXEog"
+                    publicKey = PublicKey("ed25519:SkvGRgDPF2vPM8uiusmYNAoXtv5421yptvwS82cXQZvtkPb5ynyqXhyPaPoaLw9LE86bHahjgkC4VrSgr6aXEog")
                 )
             ),
             TestData(
@@ -432,7 +433,7 @@ class BlockDeserializationTest : FunSpec({
                     }
                 }
             """, Action.AddKey(
-                    publicKey = "ed25519:SkvGRgDPF2vPM8uiusmYNAoXtv5421yptvwS82cXQZvtkPb5ynyqXhyPaPoaLw9LE86bHahjgkC4VrSgr6aXEog",
+                    publicKey = PublicKey("ed25519:SkvGRgDPF2vPM8uiusmYNAoXtv5421yptvwS82cXQZvtkPb5ynyqXhyPaPoaLw9LE86bHahjgkC4VrSgr6aXEog"),
                     accessKey = AccessKey(
                         nonce = 69877007000001,
                         permission = AccessKeyPermission.FullAccess
@@ -447,7 +448,7 @@ class BlockDeserializationTest : FunSpec({
                     }
                 }
             """, Action.DeleteKey(
-                    publicKey = "ed25519:SkvGRgDPF2vPM8uiusmYNAoXtv5421yptvwS82cXQZvtkPb5ynyqXhyPaPoaLw9LE86bHahjgkC4VrSgr6aXEog",
+                    publicKey = PublicKey("ed25519:SkvGRgDPF2vPM8uiusmYNAoXtv5421yptvwS82cXQZvtkPb5ynyqXhyPaPoaLw9LE86bHahjgkC4VrSgr6aXEog"),
                 )
             ),
             TestData(
@@ -471,7 +472,7 @@ class BlockDeserializationTest : FunSpec({
                 }
             """, Action.StakeChunkOnly(
                     stake = BigInteger.valueOf(100),
-                    publicKey = "ed25519:SkvGRgDPF2vPM8uiusmYNAoXtv5421yptvwS82cXQZvtkPb5ynyqXhyPaPoaLw9LE86bHahjgkC4VrSgr6aXEog",
+                    publicKey = PublicKey("ed25519:SkvGRgDPF2vPM8uiusmYNAoXtv5421yptvwS82cXQZvtkPb5ynyqXhyPaPoaLw9LE86bHahjgkC4VrSgr6aXEog"),
                 )
             )
         ) { (a, b) ->

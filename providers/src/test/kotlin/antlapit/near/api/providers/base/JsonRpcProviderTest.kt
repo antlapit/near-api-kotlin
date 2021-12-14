@@ -1,6 +1,5 @@
-package antlapit.near.api.providers.endpoints
+package antlapit.near.api.providers.base
 
-import antlapit.near.api.providers.base.JsonRpcProvider
 import antlapit.near.api.providers.base.config.JsonRpcConfig
 import antlapit.near.api.providers.base.config.NetworkEnum
 import antlapit.near.api.providers.model.account.Account

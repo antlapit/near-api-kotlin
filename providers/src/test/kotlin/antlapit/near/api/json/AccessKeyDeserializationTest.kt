@@ -1,6 +1,7 @@
 package antlapit.near.api.json
 
 import antlapit.near.api.providers.model.accesskey.*
+import antlapit.near.api.providers.model.primitives.PublicKey
 import com.fasterxml.jackson.module.kotlin.readValue
 import io.kotest.assertions.throwables.shouldNotThrow
 import io.kotest.common.ExperimentalKotest
@@ -42,7 +43,7 @@ class AccessKeyDeserializationTest : FunSpec({
                         blockHash = "jav58J75jTCkAouUyT8fEzoRTqoNaZpX1hGQZNKbU7c",
                         keys = listOf(
                             AccessKeyInfo(
-                                publicKey = "ed25519:6PKfSu4zZarrFVk1Z4uf8kjiNwbMHSaiUmBgaWYF1dCj",
+                                publicKey = PublicKey("ed25519:6PKfSu4zZarrFVk1Z4uf8kjiNwbMHSaiUmBgaWYF1dCj"),
                                 accessKey = AccessKey(
                                     nonce = 69877007000001,
                                     permission = AccessKeyPermission.FullAccess,

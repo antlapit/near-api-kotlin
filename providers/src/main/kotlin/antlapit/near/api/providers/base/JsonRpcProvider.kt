@@ -21,10 +21,9 @@ import java.util.*
  * Should be initialized from config class
  */
 class JsonRpcProvider(
-    val config: JsonRpcConfig
+    val config: JsonRpcConfig,
+    val objectMapper: ObjectMapper = ObjectMapperFactory.newInstance()
 ) {
-
-    private val objectMapper: ObjectMapper = ObjectMapperFactory.newInstance()
 
     // TODO close client after execution
     val client: HttpClient = HttpClient(CIO) {
