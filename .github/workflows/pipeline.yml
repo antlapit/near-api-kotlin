@@ -25,7 +25,7 @@ jobs:
 
       - name: Publish package on main branch
         run: ./gradlew publish
-        if: ${{ github.ref == 'refs/heads/main' }}
+        if: ${{ github.ref == 'refs/heads/main' }} && success()
         env:
           GITHUB_TOKEN: ${{ secrets.PKG_GITHUB_TOKEN }}
 
