@@ -10,7 +10,7 @@ import io.kotest.matchers.shouldBe
 import java.math.BigInteger
 
 @ExperimentalKotest
-class ErrorsDeserializeTest : FunSpec({
+class ErrorsDeserializationTest : FunSpec({
 
     val mapper = ObjectMapperFactory.newInstance()
 
@@ -157,7 +157,7 @@ class ErrorsDeserializeTest : FunSpec({
                     }}""",
                 ActionErrorKind.DeleteKeyDoesNotExist(
                     accountId = "account",
-                    publicKey = "ed25519:4o6mz55p1mNmfwg5EeTDXdtYFxQev672eU5wy5RjRCbw"
+                    publicKey = PublicKey("ed25519:4o6mz55p1mNmfwg5EeTDXdtYFxQev672eU5wy5RjRCbw")
                 )
             ),
             TestData(
@@ -167,7 +167,7 @@ class ErrorsDeserializeTest : FunSpec({
                     }}""",
                 ActionErrorKind.AddKeyAlreadyExists(
                     accountId = "account",
-                    publicKey = "ed25519:4o6mz55p1mNmfwg5EeTDXdtYFxQev672eU5wy5RjRCbw"
+                    publicKey = PublicKey("ed25519:4o6mz55p1mNmfwg5EeTDXdtYFxQev672eU5wy5RjRCbw")
                 )
             ),
             TestData(
@@ -375,7 +375,7 @@ class ErrorsDeserializeTest : FunSpec({
                 }""".trimMargin(),
                 InvalidAccessKeyErrorType.AccessKeyNotFound(
                     accountId = "account",
-                    publicKey = "ed25519:4o6mz55p1mNmfwg5EeTDXdtYFxQev672eU5wy5RjRCbw"
+                    publicKey = PublicKey("ed25519:4o6mz55p1mNmfwg5EeTDXdtYFxQev672eU5wy5RjRCbw")
                 )
             ),
             TestData(
@@ -402,7 +402,7 @@ class ErrorsDeserializeTest : FunSpec({
                 }""".trimMargin(),
                 InvalidAccessKeyErrorType.NotEnoughAllowance(
                     accountId = "account",
-                    publicKey = "ed25519:4o6mz55p1mNmfwg5EeTDXdtYFxQev672eU5wy5RjRCbw",
+                    publicKey = PublicKey("ed25519:4o6mz55p1mNmfwg5EeTDXdtYFxQev672eU5wy5RjRCbw"),
                     allowance = BigInteger.ONE,
                     cost = BigInteger.TEN
                 )
@@ -509,11 +509,11 @@ class ErrorsDeserializeTest : FunSpec({
             TestData(
                 """{
                     "UnsuitableStakingKey": {
-                        "public_key": "key"
+                        "public_key": "ed25519:key"
                     }
                 }""",
                 ActionsValidationError.UnsuitableStakingKey(
-                    publicKey = "key"
+                    publicKey = PublicKey("ed25519:key")
                 )
             ),
             TestData(

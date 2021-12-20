@@ -19,12 +19,14 @@ plugins {
 repositories {
     // Use Maven Central for resolving dependencies.
     mavenCentral()
+
+    // Use jitpack for Kotlin Komputing projects
+    maven(url = "https://jitpack.io")
 }
 
 dependencies {
     implementation(project(":providers-api"))
-
-    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
+    implementation(fileTree("lib")) // should be artifact
 
     // Align versions of all Kotlin components
     implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
@@ -63,6 +65,10 @@ dependencies {
     testImplementation("io.kotest:kotest-framework-datatest:$kotestVersion")
     testImplementation("io.kotest:kotest-assertions-core:$kotestVersion")
     testImplementation("io.kotest:kotest-property:$kotestVersion")
+
+    testImplementation("com.github.komputing.KHash:sha256:1.1.1")
+    // signing with tweetnacl java port
+    testImplementation("io.github.instantwebp2p:tweetnacl-java:1.1.2")
 }
 
 java {

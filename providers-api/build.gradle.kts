@@ -19,6 +19,9 @@ plugins {
 repositories {
     // Use Maven Central for resolving dependencies.
     mavenCentral()
+
+    // Use jitpack for Kotlin Komputing projects
+    maven(url = "https://jitpack.io")
 }
 
 dependencies {
@@ -27,6 +30,8 @@ dependencies {
 
     // Use the Kotlin JDK 8 standard library.
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+
+    implementation("com.github.komputing:KBase58:0.4")
 }
 
 java {

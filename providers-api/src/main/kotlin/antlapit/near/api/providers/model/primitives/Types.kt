@@ -71,8 +71,6 @@ typealias ReceiptIndex = Long // TODO Rust u64
 typealias PromiseId = List<ReceiptIndex>
 typealias ProtocolVersion = Int // TODO UInt
 
-// TODO signature
-typealias Signature = String
 /// Hash used by to store state root.
 typealias StateRoot = CryptoHash
 

@@ -5,6 +5,7 @@ import antlapit.near.api.providers.base.JsonRpcProvider
 import antlapit.near.api.providers.base.config.JsonRpcConfig
 import antlapit.near.api.providers.base.config.NetworkEnum
 import antlapit.near.api.providers.model.accesskey.AccessKeyPermission
+import antlapit.near.api.providers.model.primitives.PublicKey
 import io.kotest.common.ExperimentalKotest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
@@ -44,7 +45,7 @@ class AccessKeyRpcProviderTest {
     @Test
     fun getSingleAccessKey_whenLatest_thenCorrect() = runBlocking {
         val accountId = "api_kotlin.testnet"
-        val publicKey = "ed25519:7jytAYzviGM2a3dcXYAD5YTtCcYJ3XiYSwLcHYdEx1uk"
+        val publicKey = PublicKey("ed25519:7jytAYzviGM2a3dcXYAD5YTtCcYJ3XiYSwLcHYdEx1uk")
         val finalKey = endpoint.getAccessKey(accountId, publicKey, Finality.FINAL)
         assertEquals(AccessKeyPermission.FullAccess, finalKey.permission, "access key should be FullAccess key")
 

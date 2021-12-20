@@ -19,5 +19,5 @@ data class ChunkHeader(
     val outgoingReceiptsRoot: CryptoHash,
     val txRoot: CryptoHash,
     val validatorProposals: List<ValidatorStakeView> = emptyList(),
-    val signature: Signature
+    val signature: CryptoHash
 )
