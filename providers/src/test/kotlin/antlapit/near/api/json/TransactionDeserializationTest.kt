@@ -211,7 +211,7 @@ class TransactionDeserializationTest : FunSpec({
                     """,
                     FinalExecutionOutcome(
                         status = FinalExecutionStatus.SuccessValue(value = "success"),
-                        transaction = SignedTransaction(
+                        transaction = SignedTransactionView(
                             signerId = "namlebao19.testnet",
                             publicKey = PublicKey("ed25519:AfEKZddqE52chy49b2tFqnULJLjKyzE8JecH8DMcTV4L"),
                             nonce = 71618374000001,

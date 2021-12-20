@@ -3,20 +3,22 @@ package antlapit.near.api.providers
 import antlapit.near.api.providers.model.primitives.AccountId
 import antlapit.near.api.providers.model.primitives.CryptoHash
 import antlapit.near.api.providers.model.transaction.FinalExecutionOutcome
-import antlapit.near.api.providers.model.transaction.Signer
-import antlapit.near.api.providers.model.transaction.Transaction
+import antlapit.near.api.providers.model.transaction.SignedTransaction
 
 interface TransactionProvider {
 
     /**
      * Sends a transaction and immediately returns transaction hash.
      *
-     * @param signedTx Signed Transaction
+     * @param signedTx Signed Transaction in bytes
      * @return Transaction hash
      */
-    suspend fun sendTxAsync(signedTx: String, timeout: Long = Constants.DEFAULT_TIMEOUT): CryptoHash
+    suspend fun sendTxAsync(signedTx: ByteArray, timeout: Long = Constants.DEFAULT_TIMEOUT): CryptoHash
 
-    suspend fun sendTxAsync(transaction: Transaction, signer: Signer, timeout: Long = Constants.DEFAULT_TIMEOUT) : CryptoHash
+    suspend fun sendTxAsync(
+        signedTransaction: SignedTransaction,
+        timeout: Long = Constants.DEFAULT_TIMEOUT
+    ): CryptoHash
 
     /**
      * Sends a transaction and waits until transaction is fully complete. (Has a 10 second timeout)
@@ -24,9 +26,12 @@ interface TransactionProvider {
      * @param signedTx Signed Transaction
      * @param timeout
      */
-    suspend fun sendTxAndWait(signedTx: String, timeout: Long = Constants.DEFAULT_TIMEOUT): FinalExecutionOutcome
+    suspend fun sendTxAndWait(signedTx: ByteArray, timeout: Long = Constants.DEFAULT_TIMEOUT): FinalExecutionOutcome
 
-    suspend fun sendTxAndWait(transaction: Transaction, signer: Signer, timeout: Long = Constants.DEFAULT_TIMEOUT): FinalExecutionOutcome
+    suspend fun sendTxAndWait(
+        signedTransaction: SignedTransaction,
+        timeout: Long = Constants.DEFAULT_TIMEOUT
+    ): FinalExecutionOutcome
 
     /**
      * Queries status of a transaction by hash and returns the final transaction result.

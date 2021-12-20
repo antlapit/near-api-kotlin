@@ -1,26 +1,32 @@
 package antlapit.near.api.providers.model.transaction
 
-import antlapit.near.api.providers.model.block.Action
-import antlapit.near.api.providers.model.primitives.*
+import antlapit.near.api.providers.model.primitives.KeyType
+import org.komputing.kbase58.decodeBase58
+import org.komputing.kbase58.encodeToBase58String
 
 data class SignedTransaction(
-    override val signerId: AccountId,
-    override val publicKey: PublicKey,
-    override val nonce: Nonce,
-    override val receiverId: AccountId,
-    override val hash: CryptoHash,
-    override val actions: List<Action> = emptyList(),
-    val signature: Signature,
-) : Transaction(
-    signerId, publicKey, nonce, receiverId, hash, actions
+    val transaction: Transaction,
+    val signature: TransactionSignature
+)
+
+data class TransactionSignature(
+    val keyType: KeyType,
+    val data: String
 ) {
-    constructor(transaction: Transaction, signature: Signature) : this(
-        signerId = transaction.signerId,
-        publicKey = transaction.publicKey,
-        nonce = transaction.nonce,
-        receiverId = transaction.receiverId,
-        hash = transaction.hash,
-        actions = transaction.actions,
-        signature = signature
+    constructor(args: List<String>) : this(
+        if (args.size == 1) KeyType.ED25519 else KeyType.valueOf(args[0].uppercase()),
+        if (args.size == 1) args[0] else args[1]
     )
+
+    /**
+     * @param encodedString - <curve>:<encoded key> or just <encoded key> with default ED25519
+     */
+    constructor(encodedString: String) : this(encodedString.split(":"))
+
+    constructor(signature: ByteArray) : this(signature.encodeToBase58String())
+
+    fun asString() = "${keyType.name.lowercase()}:$data"
+
+    fun decodeBase58() = data.decodeBase58()
 }
+

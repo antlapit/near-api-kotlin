@@ -2,12 +2,12 @@ package antlapit.near.api.providers.endpoints
 
 import antlapit.near.api.providers.ContractProvider
 import antlapit.near.api.providers.Finality
-import antlapit.near.api.providers.Utils
 import antlapit.near.api.providers.base.BlockSearch
 import antlapit.near.api.providers.base.BlockSearch.Companion.fromBlockHash
 import antlapit.near.api.providers.base.BlockSearch.Companion.fromBlockId
 import antlapit.near.api.providers.base.BlockSearch.Companion.ofFinality
 import antlapit.near.api.providers.base.JsonRpcProvider
+import antlapit.near.api.providers.base64
 import antlapit.near.api.providers.model.account.Account
 import antlapit.near.api.providers.model.account.CallResult
 import antlapit.near.api.providers.model.account.ContractCode
@@ -113,7 +113,7 @@ class ContractRpcProvider(private val jsonRpcProvider: JsonRpcProvider) : Contra
             "request_type" to "call_function",
             "account_id" to accountId,
             "method_name" to methodName,
-            "args_base64" to Utils.encodeToBase64(args)
+            "args_base64" to args.toByteArray().base64()
         ),
         blockSearch,
         timeout

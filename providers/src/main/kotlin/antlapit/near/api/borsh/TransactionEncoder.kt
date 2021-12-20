@@ -5,10 +5,10 @@ import antlapit.near.api.providers.model.accesskey.AccessKeyPermission
 import antlapit.near.api.providers.model.block.Action
 import antlapit.near.api.providers.model.primitives.KeyType
 import antlapit.near.api.providers.model.primitives.PublicKey
-import antlapit.near.api.providers.model.primitives.Signature
 import antlapit.near.api.providers.model.primitives.decodeBase58
 import antlapit.near.api.providers.model.transaction.SignedTransaction
 import antlapit.near.api.providers.model.transaction.Transaction
+import antlapit.near.api.providers.model.transaction.TransactionSignature
 import org.near.borshj.Borsh
 import java.math.BigInteger
 import java.util.*
@@ -18,71 +18,90 @@ data class TransactionBorsh(
     val publicKey: PublicKeyBorsh,
     val nonce: Long,
     val receiverId: String,
-    val hash: BorshArray32,
+    val blockHash: BorshArray32,
     val actions: List<BorshEnum>,
-) : Borsh
+) : Borsh {
 
-fun Transaction.toBorsh() = TransactionBorsh(
-    signerId = signerId,
-    publicKey = publicKey.toBorsh(),
-    nonce = nonce,
-    receiverId = receiverId,
-    hash = BorshArray32(hash.decodeBase58()),
-    actions = actions.map {
-        BorshEnum(
-            it.stableIndex(),
-            it.toBorsh()
-        )
+    constructor(transaction: Transaction) : this(
+        signerId = transaction.signerId,
+        publicKey = PublicKeyBorsh(transaction.publicKey),
+        nonce = transaction.nonce,
+        receiverId = transaction.receiverId,
+        blockHash = BorshArray32(transaction.blockHash.decodeBase58()),
+        actions = transaction.actions.map {
+            BorshEnum(
+                it.stableIndex(),
+                it.toBorsh()
+            )
+        }
+    )
+
+    fun encode(): ByteArray {
+        return Borsh.serialize(this)
     }
-)
+}
 
-data class PublicKeyBorsh(val keyType: Byte, val data: BorshArray32) : Borsh
+fun Transaction.encode() = TransactionBorsh(this).encode()
 
-fun PublicKey.toBorsh() = PublicKeyBorsh(keyType = keyType.stableIndex(), data = BorshArray32(decodeBase58()))
+data class PublicKeyBorsh(val keyType: Byte, val data: BorshArray32) : Borsh {
+    constructor(key: PublicKey) : this(
+        keyType = key.keyType.stableIndex(),
+        data = BorshArray32(key.decodeBase58())
+    )
+}
 
 fun KeyType.stableIndex(): Byte = when (this) {
-    KeyType.ed25519 -> 0
+    KeyType.ED25519 -> 0
 }
 
 
-data class SignedTransactionBorsh(val transaction: TransactionBorsh/*, val signature: SignatureBorsh*/) : Borsh
+data class SignedTransactionBorsh(
+    val transaction: TransactionBorsh,
+    val signature: SignatureBorsh
+) : Borsh {
 
-fun SignedTransaction.toBorsh() =
-    SignedTransactionBorsh(transaction = (this as Transaction).toBorsh()/*, signature = signature.toBorsh()*/)
-
-
-data class SignatureBorsh(val keyType: Byte, val data: BorshArray64) : Borsh
-
-fun Signature.toBorsh() = SignatureBorsh(
-    keyType = 0, // TODO KeyType ??
-    data = BorshArray64(decodeBase58())
-)
-
-data class AccessKeyBorsh(val nonce: Long, val permission: BorshEnum) : Borsh
-
-fun AccessKey.toBorsh(): AccessKeyBorsh = AccessKeyBorsh(
-    nonce = nonce,
-    permission = BorshEnum(
-        permission.stableIndex(),
-        permission.toBorsh()
+    constructor(transaction: SignedTransaction) : this(
+        transaction = TransactionBorsh(transaction.transaction),
+        signature = SignatureBorsh(transaction.signature)
     )
-)
+
+    fun encode(): ByteArray {
+        return Borsh.serialize(this)
+    }
+}
+
+fun SignedTransaction.encode() = SignedTransactionBorsh(this).encode()
+
+data class SignatureBorsh(val keyType: Byte, val data: BorshArray64) : Borsh {
+    constructor(signature: TransactionSignature) : this(
+        keyType = signature.keyType.stableIndex(),
+        data = BorshArray64(signature.decodeBase58())
+    )
+}
+
+data class AccessKeyBorsh(val nonce: Long, val permission: BorshEnum) : Borsh {
+    constructor(accessKey: AccessKey) : this(
+        nonce = accessKey.nonce,
+        permission = BorshEnum(
+            accessKey.permission.stableIndex(),
+            accessKey.permission.toBorsh()
+        )
+    )
+}
 
 fun AccessKeyPermission.stableIndex(): Byte = when (this) {
     is AccessKeyPermission.FunctionCall -> 0
     AccessKeyPermission.FullAccess -> 1
 }
 
-fun AccessKeyPermission.toBorsh(): Borsh = when (this) {
-    is AccessKeyPermission.FunctionCall -> toBorsh()
+private fun AccessKeyPermission.toBorsh(): Borsh = when (this) {
+    is AccessKeyPermission.FunctionCall -> FunctionCallPermissionBorsh(
+        allowance = Optional.ofNullable(allowance),
+        receiverId = receiverId,
+        methodNames = methodNames
+    )
     AccessKeyPermission.FullAccess -> FullAccessPermissionBorsh()
 }
-
-fun AccessKeyPermission.FunctionCall.toBorsh() = FunctionCallPermissionBorsh(
-    allowance = Optional.ofNullable(allowance),
-    receiverId = receiverId,
-    methodNames = methodNames
-)
 
 data class FunctionCallPermissionBorsh(
     val allowance: Optional<BigInteger>,
@@ -104,32 +123,26 @@ fun Action.stableIndex(): Byte = when (this) {
     is Action.Transfer -> 3
 }
 
-fun Action.toBorsh(): Borsh = when (this) {
+private fun Action.toBorsh(): Borsh = when (this) {
     Action.CreateAccount -> CreateAccountBorsh()
-    is Action.AddKey -> toBorsh()
-    is Action.DeleteAccount -> toBorsh()
-    is Action.DeleteKey -> toBorsh()
-    is Action.DeployContract -> toBorsh()
-    is Action.FunctionCall -> toBorsh()
-    is Action.Stake -> toBorsh()
-    is Action.StakeChunkOnly -> toBorsh()
-    is Action.Transfer -> toBorsh()
+    is Action.AddKey -> AddKeyBorsh(
+        publicKey = PublicKeyBorsh(publicKey),
+        accessKey = AccessKeyBorsh(accessKey)
+    )
+    is Action.DeleteAccount -> DeleteAccountBorsh(beneficiaryId = beneficiaryId)
+    is Action.DeleteKey -> DeleteKeyBorsh(publicKey = PublicKeyBorsh(publicKey))
+    is Action.DeployContract -> DeployContractBorsh(code = code.toByteArray().toList())
+    is Action.FunctionCall -> FunctionCallBorsh(
+        methodName = methodName,
+        args = args.toByteArray().toList(),
+        gas = gas,
+        deposit = deposit
+    )
+
+    is Action.Stake -> StakeBorsh(stake = stake, publicKey = PublicKeyBorsh(publicKey))
+    is Action.StakeChunkOnly -> StakeChunkOnlyBorsh(stake = stake, publicKey = PublicKeyBorsh(publicKey))
+    is Action.Transfer -> TransferBorsh(deposit = deposit)
 }
-
-fun Action.AddKey.toBorsh() = AddKeyBorsh(publicKey = publicKey.toBorsh(), accessKey = accessKey.toBorsh())
-fun Action.DeleteAccount.toBorsh() = DeleteAccountBorsh(beneficiaryId = beneficiaryId)
-fun Action.DeleteKey.toBorsh() = DeleteKeyBorsh(publicKey = publicKey.toBorsh())
-fun Action.DeployContract.toBorsh() = DeployContractBorsh(code = code.toByteArray().toList())
-fun Action.FunctionCall.toBorsh() = FunctionCallBorsh(
-    methodName = methodName,
-    args = args.toByteArray().toList(),
-    gas = gas,
-    deposit = deposit
-)
-
-fun Action.Stake.toBorsh() = StakeBorsh(stake = stake, publicKey = publicKey.toBorsh())
-fun Action.StakeChunkOnly.toBorsh() = StakeChunkOnlyBorsh(stake = stake, publicKey = publicKey.toBorsh())
-fun Action.Transfer.toBorsh() = TransferBorsh(deposit = deposit)
 
 class CreateAccountBorsh : Borsh
 

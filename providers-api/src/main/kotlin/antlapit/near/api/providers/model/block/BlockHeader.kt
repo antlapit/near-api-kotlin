@@ -30,7 +30,7 @@ data class BlockHeader(
     val nextBpHash: CryptoHash,
     val blockMerkleRoot: CryptoHash,
     val epochSyncDataHash: CryptoHash?,
-    val approvals: List<Signature?> = emptyList(),
-    val signature: Signature,
+    val approvals: List<CryptoHash?> = emptyList(),
+    val signature: CryptoHash,
     val latestProtocolVersion: ProtocolVersion
 )

@@ -55,6 +55,16 @@ data class BorshArray32(
         b[16], b[17], b[18], b[19], b[20], b[21], b[22], b[23],
         b[24], b[25], b[26], b[27], b[28], b[29], b[30], b[31]
     )
+
+    fun toByteArray(): ByteArray {
+        return listOf(
+            b0, b1, b2, b3, b4, b5, b6, b7,
+            b8, b9, b10, b11, b12, b13, b14, b15,
+            b16, b17, b18, b19, b20, b21, b22, b23,
+            b24, b25, b26, b27, b28, b29, b30, b31
+        )
+            .toByteArray()
+    }
 }
 
 /**

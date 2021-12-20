@@ -6,14 +6,12 @@ import antlapit.near.api.providers.model.primitives.CryptoHash
 import antlapit.near.api.providers.model.primitives.Nonce
 import antlapit.near.api.providers.model.primitives.PublicKey
 
-/**
- * Transaction in RPC requests
- */
-data class Transaction(
+data class SignedTransactionView(
     val signerId: AccountId,
     val publicKey: PublicKey,
     val nonce: Nonce,
     val receiverId: AccountId,
     val actions: List<Action>,
-    val blockHash: CryptoHash,
+    val signature: CryptoHash,
+    val hash: CryptoHash,
 )

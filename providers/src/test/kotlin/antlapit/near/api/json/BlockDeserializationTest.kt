@@ -5,7 +5,7 @@ import antlapit.near.api.providers.model.accesskey.AccessKeyPermission
 import antlapit.near.api.providers.model.block.*
 import antlapit.near.api.providers.model.primitives.PublicKey
 import antlapit.near.api.providers.model.primitives.SlashedValidator
-import antlapit.near.api.providers.model.transaction.SignedTransaction
+import antlapit.near.api.providers.model.transaction.SignedTransactionView
 import antlapit.near.api.providers.model.validators.ValidatorStakeStructVersion
 import antlapit.near.api.providers.model.validators.ValidatorStakeView
 import com.fasterxml.jackson.module.kotlin.readValue
@@ -284,7 +284,7 @@ class BlockDeserializationTest : FunSpec({
                             signature = "ed25519:2SybLgXLFcFVpDqtKn3WX7ySkLpWwfgecAFeBZByyJvbB4ZfgHirSGxBWAmdCetJtQsM31NASDcQvkG9MPySfdzF"
                         ),
                         transactions = listOf(
-                            SignedTransaction(
+                            SignedTransactionView(
                                 signerId = "art.artcoin.testnet",
                                 publicKey = PublicKey("ed25519:4o6mz55p1mNmfwg5EeTDXdtYFxQev672eU5wy5RjRCbw"),
                                 nonce = 428216,

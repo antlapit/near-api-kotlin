@@ -1,15 +1,12 @@
 package antlapit.near.api.providers.endpoints
 
-import antlapit.near.api.borsh.toBorsh
+import antlapit.near.api.borsh.encode
 import antlapit.near.api.providers.TransactionProvider
-import antlapit.near.api.providers.Utils
 import antlapit.near.api.providers.base.JsonRpcProvider
+import antlapit.near.api.providers.base64
 import antlapit.near.api.providers.model.primitives.CryptoHash
 import antlapit.near.api.providers.model.transaction.FinalExecutionOutcome
-import antlapit.near.api.providers.model.transaction.Signer
-import antlapit.near.api.providers.model.transaction.Transaction
-import antlapit.near.api.providers.sha256
-import org.near.borshj.Borsh
+import antlapit.near.api.providers.model.transaction.SignedTransaction
 
 /**
  * RPC endpoint for transactions
@@ -20,39 +17,36 @@ class TransactionRpcProvider(private val jsonRpcProvider: JsonRpcProvider) : Tra
     /**
      * @link https://docs.near.org/docs/api/rpc/transactions#send-transaction-async
      */
-    override suspend fun sendTxAsync(signedTx: String, timeout: Long): CryptoHash = jsonRpcProvider.sendRpc(
+    override suspend fun sendTxAsync(signedTx: ByteArray, timeout: Long): CryptoHash = jsonRpcProvider.sendRpc(
         method = "broadcast_tx_async",
-        params = listOf(Utils.encodeToBase64(signedTx)),
+        params = listOf(signedTx.base64()),
         timeout = timeout
     )
 
-    override suspend fun sendTxAsync(transaction: Transaction, signer: Signer, timeout: Long): CryptoHash {
-        val message = Borsh.serialize(transaction.toBorsh())
-        val hash = String(message).sha256()
-        signer.sign(message)
-        TODO("Not yet implemented")
-        // const message = serialize(SCHEMA, transaction);
-        // const hash = new Uint8Array(sha256.sha256.array(message));
-        // const signature = await signer.signMessage(message, accountId, networkId);
-        // const signedTx = new SignedTransaction({
-        //     transaction,
-        //     signature: new Signature({ keyType: transaction.publicKey.keyType, data: signature.signature })
-        // });
-        // return [hash, signedTx]
+    override suspend fun sendTxAsync(
+        signedTransaction: SignedTransaction,
+        timeout: Long
+    ): CryptoHash {
+        val bytes = signedTransaction.encode()
+        return sendTxAsync(bytes, timeout)
     }
 
     /**
      * @link https://docs.near.org/docs/api/rpc/transactions#send-transaction-await
      */
-    override suspend fun sendTxAndWait(signedTx: String, timeout: Long): FinalExecutionOutcome =
+    override suspend fun sendTxAndWait(signedTx: ByteArray, timeout: Long): FinalExecutionOutcome =
         jsonRpcProvider.sendRpc(
             method = "broadcast_tx_commit",
-            params = listOf(Utils.encodeToBase64(signedTx)),
+            params = listOf(signedTx.base64()),
             timeout = timeout
         )
 
-    override suspend fun sendTxAndWait(transaction: Transaction, signer: Signer, timeout: Long): FinalExecutionOutcome {
-        TODO("Not yet implemented")
+    override suspend fun sendTxAndWait(
+        signedTransaction: SignedTransaction,
+        timeout: Long
+    ): FinalExecutionOutcome {
+        val bytes = signedTransaction.encode()
+        return sendTxAndWait(bytes, timeout)
     }
 
     /**
