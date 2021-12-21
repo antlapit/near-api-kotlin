@@ -7,33 +7,12 @@
  */
 
 plugins {
-    // Apply the org.jetbrains.kotlin.jvm Plugin to add support for Kotlin.
-    kotlin("jvm") version "1.5.31"
-
-    // Apply the java-library plugin for API and implementation separation.
-    `java-library`
-
-    `maven-publish`
-}
-
-repositories {
-    // Use Maven Central for resolving dependencies.
-    mavenCentral()
-
-    // Use jitpack for Kotlin Komputing projects
-    maven(url = "https://jitpack.io")
+    id("org.jetbrains.kotlin.jvm") // required for Kotlin DSL syntax
 }
 
 dependencies {
     implementation(project(":providers-api"))
-    implementation(fileTree("lib")) // should be artifact
-
-    // Align versions of all Kotlin components
-    implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
-
-    // Use the Kotlin JDK 8 standard library.
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    implementation("org.testng:testng:7.1.0")
+    implementation(fileTree("lib")) // should be artifact, but borshj is not ready
 
     // Ktor for making requests
     val ktorVersion = "1.6.2"
@@ -50,62 +29,20 @@ dependencies {
     // This dependency is used internally, and not exposed to consumers on their own compile classpath.
     implementation("com.google.guava:guava:30.1.1-jre")
 
-    // Use the Kotlin test library.
-    testImplementation("org.jetbrains.kotlin:kotlin-test")
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.1")
+    val komputingKHashSha256Version = "1.1.1"
+    testImplementation("com.github.komputing.KHash:sha256:${komputingKHashSha256Version}")
 
-    // Test logging
-    val logbackVersion = "1.2.5"
-    testImplementation("ch.qos.logback:logback-classic:$logbackVersion")
-
-    // Use the Kotlin JUnit integration.
-    testImplementation("org.junit.jupiter:junit-jupiter:5.7.0")
-    val kotestVersion = "5.0.0.M3"
-    testImplementation("io.kotest:kotest-runner-junit5:$kotestVersion")
-    testImplementation("io.kotest:kotest-framework-datatest:$kotestVersion")
-    testImplementation("io.kotest:kotest-assertions-core:$kotestVersion")
-    testImplementation("io.kotest:kotest-property:$kotestVersion")
-
-    testImplementation("com.github.komputing.KHash:sha256:1.1.1")
     // signing with tweetnacl java port
-    testImplementation("io.github.instantwebp2p:tweetnacl-java:1.1.2")
-}
-
-java {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
-}
-
-sourceSets {
-    main {
-        java.srcDirs("src/main/kotlin")
-    }
-}
-
-tasks.withType<Test> {
-    useJUnitPlatform()
-}
-
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-    kotlinOptions.jvmTarget = "11"
+    val tweetnaclVersion = "1.1.2"
+    testImplementation("io.github.instantwebp2p:tweetnacl-java:${tweetnaclVersion}")
 }
 
 publishing {
-    repositories {
-        maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/antlapit/near-api-kotlin")
-            credentials {
-                username = System.getenv("GITHUB_ACTOR")
-                password = System.getenv("GITHUB_TOKEN")
-            }
-        }
-    }
     publications {
         register<MavenPublication>("gpr") {
-            groupId = "antlapit.near.api"
+            groupId = project.rootProject.group.toString()
             artifactId = "providers"
-            version = "1.0.0-SNAPSHOT"
+            version = project.rootProject.version.toString()
             from(components["java"])
         }
     }
