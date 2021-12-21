@@ -5,15 +5,11 @@ import antlapit.near.api.providers.Constants.Companion.DEFAULT_TIMEOUT
 import antlapit.near.api.providers.base.JsonRpcProvider
 import antlapit.near.api.providers.base.config.JsonRpcConfig
 import antlapit.near.api.providers.base.config.NetworkEnum
-import antlapit.near.api.providers.exception.ProviderException
+import antlapit.near.api.providers.exception.InvalidTransactionException
 import antlapit.near.api.providers.model.block.Action
 import antlapit.near.api.providers.model.primitives.*
-import antlapit.near.api.providers.model.transaction.FinalExecutionStatus
-import antlapit.near.api.providers.model.transaction.SignedTransaction
-import antlapit.near.api.providers.model.transaction.Transaction
-import antlapit.near.api.providers.model.transaction.TransactionSignature
+import antlapit.near.api.providers.model.transaction.*
 import com.iwebpp.crypto.TweetNacl
-import io.kotest.assertions.retry
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import org.komputing.khash.sha256.extensions.sha256
@@ -21,7 +17,6 @@ import java.math.BigInteger
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.time.Duration
 import kotlin.time.ExperimentalTime
 
 @ExperimentalTime
@@ -83,18 +78,6 @@ internal class TransactionRpcProviderTest {
      */
     @Test
     fun sendTxAndWait_whenSuccess_thenCorrect() = runBlocking {
-        return@runBlocking retry(
-            maxRetry = 10,
-            timeout = Duration.minutes(1),
-            delay = Duration.milliseconds(100),
-            exceptionClass = ProviderException::class,
-            f = suspend {
-                sendTxAndWaitTestBody()
-            }
-        )
-    }
-
-    private suspend fun sendTxAndWaitTestBody() {
         val tx1Account = "tx1.api_kotlin.testnet"
         val tx1Public = PublicKey("ed25519:5zpBhMxTtD4ozFsBRV9v5hPKTDDFquHqj8gXGERGh6YF")
         val tx1Private = "4Qtz6nhCkHFQGHB7Q2XPDLRNN37oc4fsUe4ar8cNZmRC5LHZBHR1XTG9ZEUS5wZ4uvVPVxRUeiyMhZAnAthyqdZh"
@@ -106,24 +89,41 @@ internal class TransactionRpcProviderTest {
         val transferAmount = BigInteger("1000000000000000000000000")
 
         // transfer token from tx1.api_kotlin.testnet to tx2.api_kotlin.testnet
-        val toTx2 = createTransferTx(tx1Account, tx1Public, tx2Account, transferAmount)
-        val signedToTx2 = sign(toTx2, tx1Public, tx1Private)
+        var result: FinalExecutionOutcome = transferTestBody(tx1Account, tx1Public, tx1Private, tx2Account, transferAmount)
 
-        val result1 = endpoint.sendTxAndWait(signedToTx2, DEFAULT_TIMEOUT * 6)
-        println("Processed transaction in explorer https://explorer.testnet.near.org/transactions/${result1.transaction.hash}")
-
-        val resultTransaction = result1.transaction
+        val resultTransaction = result.transaction
         assertEquals(tx1Public, resultTransaction.publicKey)
         assertEquals(tx1Account, resultTransaction.signerId)
         assertEquals(tx2Account, resultTransaction.receiverId)
         assertEquals(Action.Transfer(transferAmount), resultTransaction.actions[0])
 
         // transfer token from tx1.api_kotlin.testnet to tx2.api_kotlin.testnet
-        val toTx1 = createTransferTx(tx2Account, tx2Public, tx1Account, transferAmount)
-        val signedToTx1 = sign(toTx1, tx2Public, tx2Private)
+        result = transferTestBody(tx2Account, tx2Public, tx2Private, tx1Account, transferAmount)
+    }
 
-        val result2 = endpoint.sendTxAndWait(signedToTx1, DEFAULT_TIMEOUT * 6)
-        println("Processed transaction in explorer https://explorer.testnet.near.org/transactions/${result2.transaction.hash}")
+    suspend fun transferTestBody(
+        sender: String,
+        senderPublicKey: PublicKey,
+        senderPrivateKey: String,
+        receiver: String,
+        transferAmount: BigInteger
+    ): FinalExecutionOutcome {
+        var counter = 3
+        while (true) {
+            val toTx2 = createTransferTx(sender, senderPublicKey, receiver, transferAmount)
+            val signedToTx2 = sign(toTx2, senderPublicKey, senderPrivateKey)
+            try {
+                val result = endpoint.sendTxAndWait(signedToTx2, DEFAULT_TIMEOUT * 6)
+                println("Processed transaction in explorer https://explorer.testnet.near.org/transactions/${result.transaction.hash}")
+                return result
+            } catch (e: InvalidTransactionException) {
+                --counter
+                println("Invalid transaction exception - retries left $counter")
+                if (counter == 0) {
+                    throw e
+                }
+            }
+        }
     }
 
     /**

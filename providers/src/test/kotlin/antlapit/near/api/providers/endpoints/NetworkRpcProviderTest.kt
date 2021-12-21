@@ -1,5 +1,6 @@
 package antlapit.near.api.providers.endpoints
 
+import antlapit.near.api.providers.Constants
 import antlapit.near.api.providers.base.JsonRpcProvider
 import antlapit.near.api.providers.base.config.JsonRpcConfig
 import antlapit.near.api.providers.base.config.NetworkEnum
@@ -40,7 +41,7 @@ internal class NetworkRpcProviderTest {
 
     @Test
     fun getValidationStatus_thenCorrect() = runBlocking {
-        val latestStatus = endpoint.getValidationStatus()
+        val latestStatus = endpoint.getValidationStatus(6 * Constants.DEFAULT_TIMEOUT)
         assertTrue(latestStatus.epochStartHeight > 0, "epoch start height should not be 0")
         assertTrue(latestStatus.epochHeight > 0, "epoch start height should not be 0")
         return@runBlocking
