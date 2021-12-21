@@ -5,6 +5,7 @@ import antlapit.near.api.providers.Constants.Companion.DEFAULT_TIMEOUT
 import antlapit.near.api.providers.base.JsonRpcProvider
 import antlapit.near.api.providers.base.config.JsonRpcConfig
 import antlapit.near.api.providers.base.config.NetworkEnum
+import antlapit.near.api.providers.exception.ProviderException
 import antlapit.near.api.providers.model.block.Action
 import antlapit.near.api.providers.model.primitives.*
 import antlapit.near.api.providers.model.transaction.FinalExecutionStatus
@@ -12,6 +13,7 @@ import antlapit.near.api.providers.model.transaction.SignedTransaction
 import antlapit.near.api.providers.model.transaction.Transaction
 import antlapit.near.api.providers.model.transaction.TransactionSignature
 import com.iwebpp.crypto.TweetNacl
+import io.kotest.assertions.retry
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import org.komputing.khash.sha256.extensions.sha256
@@ -19,7 +21,10 @@ import java.math.BigInteger
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.time.Duration
+import kotlin.time.ExperimentalTime
 
+@ExperimentalTime
 @ExperimentalCoroutinesApi
 internal class TransactionRpcProviderTest {
 
@@ -73,9 +78,23 @@ internal class TransactionRpcProviderTest {
      *     <li>from tx1.api_kotlin.testnet to tx2.api_kotlin.testnet with amount 1N</li>
      *     <li>from tx2.api_kotlin.testnet to tx1.api_kotlin.testnet with amount 1N</li>
      * </ul>
+     *
+     * This test sometimes produce INVALID_TRANSACTION error, so retry added for this test
      */
     @Test
     fun sendTxAndWait_whenSuccess_thenCorrect() = runBlocking {
+        return@runBlocking retry(
+            maxRetry = 10,
+            timeout = Duration.minutes(1),
+            delay = Duration.milliseconds(100),
+            exceptionClass = ProviderException::class,
+            f = suspend {
+                sendTxAndWaitTestBody()
+            }
+        )
+    }
+
+    private suspend fun sendTxAndWaitTestBody() {
         val tx1Account = "tx1.api_kotlin.testnet"
         val tx1Public = PublicKey("ed25519:5zpBhMxTtD4ozFsBRV9v5hPKTDDFquHqj8gXGERGh6YF")
         val tx1Private = "4Qtz6nhCkHFQGHB7Q2XPDLRNN37oc4fsUe4ar8cNZmRC5LHZBHR1XTG9ZEUS5wZ4uvVPVxRUeiyMhZAnAthyqdZh"
