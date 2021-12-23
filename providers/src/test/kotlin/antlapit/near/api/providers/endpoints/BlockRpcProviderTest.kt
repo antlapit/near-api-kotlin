@@ -5,11 +5,12 @@ import antlapit.near.api.providers.Finality
 import antlapit.near.api.providers.base.JsonRpcProvider
 import antlapit.near.api.providers.base.config.JsonRpcConfig
 import antlapit.near.api.providers.base.config.NetworkEnum
+import antlapit.near.api.providers.exception.InvalidShardIdException
+import antlapit.near.api.providers.exception.UnknownBlockException
+import antlapit.near.api.providers.exception.UnknownChunkException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
-import kotlin.test.BeforeTest
-import kotlin.test.Test
-import kotlin.test.assertEquals
+import kotlin.test.*
 
 @ExperimentalCoroutinesApi
 class BlockRpcProviderTest {
@@ -37,6 +38,19 @@ class BlockRpcProviderTest {
         return@runBlocking
     }
 
+    /**
+     * This test checks UnknownBlockException while accessing by blockId
+     */
+    @Test
+    fun getBlock_whenUnknownBlock_thenException() = runBlocking {
+        val e = assertFails(
+            message = "UnknownBlockException expected"
+        ) {
+            endpoint.getBlock("jav58J75jTCkAouUyT8fEzoRTqoNaZpX1hGQZNKbU7c")
+        }
+        assertTrue(e is UnknownBlockException)
+    }
+
     @Test
     fun getChunk_whenLatest_thenCorrect() = runBlocking {
         // latest block
@@ -50,5 +64,30 @@ class BlockRpcProviderTest {
         // chunk by hash
         val chunkByHash = endpoint.getChunk(chunkByBlockId.header.chunkHash)
         assertEquals(chunkByHash, chunkByBlockHash)
+    }
+
+    @Test
+    fun getChunk_whenUnknownChunk_thenException() = runBlocking {
+        val e = assertFails(
+            message = "UnknownChunkException expected"
+        ) {
+            endpoint.getChunk("jav58J75jTCkAouUyT8fEzoRTqoNaZpX1hGQZNKbU7c")
+        }
+        assertTrue(e is UnknownChunkException)
+        assertEquals("jav58J75jTCkAouUyT8fEzoRTqoNaZpX1hGQZNKbU7c", e.chunkHash)
+    }
+
+    @Test
+    fun getChunk_whenInvalidShard_thenException() = runBlocking {
+        // latest block
+        val finalBlock = endpoint.getLatestBlock(Finality.FINAL)
+
+        val e = assertFails(
+            message = "InvalidShardIdException expected"
+        ) {
+            endpoint.getChunkInBlock(finalBlock.header.height, 1000)
+        }
+        assertTrue(e is InvalidShardIdException)
+        assertEquals(1000, e.shardId)
     }
 }

@@ -3,8 +3,7 @@ package antlapit.near.api.providers.base
 import antlapit.near.api.json.ObjectMapperFactory
 import antlapit.near.api.providers.Constants
 import antlapit.near.api.providers.base.config.JsonRpcConfig
-import antlapit.near.api.providers.exception.ErrorCause
-import antlapit.near.api.providers.exception.ProviderException
+import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
@@ -22,8 +21,10 @@ import java.util.*
  */
 class JsonRpcProvider(
     val config: JsonRpcConfig,
-    val objectMapper: ObjectMapper = ObjectMapperFactory.newInstance()
+    private val objectMapper: ObjectMapper = ObjectMapperFactory.newInstance()
 ) {
+
+    val exceptionFactory: JsonRpcProviderExceptionFactory = JsonRpcProviderExceptionFactory(objectMapper)
 
     // TODO close client after execution
     val client: HttpClient = HttpClient(CIO) {
@@ -79,32 +80,9 @@ class JsonRpcProvider(
             }
         }
         when {
-            response.error != null -> {
-                when (response.error) {
-                    is String -> {
-                        throw ProviderException(response.error)
-                    }
-                    is Map<*, *> -> {
-                        val causeMap = response.error["cause"] as Map<String, Any?>
-                        val rpcError = RpcError(
-                            response.error["name"] as String, RpcErrorCause(
-                                name = causeMap["name"] as String,
-                                info = causeMap["info"] as Map<String, Any?>?
-                            )
-                        )
-                        throw constructException(rpcError)
-                    }
-                    else -> {
-                        throw ProviderException("Undefined response error")
-                    }
-                }
-            }
-            response.result == null -> {
-                throw ProviderException("Empty result in response without specifying error")
-            }
-            else -> {
-                return response.result
-            }
+            response.result != null -> return response.result
+            response.error != null && !response.error.isNull -> throw exceptionFactory.fromJsonNode(response.error)
+            else -> throw exceptionFactory.emptyResult()
         }
     }
 
@@ -134,18 +112,15 @@ class JsonRpcProvider(
     suspend inline fun <reified T> query(path: String, data: String, timeout: Long = Constants.DEFAULT_TIMEOUT) =
         sendRpc<T>(method = "query", params = arrayListOf(path, data), timeout = timeout)
 
-    data class RpcError(val name: String, val cause: RpcErrorCause)
-
-    data class RpcErrorCause(val name: String, val info: Map<String, Any?>?)
-
     data class GenericRpcRequest(val method: String, val params: Any?) {
         @Suppress("unused")
         val jsonrpc = "2.0"
+
         @Suppress("unused")
         val id = UUID.randomUUID().toString()
     }
 
-    data class GenericRpcResponse<T>(val id: String, val jsonrpc: String, val error: Any?, val result: T?)
+    data class GenericRpcResponse<T>(val id: String, val jsonrpc: String, val error: JsonNode?, val result: T?)
 
     companion object {
         fun mergeParams(params: Map<String, Any?>, blockSearch: BlockSearch): Map<String, Any?> {
@@ -160,17 +135,6 @@ class JsonRpcProvider(
                 paramsMap["finality"] = blockSearch.finality!!.code
             }
             return paramsMap
-        }
-
-        @JvmStatic
-        fun constructException(error: RpcError) : ProviderException {
-            val errorCause = ErrorCause.findByCode(error.cause.name)
-            val info = error.cause.info
-            return if (errorCause == null) {
-                ProviderException(error.name, error.cause.name, info)
-            } else {
-                ProviderException.byCause(errorCause, info)
-            }
         }
     }
 }

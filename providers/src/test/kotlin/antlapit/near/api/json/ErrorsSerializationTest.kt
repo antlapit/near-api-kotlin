@@ -1,5 +1,6 @@
 package antlapit.near.api.json
 
+import antlapit.near.api.common.TestData
 import antlapit.near.api.providers.model.primitives.ActionsValidationError
 import antlapit.near.api.providers.model.primitives.InvalidAccessKeyErrorType
 import antlapit.near.api.providers.model.primitives.InvalidTxError

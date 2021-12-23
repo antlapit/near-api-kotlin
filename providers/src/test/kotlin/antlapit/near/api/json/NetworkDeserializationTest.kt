@@ -1,5 +1,6 @@
 package antlapit.near.api.json
 
+import antlapit.near.api.common.TestData
 import antlapit.near.api.providers.model.networkinfo.*
 import antlapit.near.api.providers.model.primitives.PublicKey
 import antlapit.near.api.providers.model.validators.*

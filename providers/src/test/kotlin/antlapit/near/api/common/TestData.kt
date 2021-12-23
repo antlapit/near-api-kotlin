@@ -1,4 +1,4 @@
-package antlapit.near.api.json
+package antlapit.near.api.common
 
 data class TestData<T>(
     val raw: String,

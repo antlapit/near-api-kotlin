@@ -1,5 +1,6 @@
 package antlapit.near.api.json
 
+import antlapit.near.api.common.TestData
 import antlapit.near.api.providers.model.account.*
 import com.fasterxml.jackson.module.kotlin.readValue
 import io.kotest.assertions.throwables.shouldNotThrow

@@ -1,5 +1,6 @@
 package antlapit.near.api.json
 
+import antlapit.near.api.common.TestData
 import antlapit.near.api.providers.model.accesskey.AccessKey
 import antlapit.near.api.providers.model.accesskey.AccessKeyPermission
 import antlapit.near.api.providers.model.block.*

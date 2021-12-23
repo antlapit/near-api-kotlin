@@ -5,13 +5,12 @@ import antlapit.near.api.providers.Finality
 import antlapit.near.api.providers.base.JsonRpcProvider
 import antlapit.near.api.providers.base.config.JsonRpcConfig
 import antlapit.near.api.providers.base.config.NetworkEnum
+import antlapit.near.api.providers.exception.UnknownAccountException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import java.io.File
 import java.util.*
-import kotlin.test.BeforeTest
-import kotlin.test.Test
-import kotlin.test.assertEquals
+import kotlin.test.*
 
 @ExperimentalCoroutinesApi
 class ContractRpcProviderTest {
@@ -37,6 +36,17 @@ class ContractRpcProviderTest {
             "account by block id should equals account by last block hash"
         )
         return@runBlocking
+    }
+
+    @Test
+    fun viewAccount_whenUnknown_thenCorrect() = runBlocking {
+        val e = assertFails(
+            message = "UnknownAccountException expected"
+        ) {
+            endpoint.getAccount("not_existing.api_kotlin.testnet")
+        }
+        assertTrue(e is UnknownAccountException)
+        assertEquals("not_existing.api_kotlin.testnet", e.requestedAccountId)
     }
 
     @Test

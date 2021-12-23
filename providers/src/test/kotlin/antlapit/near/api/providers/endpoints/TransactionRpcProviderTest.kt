@@ -14,9 +14,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import org.komputing.khash.sha256.extensions.sha256
 import java.math.BigInteger
-import kotlin.test.BeforeTest
-import kotlin.test.Test
-import kotlin.test.assertEquals
+import kotlin.test.*
 import kotlin.time.ExperimentalTime
 
 @ExperimentalTime
@@ -31,6 +29,16 @@ internal class TransactionRpcProviderTest {
     private lateinit var blockEndpoint: BlockRpcProvider
     private lateinit var accessKeyEndpoint: AccessKeyRpcProvider
     private lateinit var contractEndpoint: ContractRpcProvider
+
+    private val tx1Account = "tx1.api_kotlin.testnet"
+    private val tx1Public = PublicKey("ed25519:5zpBhMxTtD4ozFsBRV9v5hPKTDDFquHqj8gXGERGh6YF")
+    private val tx1Private = "4Qtz6nhCkHFQGHB7Q2XPDLRNN37oc4fsUe4ar8cNZmRC5LHZBHR1XTG9ZEUS5wZ4uvVPVxRUeiyMhZAnAthyqdZh"
+
+    private val tx2Account = "tx2.api_kotlin.testnet"
+    private val tx2Public = PublicKey("ed25519:319YAVp3QD4R7b3dUGq4hiU9HvmGiEMjmUeY6riRpLFu")
+    private val tx2Private = "5d8TxKjUVVLg1B12LUbSVQe82bfE96tKEVmFDSDuXjL3HyAqktFzM6C15bDFf6vfdvYSXWxaUtFQ6Z5Vtbjwiydu"
+
+    private val transferAmount = BigInteger("1000000000000000000000000")
 
     @BeforeTest
     fun initEndpoint() {
@@ -78,18 +86,11 @@ internal class TransactionRpcProviderTest {
      */
     @Test
     fun sendTxAndWait_whenSuccess_thenCorrect() = runBlocking {
-        val tx1Account = "tx1.api_kotlin.testnet"
-        val tx1Public = PublicKey("ed25519:5zpBhMxTtD4ozFsBRV9v5hPKTDDFquHqj8gXGERGh6YF")
-        val tx1Private = "4Qtz6nhCkHFQGHB7Q2XPDLRNN37oc4fsUe4ar8cNZmRC5LHZBHR1XTG9ZEUS5wZ4uvVPVxRUeiyMhZAnAthyqdZh"
-
-        val tx2Account = "tx2.api_kotlin.testnet"
-        val tx2Public = PublicKey("ed25519:319YAVp3QD4R7b3dUGq4hiU9HvmGiEMjmUeY6riRpLFu")
-        val tx2Private = "5d8TxKjUVVLg1B12LUbSVQe82bfE96tKEVmFDSDuXjL3HyAqktFzM6C15bDFf6vfdvYSXWxaUtFQ6Z5Vtbjwiydu"
-
         val transferAmount = BigInteger("1000000000000000000000000")
 
         // transfer token from tx1.api_kotlin.testnet to tx2.api_kotlin.testnet
-        var result: FinalExecutionOutcome = transferTestBody(tx1Account, tx1Public, tx1Private, tx2Account, transferAmount)
+        var result: FinalExecutionOutcome =
+            transferTestBody(tx1Account, tx1Public, tx1Private, tx2Account, transferAmount)
 
         val resultTransaction = result.transaction
         assertEquals(tx1Public, resultTransaction.publicKey)
@@ -101,7 +102,24 @@ internal class TransactionRpcProviderTest {
         result = transferTestBody(tx2Account, tx2Public, tx2Private, tx1Account, transferAmount)
     }
 
-    suspend fun transferTestBody(
+    /**
+     * This test checks InvalidTransactionException while transferring with wrong Nonce
+     */
+    @Test
+    fun sendTxAndWait_whenInvalidTx_thenException() = runBlocking {
+        // transfer token from tx1.api_kotlin.testnet to tx2.api_kotlin.testnet
+        val toTx2 = createTransferTx(tx1Account, tx1Public, tx2Account, transferAmount, 0)
+        val signedToTx2 = sign(toTx2, tx1Public, tx1Private)
+        val e = assertFails(
+            message = "InvalidTransactionException expected"
+        ) {
+            endpoint.sendTxAndWait(signedToTx2)
+        }
+        assertTrue(e is InvalidTransactionException)
+        assertTrue(e.txExecutionError is InvalidTxError.InvalidNonce)
+    }
+
+    private suspend fun transferTestBody(
         sender: String,
         senderPublicKey: PublicKey,
         senderPrivateKey: String,
@@ -117,9 +135,13 @@ internal class TransactionRpcProviderTest {
                 println("Processed transaction in explorer https://explorer.testnet.near.org/transactions/${result.transaction.hash}")
                 return result
             } catch (e: InvalidTransactionException) {
-                --counter
-                println("Invalid transaction exception - retries left $counter")
-                if (counter == 0) {
+                if (e.txExecutionError != null && (e.txExecutionError is InvalidTxError.InvalidNonce || e.txExecutionError is InvalidTxError.Expired)) {
+                    --counter
+                    println("Invalid transaction exception - retries left $counter")
+                    if (counter == 0) {
+                        throw e
+                    }
+                } else {
                     throw e
                 }
             }
@@ -135,16 +157,6 @@ internal class TransactionRpcProviderTest {
      */
     @Test
     fun sendTxAsync_whenSuccess_thenCorrect() = runBlocking {
-        val tx1Account = "tx1.api_kotlin.testnet"
-        val tx1Public = PublicKey("ed25519:5zpBhMxTtD4ozFsBRV9v5hPKTDDFquHqj8gXGERGh6YF")
-        val tx1Private = "4Qtz6nhCkHFQGHB7Q2XPDLRNN37oc4fsUe4ar8cNZmRC5LHZBHR1XTG9ZEUS5wZ4uvVPVxRUeiyMhZAnAthyqdZh"
-
-        val tx2Account = "tx2.api_kotlin.testnet"
-        val tx2Public = PublicKey("ed25519:319YAVp3QD4R7b3dUGq4hiU9HvmGiEMjmUeY6riRpLFu")
-        val tx2Private = "5d8TxKjUVVLg1B12LUbSVQe82bfE96tKEVmFDSDuXjL3HyAqktFzM6C15bDFf6vfdvYSXWxaUtFQ6Z5Vtbjwiydu"
-
-        val transferAmount = BigInteger("1000000000000000000000000")
-
         // transfer token from tx1.api_kotlin.testnet to tx2.api_kotlin.testnet
         val toTx2 = createTransferTx(tx1Account, tx1Public, tx2Account, transferAmount)
         val signedToTx2 = sign(toTx2, tx1Public, tx1Private)
@@ -168,14 +180,23 @@ internal class TransactionRpcProviderTest {
     ): Transaction {
         // load access key for sender account for getting Nonce
         val accessKey = accessKeyEndpoint.getAccessKey(senderId, senderPublicKey)
+        return createTransferTx(senderId, senderPublicKey, receiverId, transferAmount, accessKey.nonce)
+    }
 
+    private suspend fun createTransferTx(
+        senderId: String,
+        senderPublicKey: PublicKey,
+        receiverId: String,
+        transferAmount: BigInteger,
+        accessKeyNonce: Nonce
+    ): Transaction {
         // load latest block for transaction
         val latestBlock = blockEndpoint.getLatestBlock()
 
         return Transaction(
             signerId = senderId,
             publicKey = senderPublicKey,
-            nonce = accessKey.nonce + 1,
+            nonce = accessKeyNonce + 1,
             receiverId = receiverId,
             actions = listOf(
                 Action.Transfer(transferAmount)
