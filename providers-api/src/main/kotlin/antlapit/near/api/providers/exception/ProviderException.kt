@@ -65,7 +65,11 @@ class NotSyncedException(info: Any?) : HandlerError("Not synced: $info")
  * <br />
  * Solution: Provide a valid <b>account_id</b>
  */
-class InvalidAccountException(info: Any?) : HandlerError("Invalid account: $info")
+class InvalidAccountException(
+    val requestedAccountId: AccountId,
+    val blockHeight: BlockHeight,
+    val blockHash: CryptoHash
+) : HandlerError("Invalid account: $requestedAccountId in block(height=$blockHeight, hash=$blockHash)")
 
 /**
  * Reason: The requested <b>account_id</b> has not been found while viewing since the account has not been created or has been already deleted
@@ -91,7 +95,10 @@ class UnknownAccountException(
  *    <li>Specify a different block or retry if you request the latest state</li>
  * </ul>
  */
-class UnknownAccessKeyException(info: Any?) : HandlerError("Unknown access key: $info")
+class UnknownAccessKeyException(
+    val publicKey: PublicKey, val blockHeight: BlockHeight,
+    val blockHash: CryptoHash
+) : HandlerError("Unknown access key: $publicKey in block(height=$blockHeight, hash=$blockHash)")
 
 /**
  * Reason: The node was unable to found the requested data because it does not track the shard where data is present
@@ -175,7 +182,7 @@ sealed class RequestValidationError(message: String?) : ProviderException(messag
  *    <li>Check info for more details</li>
  * </ul>
  */
-class ParseErrorException(errorMessage: String?) : RequestValidationError("Parse error: $errorMessage")
+class ParseErrorException(val errorMessage: String?) : RequestValidationError("Parse error: $errorMessage")
 
 sealed class InternalError(message: String?) : ProviderException(message)
 
@@ -189,4 +196,4 @@ sealed class InternalError(message: String?) : ProviderException(message)
  *    <li>Check info for more details</li>
  * </ul>
  */
-class InternalErrorException(info: Any?) : InternalError("Internal error: $info")
+class InternalErrorException(val errorMessage: String?) : InternalError("Internal error: $errorMessage")

@@ -1,6 +1,7 @@
 package antlapit.near.api.providers.base
 
 import antlapit.near.api.providers.exception.*
+import antlapit.near.api.providers.model.primitives.PublicKey
 import antlapit.near.api.providers.model.primitives.TxExecutionError
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -39,13 +40,21 @@ class JsonRpcProviderExceptionFactory(
                     "UNKNOWN_CHUNK" -> UnknownChunkException(info.get("chunk_hash").asText())
                     "INVALID_SHARD_ID" -> InvalidShardIdException(info.get("shard_id").asLong())
                     "NOT_SYNCED_YET" -> NotSyncedException(info)
-                    "INVALID_ACCOUNT" -> InvalidAccountException(info)
+                    "INVALID_ACCOUNT" -> InvalidAccountException(
+                        info.get("requested_account_id").asText(),
+                        info.get("block_height").asLong(),
+                        info.get("block_hash").asText()
+                    )
                     "UNKNOWN_ACCOUNT" -> UnknownAccountException(
                         info.get("requested_account_id").asText(),
                         info.get("block_height").asLong(),
                         info.get("block_hash").asText()
                     )
-                    "UNKNOWN_ACCESS_KEY" -> UnknownAccessKeyException(info)
+                    "UNKNOWN_ACCESS_KEY" -> UnknownAccessKeyException(
+                        PublicKey(info.get("public_key").asText()),
+                        info.get("block_height").asLong(),
+                        info.get("block_hash").asText()
+                    )
                     "UNAVAILABLE_SHARD" -> UnavailableShardException(info)
                     "NO_SYNCED_BLOCKS" -> NoSyncedBlocksException(info)
                     "INVALID_TRANSACTION" -> {
@@ -62,7 +71,7 @@ class JsonRpcProviderExceptionFactory(
                     else -> ProviderException(error, cause)
                 }
                 "INTERNAL_ERROR" -> when (cause) {
-                    "INTERNAL_ERROR" -> InternalErrorException(info)
+                    "INTERNAL_ERROR" -> InternalErrorException(info.get("error_message").asText())
                     else -> ProviderException(error, cause)
                 }
                 else -> ProviderException(error, cause)
