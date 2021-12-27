@@ -10,17 +10,29 @@ import antlapit.near.api.providers.exception.UnknownBlockException
 import antlapit.near.api.providers.exception.UnknownChunkException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
-import kotlin.test.*
+import org.junit.jupiter.api.AfterAll
+import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.TestInstance
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFails
+import kotlin.test.assertTrue
 
 @ExperimentalCoroutinesApi
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class BlockRpcProviderTest {
 
     private val client = JsonRpcProvider(JsonRpcConfig(NetworkEnum.TESTNET))
     private lateinit var endpoint: BlockProvider
 
-    @BeforeTest
+    @BeforeAll
     fun initEndpoint() {
         endpoint = BlockRpcProvider(client)
+    }
+
+    @AfterAll
+    fun close() {
+        client.close()
     }
 
     @Test

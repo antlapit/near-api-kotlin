@@ -12,13 +12,20 @@ import antlapit.near.api.providers.model.transaction.*
 import com.iwebpp.crypto.TweetNacl
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
+import org.junit.jupiter.api.AfterAll
+import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.TestInstance
 import org.komputing.khash.sha256.extensions.sha256
 import java.math.BigInteger
-import kotlin.test.*
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFails
+import kotlin.test.assertTrue
 import kotlin.time.ExperimentalTime
 
 @ExperimentalTime
 @ExperimentalCoroutinesApi
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 internal class TransactionRpcProviderTest {
 
     private val archivalClient = JsonRpcProvider(JsonRpcConfig(NetworkEnum.TESTNET_ARCHIVAL))
@@ -40,13 +47,18 @@ internal class TransactionRpcProviderTest {
 
     private val transferAmount = BigInteger("1000000000000000000000000")
 
-    @BeforeTest
+    @BeforeAll
     fun initEndpoint() {
         archivalEndpoint = TransactionRpcProvider(archivalClient)
         endpoint = TransactionRpcProvider(client)
         blockEndpoint = BlockRpcProvider(client)
         accessKeyEndpoint = AccessKeyRpcProvider(client)
         contractEndpoint = ContractRpcProvider(client)
+    }
+
+    @AfterAll
+    fun close() {
+        client.close()
     }
 
     @Test

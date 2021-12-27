@@ -6,22 +6,34 @@ import antlapit.near.api.providers.base.config.JsonRpcConfig
 import antlapit.near.api.providers.base.config.NetworkEnum
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
-import kotlin.test.*
+import org.junit.jupiter.api.AfterAll
+import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.TestInstance
+import kotlin.test.Ignore
+import kotlin.test.Test
+import kotlin.test.assertNotNull
+import kotlin.test.assertTrue
 
 /**
  * End-to-end test of network endpoints
  */
 @ExperimentalCoroutinesApi
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 internal class NetworkRpcProviderTest {
 
     private val client = JsonRpcProvider(JsonRpcConfig(NetworkEnum.MAINNET_ARCHIVAL))
     private lateinit var endpoint: NetworkRpcProvider
     private lateinit var blockProvider: BlockRpcProvider
 
-    @BeforeTest
+    @BeforeAll
     fun initEndpoint() {
         endpoint = NetworkRpcProvider(client)
         blockProvider = BlockRpcProvider(client)
+    }
+
+    @AfterAll
+    fun close() {
+        client.close()
     }
 
     @Test

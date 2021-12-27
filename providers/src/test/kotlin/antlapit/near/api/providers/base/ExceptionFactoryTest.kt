@@ -14,10 +14,10 @@ import io.kotest.matchers.shouldBe
 
 
 @ExperimentalKotest
-class JsonRpcProviderExceptionFactoryTest : FunSpec({
+class ExceptionFactoryTest : FunSpec({
 
     val mapper = ObjectMapperFactory.newInstance()
-    val factory = JsonRpcProviderExceptionFactory(mapper)
+    val factory = ExceptionFactory(mapper)
 
     context("deserialize provider exception") {
         withData(

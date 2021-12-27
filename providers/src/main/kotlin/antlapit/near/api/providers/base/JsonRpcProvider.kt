@@ -12,6 +12,7 @@ import io.ktor.client.features.json.*
 import io.ktor.client.features.logging.*
 import io.ktor.client.request.*
 import io.ktor.http.*
+import java.io.Closeable
 import java.util.*
 
 /**
@@ -22,15 +23,14 @@ import java.util.*
 class JsonRpcProvider(
     val config: JsonRpcConfig,
     private val objectMapper: ObjectMapper = ObjectMapperFactory.newInstance()
-) {
+) : Closeable {
 
-    val exceptionFactory: JsonRpcProviderExceptionFactory = JsonRpcProviderExceptionFactory(objectMapper)
+    val exceptionFactory: ExceptionFactory = ExceptionFactory(objectMapper)
 
-    // TODO close client after execution
     val client: HttpClient = HttpClient(CIO) {
         install(Logging) {
-            logger = Logger.DEFAULT
-            level = LogLevel.BODY
+            level = config.logging.level
+            logger = config.logging.logger
         }
         install(JsonFeature) {
             serializer = JacksonSerializer(
@@ -137,4 +137,6 @@ class JsonRpcProvider(
             return paramsMap
         }
     }
+
+    override fun close() = client.close()
 }

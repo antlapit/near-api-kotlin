@@ -9,7 +9,9 @@ import antlapit.near.api.providers.model.primitives.PublicKey
 import io.kotest.common.ExperimentalKotest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
-import kotlin.test.BeforeTest
+import org.junit.jupiter.api.AfterAll
+import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.TestInstance
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -18,14 +20,20 @@ import kotlin.test.assertEquals
  */
 @ExperimentalKotest
 @ExperimentalCoroutinesApi
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class AccessKeyRpcProviderTest {
 
     private val client = JsonRpcProvider(JsonRpcConfig(NetworkEnum.TESTNET))
     private lateinit var endpoint: AccessKeyRpcProvider
 
-    @BeforeTest
+    @BeforeAll
     fun initEndpoint() {
         endpoint = AccessKeyRpcProvider(client)
+    }
+
+    @AfterAll
+    fun close() {
+        client.close()
     }
 
     @Test

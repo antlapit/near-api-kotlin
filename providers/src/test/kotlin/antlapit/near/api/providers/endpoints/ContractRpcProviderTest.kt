@@ -8,19 +8,31 @@ import antlapit.near.api.providers.base.config.NetworkEnum
 import antlapit.near.api.providers.exception.UnknownAccountException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
+import org.junit.jupiter.api.AfterAll
+import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.TestInstance
 import java.io.File
 import java.util.*
-import kotlin.test.*
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFails
+import kotlin.test.assertTrue
 
 @ExperimentalCoroutinesApi
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ContractRpcProviderTest {
 
     private val client = JsonRpcProvider(JsonRpcConfig(NetworkEnum.TESTNET))
     private lateinit var endpoint: ContractProvider
 
-    @BeforeTest
+    @BeforeAll
     fun initEndpoint() {
         endpoint = ContractRpcProvider(client)
+    }
+
+    @AfterAll
+    fun close() {
+        client.close()
     }
 
     @Test

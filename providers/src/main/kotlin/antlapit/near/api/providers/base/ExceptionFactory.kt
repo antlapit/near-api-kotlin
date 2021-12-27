@@ -6,7 +6,7 @@ import antlapit.near.api.providers.model.primitives.TxExecutionError
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 
-class JsonRpcProviderExceptionFactory(
+class ExceptionFactory(
     private val objectMapper: ObjectMapper
 ) {
     fun emptyResult() = ProviderException("Empty result in response without specifying error")
