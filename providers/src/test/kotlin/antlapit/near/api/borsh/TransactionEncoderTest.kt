@@ -7,7 +7,6 @@ import antlapit.near.api.providers.model.primitives.PublicKey
 import antlapit.near.api.providers.model.transaction.SignedTransaction
 import antlapit.near.api.providers.model.transaction.Transaction
 import antlapit.near.api.providers.model.transaction.TransactionSignature
-import antlapit.near.api.providers.util.toHexString
 import io.kotest.assertions.throwables.shouldNotThrow
 import io.kotest.common.ExperimentalKotest
 import io.kotest.core.Tuple2
@@ -119,3 +118,5 @@ class TransactionEncoderTest : FunSpec({
         }
     }
 })
+
+fun ByteArray.toHexString(): String = joinToString("", transform = { "%02x".format(it) })
