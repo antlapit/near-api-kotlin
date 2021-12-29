@@ -21,7 +21,7 @@ import java.util.*
  * Should be initialized from config class
  */
 class JsonRpcProvider(
-    val config: JsonRpcConfig,
+    val config: JsonRpcConfig = JsonRpcConfig(),
     private val objectMapper: ObjectMapper = ObjectMapperFactory.newInstance()
 ) : Closeable {
 

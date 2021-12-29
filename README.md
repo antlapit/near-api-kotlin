@@ -19,9 +19,10 @@ This library consists of 2 modules:
 It is possible to use only **providers-api** and create custom implementation
 
 ### Providers API
+**Dependencies**
+* [`Komputing Base58`] for encoding and decoding into base58
 
 **Interfaces**
-
 Every API group in [`NEAR RPC documentation`] has a separate interface:
 * [AccessKeyProvider] for [`Access keys`] endpoint
 * [BlockProvider] for [`Block / Chunk`] endpoint
@@ -35,10 +36,33 @@ Every API group in [`NEAR RPC documentation`] has a separate interface:
 * Some types are just aliases to primitives but are named exactly like in [nearcore] (ex. AccountId, BlockHeight, etc)
 
 ### Providers implementation
-**Key features**
+**Dependencies**
 * [Ktor] for making HTTP calls
 * [Jackson] for serializing/deserializing requests and models
 * [Kotest] and [JUnit] for testing
+* [`Komputing Sha256`] and [`Tweetnacl Java port`] for end-to-end transaction testing
+
+**JSON serialization/deserialization**
+JSON serialization and deserialization are implemented with [Jackson] and additional [NearRpcModelsModule]
+
+**Main classes**
+[JsonRpcProvider] implements low level methods for calling RPC API (**sendRpc** and **query** methods). 
+This class contains [Ktor] client that should be closed after final API call. [JsonRpcProvider] can be configured with
+[Network], [Ktor] logging properties and custom [Jackson] ObjectMapper.
+
+[Network] interface can be used for custom network implementation, but it is recommended to use predefined **NetworkEnum**.
+
+Other providers ([AccessKeyRpcProvider], [BlockRpcProvider], [ContractRpcProvider], [GasRpcProvider], 
+[NetworkRpcProvider], [TransactionRpcProvider]) implements high level operations of RPC endpoints. These classes
+require [JsonRpcProvider] as a constructor parameter. (!) While using the same instance of [JsonRpcProvider] for 
+different providers, don't forget that closing [JsonRpcProvider] in one place will lead to errors in other places.  
+
+See Examples section for additional information.
+
+## Rust enums support
+[nearcore] is written in Rust and uses awesome Rust enums in RPC models (see [`Rust enum docs`]).
+Kotlin does not have any straightforward implementation of such structure and the closest analogue is [`Kotlin sealed classes`].
+For the purpose of this library there are annotations in [RustBridge], which are used in deserialization process in [RustEnumSerializers].
 
 ## Installation
 **NEAR RPC Kotlin API** can be used in your project as a Maven or Gradle dependency.
@@ -114,13 +138,13 @@ Also end-to-end tests are designed to fail in case of changing RPC API in testne
 These tests use prepared JSON responses based on a real for many variants.
 This stabilizes API and prevents the appearance of bugs during refactoring of future improvements.
 
-## Usage
-
 ## Known issues
 * [BorshJ] implementation in code base should be replaced by normal dependency, when it will be created
 * Fixed size arrays in BorshJ serializations should be moved to [BorshJ]
 
 ## Examples
+
+Under construction. Expecting in February 2022.
 
 [`NEAR RPC documentation`]: https://docs.near.org/docs/api/rpc
 [`Access keys`]: https://docs.near.org/docs/api/rpc/access-keys
@@ -143,18 +167,29 @@ This stabilizes API and prevents the appearance of bugs during refactoring of fu
 [Jackson]: https://github.com/FasterXML/jackson
 [Kotest]: https://kotest.io/
 [JUnit]: https://junit.org/
+[`Komputing Base58`]: https://github.com/komputing/KBase58
+[`Komputing Sha256`]: https://github.com/komputing/KHash
+[`Tweetnacl Java port`]: https://github.com/InstantWebP2P/tweetnacl-java
 
-[AccessKeyProvider]: https://github.com/antlapit/near-api-kotlin/providers-api/src/main/kotlin/antlapit/near/api/providers/AccessKeyProvider.kt
-[BlockProvider]: https://github.com/antlapit/near-api-kotlin/providers-api/src/main/kotlin/antlapit/near/api/providers/BlockProvider.kt
-[ContractProvider]: https://github.com/antlapit/near-api-kotlin/providers-api/src/main/kotlin/antlapit/near/api/providers/ContractProvider.kt
-[GasProvider]: https://github.com/antlapit/near-api-kotlin/providers-api/src/main/kotlin/antlapit/near/api/providers/GasProvider.kt
-[NetworkProvider]: https://github.com/antlapit/near-api-kotlin/providers-api/src/main/kotlin/antlapit/near/api/providers/NetworkProvider.kt
-[TransactionProvider]: https://github.com/antlapit/near-api-kotlin/providers-api/src/main/kotlin/antlapit/near/api/providers/TransactionProvider.kt
+[`Rust enum docs]: https://doc.rust-lang.org/book/ch06-01-defining-an-enum.html
+[`Kotlin sealed classes`]: https://kotlinlang.org/docs/sealed-classes.html
 
-[JsonRpcProvider]: https://github.com/antlapit/near-api-kotlin/providers/src/main/kotlin/antlapit/near/api/providers/base/JsonRpcProvider.kt
-[AccessKeyRpcProvider]: https://github.com/antlapit/near-api-kotlin/providers/src/main/kotlin/antlapit/near/api/providers/endpoints/AccessKeyRpcProvider.kt
-[BlockRpcProvider]: https://github.com/antlapit/near-api-kotlin/providers/src/main/kotlin/antlapit/near/api/providers/endpoints/BlockRpcProvider.kt
-[ContractRpcProvider]: https://github.com/antlapit/near-api-kotlin/providers/src/main/kotlin/antlapit/near/api/providers/endpoints/ContractRpcProvider.kt
-[GasRpcProvider]: https://github.com/antlapit/near-api-kotlin/providers/src/main/kotlin/antlapit/near/api/providers/endpoints/GasRpcProvider.kt
-[NetworkRpcProvider]: https://github.com/antlapit/near-api-kotlin/providers/src/main/kotlin/antlapit/near/api/providers/endpoints/NetworkRpcProvider.kt
-[TransactionRpcProvider]: https://github.com/antlapit/near-api-kotlin/providers/src/main/kotlin/antlapit/near/api/providers/endpoints/TransactionRpcProvider.kt
+[AccessKeyProvider]: https://github.com/antlapit/near-api-kotlin/tree/main/providers-api/src/main/kotlin/antlapit/near/api/providers/AccessKeyProvider.kt
+[BlockProvider]: https://github.com/antlapit/near-api-kotlin/tree/main/providers-api/src/main/kotlin/antlapit/near/api/providers/BlockProvider.kt
+[ContractProvider]: https://github.com/antlapit/near-api-kotlin/tree/main/providers-api/src/main/kotlin/antlapit/near/api/providers/ContractProvider.kt
+[GasProvider]: https://github.com/antlapit/near-api-kotlin/tree/main/providers-api/src/main/kotlin/antlapit/near/api/providers/GasProvider.kt
+[NetworkProvider]: https://github.com/antlapit/near-api-kotlin/tree/main/providers-api/src/main/kotlin/antlapit/near/api/providers/NetworkProvider.kt
+[TransactionProvider]: https://github.com/antlapit/near-api-kotlin/tree/main/providers-api/src/main/kotlin/antlapit/near/api/providers/TransactionProvider.kt
+[RustBridge]: https://github.com/antlapit/near-api-kotlin/tree/main/providers-api/src/main/kotlin/antlapit/near/api/providers/model/rust/RustBridge.kt
+
+
+[Network]: https://github.com/antlapit/near-api-kotlin/tree/main/providers/src/main/kotlin/antlapit/near/api/providers/base/config/Network.kt
+[JsonRpcProvider]: https://github.com/antlapit/near-api-kotlin/tree/main/providers/src/main/kotlin/antlapit/near/api/providers/base/JsonRpcProvider.kt
+[AccessKeyRpcProvider]: https://github.com/antlapit/near-api-kotlin/tree/main/providers/src/main/kotlin/antlapit/near/api/providers/endpoints/AccessKeyRpcProvider.kt
+[BlockRpcProvider]: https://github.com/antlapit/near-api-kotlin/tree/main/providers/src/main/kotlin/antlapit/near/api/providers/endpoints/BlockRpcProvider.kt
+[ContractRpcProvider]: https://github.com/antlapit/near-api-kotlin/tree/main/providers/src/main/kotlin/antlapit/near/api/providers/endpoints/ContractRpcProvider.kt
+[GasRpcProvider]: https://github.com/antlapit/near-api-kotlin/tree/main/providers/src/main/kotlin/antlapit/near/api/providers/endpoints/GasRpcProvider.kt
+[NetworkRpcProvider]: https://github.com/antlapit/near-api-kotlin/tree/main/providers/src/main/kotlin/antlapit/near/api/providers/endpoints/NetworkRpcProvider.kt
+[TransactionRpcProvider]: https://github.com/antlapit/near-api-kotlin/tree/main/providers/src/main/kotlin/antlapit/near/api/providers/endpoints/TransactionRpcProvider.kt
+[RustEnumSerializers]: https://github.com/antlapit/near-api-kotlin/tree/main/providers/src/main/kotlin/antlapit/near/api/json/RustEnumSerializers.kt
+[NearRpcModelsModule]: https://github.com/antlapit/near-api-kotlin/tree/main/providers/src/main/kotlin/antlapit/near/api/json/NearRpcModelsModule.kt

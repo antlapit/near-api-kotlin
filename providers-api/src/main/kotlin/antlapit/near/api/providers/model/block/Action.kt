@@ -5,7 +5,7 @@ import antlapit.near.api.providers.model.primitives.AccountId
 import antlapit.near.api.providers.model.primitives.Balance
 import antlapit.near.api.providers.model.primitives.Gas
 import antlapit.near.api.providers.model.primitives.PublicKey
-import antlapit.near.api.providers.util.RustEnum
+import antlapit.near.api.providers.model.rust.RustEnum
 
 @RustEnum
 sealed interface Action {

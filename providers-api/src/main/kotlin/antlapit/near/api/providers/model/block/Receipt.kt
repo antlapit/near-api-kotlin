@@ -4,7 +4,7 @@ import antlapit.near.api.providers.model.primitives.AccountId
 import antlapit.near.api.providers.model.primitives.Balance
 import antlapit.near.api.providers.model.primitives.CryptoHash
 import antlapit.near.api.providers.model.primitives.PublicKey
-import antlapit.near.api.providers.util.RustEnum
+import antlapit.near.api.providers.model.rust.RustEnum
 
 data class Receipt(
     val predecessorId: AccountId,

@@ -1,4 +1,4 @@
-package antlapit.near.api.providers.util
+package antlapit.near.api.providers.model.rust
 
 /**
  * Indicates that sealed class/interface is rust-like enum

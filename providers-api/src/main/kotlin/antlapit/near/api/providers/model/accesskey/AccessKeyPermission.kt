@@ -1,7 +1,7 @@
 package antlapit.near.api.providers.model.accesskey
 
 import antlapit.near.api.providers.model.primitives.Balance
-import antlapit.near.api.providers.util.RustEnum
+import antlapit.near.api.providers.model.rust.RustEnum
 
 @RustEnum
 sealed interface AccessKeyPermission {

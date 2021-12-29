@@ -1,7 +1,7 @@
 package antlapit.near.api.providers.model.primitives
 
-import antlapit.near.api.providers.util.RustEnum
-import antlapit.near.api.providers.util.RustSinglePropertyEnumItem
+import antlapit.near.api.providers.model.rust.RustEnum
+import antlapit.near.api.providers.model.rust.RustSinglePropertyEnumItem
 
 /**
  * The execution has failed.
