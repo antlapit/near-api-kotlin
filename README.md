@@ -1,5 +1,9 @@
 # NEAR RPC Kotlin API
 
+![Workflow](https://github.com/antlapit/near-api-kotlin/actions/workflows/main.yml/badge.svg)
+![Coverage](.github/badges/jacoco.svg)
+![Branches](.github/badges/branches.svg)
+
 **NEAR RPC Kotlin API** is used to interact with NEAR network via RPC API. 
 RPC API documentation can be found on [`NEAR RPC documentation`] website.
 
