@@ -5,6 +5,7 @@ subprojects {
 
     apply(plugin = "java-library")
     apply(plugin = "maven-publish")
+    apply(plugin = "jacoco")
 
     repositories {
         // Use Maven Central for resolving dependencies.
@@ -49,6 +50,16 @@ subprojects {
         kotlinOptions.jvmTarget = "11"
     }
 
+    tasks.test {
+        finalizedBy(tasks.jacocoTestReport) // report is always generated after tests run
+    }
+    tasks.jacocoTestReport {
+        dependsOn(tasks.test) // tests are required to run before generating the report
+        reports {
+            csv.required.set(true)
+        }
+    }
+
     sourceSets {
         main {
             java.srcDirs("src/main/kotlin")
@@ -83,6 +94,8 @@ plugins {
     `java-library`
 
     `maven-publish`
+
+    jacoco
 }
 
 repositories {
