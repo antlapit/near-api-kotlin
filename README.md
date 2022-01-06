@@ -1,6 +1,10 @@
 # NEAR RPC Kotlin API
 
-![Workflow](https://github.com/antlapit/near-api-kotlin/actions/workflows/main.yml/badge.svg)
+![badge-jdk-11]
+![badge-kotlin-1.5]
+![badge-gradle]
+
+![ci-badge]
 ![Coverage](.github/badges/jacoco.svg)
 ![Branches](.github/badges/branches.svg)
 
@@ -45,6 +49,7 @@ Every API group in [`NEAR RPC documentation`] has a separate interface:
 * [Jackson] for serializing/deserializing requests and models
 * [Kotest] and [JUnit] for testing
 * [`Komputing Sha256`] and [`Tweetnacl Java port`] for end-to-end transaction testing
+* [JaCoCo] for test coverage
 
 **JSON serialization/deserialization**
 JSON serialization and deserialization are implemented with [Jackson] and additional [NearRpcModelsModule]
@@ -171,6 +176,7 @@ Under construction. Expecting in February 2022.
 [Jackson]: https://github.com/FasterXML/jackson
 [Kotest]: https://kotest.io/
 [JUnit]: https://junit.org/
+[JaCoCo]: https://github.com/jacoco/jacoco
 [`Komputing Base58`]: https://github.com/komputing/KBase58
 [`Komputing Sha256`]: https://github.com/komputing/KHash
 [`Tweetnacl Java port`]: https://github.com/InstantWebP2P/tweetnacl-java
@@ -197,3 +203,9 @@ Under construction. Expecting in February 2022.
 [TransactionRpcProvider]: https://github.com/antlapit/near-api-kotlin/tree/main/providers/src/main/kotlin/antlapit/near/api/providers/endpoints/TransactionRpcProvider.kt
 [RustEnumSerializers]: https://github.com/antlapit/near-api-kotlin/tree/main/providers/src/main/kotlin/antlapit/near/api/json/RustEnumSerializers.kt
 [NearRpcModelsModule]: https://github.com/antlapit/near-api-kotlin/tree/main/providers/src/main/kotlin/antlapit/near/api/json/NearRpcModelsModule.kt
+
+
+[ci-badge]:https://github.com/antlapit/near-api-kotlin/actions/workflows/main.yml/badge.svg "CI build status"
+[badge-jdk-11]: https://img.shields.io/badge/jdk-11-green.svg "JDK-11 or higher"
+[badge-kotlin-1.5]: https://img.shields.io/badge/kotlin-1.5-green.svg "Kotlin 1.5.0 or higher"
+[badge-gradle]: https://img.shields.io/badge/tool-gradle-blue.svg
