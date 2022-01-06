@@ -11,7 +11,7 @@ RPC API documentation can be found on [`NEAR RPC documentation`] website.
 This repository is distributed under the terms of both the MIT license and the Apache License (Version 2.0). See LICENSE and LICENSE-APACHE for details.
 
 ## Prerequisites
-- [Kotlin] 1.5.31+ (library is )
+- [Kotlin] 1.5.31+ (library is written on pure Kotlin)
 - [Java] 11+ (this version is the jvm target version for this library)
 - [Gradle] (when building from source code)
 
@@ -175,7 +175,7 @@ Under construction. Expecting in February 2022.
 [`Komputing Sha256`]: https://github.com/komputing/KHash
 [`Tweetnacl Java port`]: https://github.com/InstantWebP2P/tweetnacl-java
 
-[`Rust enum docs]: https://doc.rust-lang.org/book/ch06-01-defining-an-enum.html
+[`Rust enum docs`]: https://doc.rust-lang.org/book/ch06-01-defining-an-enum.html
 [`Kotlin sealed classes`]: https://kotlinlang.org/docs/sealed-classes.html
 
 [AccessKeyProvider]: https://github.com/antlapit/near-api-kotlin/tree/main/providers-api/src/main/kotlin/antlapit/near/api/providers/AccessKeyProvider.kt
