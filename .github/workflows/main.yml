@@ -23,7 +23,6 @@ jobs:
         uses: dorny/test-reporter@v1
         if: always()
         with:
-          artifact: test-results
           name: Unit Test Results
           path: providers/build/test-results/**/*.xml
           reporter: java-junit
