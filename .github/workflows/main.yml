@@ -23,7 +23,7 @@ jobs:
         if: always()
         with:
           name: JUnit Tests            # Name of the check run which will be created
-          path: roviders/build/test-results/**/*.xml    # Path to test results
+          path: providers/build/test-results/**/*.xml    # Path to test results
           reporter: java-junit        # Format of test results
 
       - name: Publish Unit Test Results
