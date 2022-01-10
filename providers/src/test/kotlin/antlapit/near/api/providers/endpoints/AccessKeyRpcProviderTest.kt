@@ -5,6 +5,7 @@ import antlapit.near.api.providers.base.JsonRpcProvider
 import antlapit.near.api.providers.base.config.JsonRpcConfig
 import antlapit.near.api.providers.base.config.NetworkEnum
 import antlapit.near.api.providers.model.accesskey.AccessKeyPermission
+import antlapit.near.api.providers.model.account.AccountWithPublicKey
 import antlapit.near.api.providers.model.primitives.PublicKey
 import io.kotest.common.ExperimentalKotest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -14,6 +15,7 @@ import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.TestInstance
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 
 /**
  * End-to-end test of access keys endpoints
@@ -24,11 +26,16 @@ import kotlin.test.assertEquals
 class AccessKeyRpcProviderTest {
 
     private val client = JsonRpcProvider(JsonRpcConfig(NetworkEnum.TESTNET))
+    private val archivalClient = JsonRpcProvider(JsonRpcConfig(NetworkEnum.TESTNET_ARCHIVAL))
     private lateinit var endpoint: AccessKeyRpcProvider
+    private lateinit var archivalEndpoint: AccessKeyRpcProvider
+    private lateinit var archivalBlockEndpoint: BlockRpcProvider
 
     @BeforeAll
     fun initEndpoint() {
         endpoint = AccessKeyRpcProvider(client)
+        archivalEndpoint = AccessKeyRpcProvider(archivalClient)
+        archivalBlockEndpoint = BlockRpcProvider(archivalClient)
     }
 
     @AfterAll
@@ -62,5 +69,29 @@ class AccessKeyRpcProviderTest {
 
         val keysByBlockId = endpoint.getAccessKey(accountId, publicKey, finalKey.blockHeight)
         assertEquals(finalKey, keysByBlockId, "access key by block id should equals latest access key")
+    }
+
+    @Test
+    fun getSingleAccessKeyChanges_whenConcreteBlock_thenCorrect() = runBlocking {
+        val accountId = "tx1.api_kotlin.testnet"
+        val publicKey = PublicKey("ed25519:5zpBhMxTtD4ozFsBRV9v5hPKTDDFquHqj8gXGERGh6YF")
+        val keysRequest = listOf(AccountWithPublicKey(accountId, publicKey))
+
+        val block = archivalBlockEndpoint.getBlock("AWXoLJtyQaYkogEjR96NExSDXpwspw5UAfLaHUP8QyB2")
+
+        val changesByHash = archivalEndpoint.getAccessKeyChanges(keysRequest, block.header.hash)
+
+        val changesByBlockId = archivalEndpoint.getAccessKeyChanges(keysRequest, block.header.height)
+        assertEquals(changesByBlockId, changesByHash, "changes in block by id and hash should be equal")
+    }
+
+    @Test
+    fun getSingleAccessKeyChanges_whenFinal_thenCorrect() = runBlocking {
+        val accountId = "tx1.api_kotlin.testnet"
+        val publicKey = PublicKey("ed25519:5zpBhMxTtD4ozFsBRV9v5hPKTDDFquHqj8gXGERGh6YF")
+        val keysRequest = listOf(AccountWithPublicKey(accountId, publicKey))
+
+        val finalChanges = archivalEndpoint.getAccessKeyChanges(keysRequest)
+        assertNotNull(finalChanges.blockHash, "block hash should not be null")
     }
 }

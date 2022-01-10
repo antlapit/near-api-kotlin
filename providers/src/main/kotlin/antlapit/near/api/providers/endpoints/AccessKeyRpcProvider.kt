@@ -9,6 +9,8 @@ import antlapit.near.api.providers.base.BlockSearch.Companion.ofFinality
 import antlapit.near.api.providers.base.JsonRpcProvider
 import antlapit.near.api.providers.model.accesskey.AccessKeyInBlock
 import antlapit.near.api.providers.model.accesskey.AccessKeysContainer
+import antlapit.near.api.providers.model.account.AccountWithPublicKey
+import antlapit.near.api.providers.model.changes.AccessKeysChangesContainer
 import antlapit.near.api.providers.model.primitives.AccountId
 import antlapit.near.api.providers.model.primitives.BlockHeight
 import antlapit.near.api.providers.model.primitives.CryptoHash
@@ -81,6 +83,35 @@ class AccessKeyRpcProvider(private val jsonRpcProvider: JsonRpcProvider) : Acces
 
     override suspend fun getAccessKeyList(accountId: AccountId, blockHash: CryptoHash, timeout: Long) =
         getAccessKeyList(accountId, fromBlockHash(blockHash), timeout)
+
+    /**
+     * @param keys List of accounts with keys
+     * @param blockSearch Block search strategy for querying blocks
+     * @link https://docs.near.org/docs/api/rpc/access-keys#view-access-key-changes-single
+     */
+    private suspend fun getAccessKeyChanges(
+        keys: List<AccountWithPublicKey>,
+        blockSearch: BlockSearch = BlockSearch.BLOCK_OPTIMISTIC,
+        timeout: Long
+    ): AccessKeysChangesContainer = jsonRpcProvider.sendRpc(
+        method = "EXPERIMENTAL_changes",
+        blockSearch = blockSearch,
+        params = mapOf(
+            "changes_type" to "single_access_key_changes",
+            "keys" to keys
+        ),
+        timeout = timeout
+    )
+
+    override suspend fun getAccessKeyChanges(keys: List<AccountWithPublicKey>, finality: Finality, timeout: Long) =
+        getAccessKeyChanges(keys, ofFinality(finality), timeout)
+
+    override suspend fun getAccessKeyChanges(keys: List<AccountWithPublicKey>, blockId: BlockHeight, timeout: Long) =
+        getAccessKeyChanges(keys, fromBlockId(blockId), timeout)
+
+    override suspend fun getAccessKeyChanges(keys: List<AccountWithPublicKey>, blockHash: CryptoHash, timeout: Long) =
+        getAccessKeyChanges(keys, fromBlockHash(blockHash), timeout)
+
 }
 
 

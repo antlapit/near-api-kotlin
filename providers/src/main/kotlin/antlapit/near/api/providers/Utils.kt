@@ -11,3 +11,11 @@ fun ByteArray.base64(): String {
 fun String.decodeBase64(): ByteArray {
     return Base64.getDecoder().decode(this)
 }
+
+val camelRegex = "(?<=[a-zA-Z])[A-Z]".toRegex()
+
+fun String.camelCaseToSnakeCase(): String {
+    return camelRegex.replace(this) {
+        "_${it.value}"
+    }.lowercase(Locale.getDefault())
+}

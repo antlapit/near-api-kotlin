@@ -2,6 +2,8 @@ package antlapit.near.api.providers
 
 import antlapit.near.api.providers.model.accesskey.AccessKeyInBlock
 import antlapit.near.api.providers.model.accesskey.AccessKeysContainer
+import antlapit.near.api.providers.model.account.AccountWithPublicKey
+import antlapit.near.api.providers.model.changes.AccessKeysChangesContainer
 import antlapit.near.api.providers.model.primitives.AccountId
 import antlapit.near.api.providers.model.primitives.BlockHeight
 import antlapit.near.api.providers.model.primitives.CryptoHash
@@ -89,7 +91,42 @@ interface AccessKeyProvider {
     ): AccessKeysContainer
 
 
-    // TODO single_access_key_changes
+    /**
+     * Returns access keys changes by account and public key.
+     *
+     * @param keys List of accounts with public key
+     * @param finality Finality param for last block
+     */
+    suspend fun getAccessKeyChanges(
+        keys: List<AccountWithPublicKey>,
+        finality: Finality = Finality.OPTIMISTIC,
+        timeout: Long = Constants.DEFAULT_TIMEOUT
+    ): AccessKeysChangesContainer
+
+    /**
+     * Returns access keys changes by account and public key.
+     *
+     * @param keys List of accounts with public key
+     * @param blockId Numeric block identifier
+     */
+    suspend fun getAccessKeyChanges(
+        keys: List<AccountWithPublicKey>,
+        blockId: BlockHeight,
+        timeout: Long = Constants.DEFAULT_TIMEOUT
+    ): AccessKeysChangesContainer
+
+    /**
+     * Returns access keys changes by account and public key.
+     *
+     * @param keys List of accounts with public key
+     * @param blockHash String block hash
+     */
+    suspend fun getAccessKeyChanges(
+        keys: List<AccountWithPublicKey>,
+        blockHash: CryptoHash,
+        timeout: Long = Constants.DEFAULT_TIMEOUT
+    ): AccessKeysChangesContainer
+
     // TODO all_access_key_changes
 
 }

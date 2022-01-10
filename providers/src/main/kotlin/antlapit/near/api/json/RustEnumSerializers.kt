@@ -8,7 +8,6 @@ import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.core.JsonToken
 import com.fasterxml.jackson.databind.*
 import com.fasterxml.jackson.databind.ser.BeanSerializerModifier
-import com.fasterxml.jackson.databind.ser.PropertyWriter
 import kotlin.reflect.KClass
 import kotlin.reflect.full.allSuperclasses
 import kotlin.reflect.full.primaryConstructor
@@ -110,15 +109,6 @@ class RustEnumSerializerModifier : BeanSerializerModifier() {
             super.modifySerializer(config, beanDesc, serializer)
         }
     }
-}
-
-class RustSinglePropertyEnumItemSerializer(propertyWriter: PropertyWriter) : JsonSerializer<Any>() {
-    override fun serialize(value: Any, gen: JsonGenerator?, serializers: SerializerProvider?) {
-        gen!!
-        serializers!!
-
-    }
-
 }
 
 class RustEnumSerializer(private val beanSerializer: JsonSerializer<Any>) : JsonSerializer<Any>() {

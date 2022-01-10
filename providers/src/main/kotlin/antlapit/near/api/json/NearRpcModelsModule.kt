@@ -1,14 +1,19 @@
 package antlapit.near.api.json
 
+import antlapit.near.api.providers.camelCaseToSnakeCase
 import antlapit.near.api.providers.model.accesskey.AccessKeyPermission
 import antlapit.near.api.providers.model.block.Action
 import antlapit.near.api.providers.model.block.ReceiptInfo
+import antlapit.near.api.providers.model.changes.AccessKeyChange
+import antlapit.near.api.providers.model.changes.StateChange
+import antlapit.near.api.providers.model.changes.StateChangeCause
 import antlapit.near.api.providers.model.primitives.*
 import antlapit.near.api.providers.model.transaction.ExecutionStatus
 import antlapit.near.api.providers.model.transaction.FinalExecutionStatus
 import antlapit.near.api.providers.model.validators.ValidatorKickoutReason
 import com.fasterxml.jackson.core.Version
 import com.fasterxml.jackson.databind.Module
+import com.fasterxml.jackson.databind.jsontype.NamedType
 import com.fasterxml.jackson.databind.module.SimpleDeserializers
 import com.fasterxml.jackson.databind.module.SimpleSerializers
 
@@ -72,5 +77,19 @@ class NearRpcModelsModule : Module() {
                 )
             }
         })
+
+        ctx.setMixInAnnotations(AccessKeyChange::class.java, AccessKeyChangeMixin::class.java)
+        ctx.setMixInAnnotations(StateChangeCause::class.java, StateChangeCauseMixin::class.java)
+
+        val subTypes = ArrayList<NamedType>()
+        for (sealedSubclass in StateChange::class.sealedSubclasses) {
+            val type = NamedType(sealedSubclass.java, sealedSubclass.simpleName!!.camelCaseToSnakeCase())
+            subTypes.add(type)
+        }
+        for (sealedSubclass in StateChangeCause::class.sealedSubclasses) {
+            val type = NamedType(sealedSubclass.java, sealedSubclass.simpleName!!.camelCaseToSnakeCase())
+            subTypes.add(type)
+        }
+        ctx.registerSubtypes(*subTypes.toTypedArray())
     }
 }
