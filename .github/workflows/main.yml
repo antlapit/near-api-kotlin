@@ -17,6 +17,15 @@ jobs:
         run: chmod +x gradlew
       - name: Build with Gradle
         run: ./gradlew build
+
+      - name: JUnit Report
+        uses: dorny/test-reporter@v1
+        if: always()
+        with:
+          name: JUnit Tests            # Name of the check run which will be created
+          path: roviders/build/test-results/**/*.xml    # Path to test results
+          reporter: java-junit        # Format of test results
+
       - name: Publish Unit Test Results
         uses: EnricoMi/publish-unit-test-result-action@v1
         if: always()
