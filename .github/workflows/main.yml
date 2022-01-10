@@ -43,6 +43,14 @@ jobs:
           file-name: 'tests.svg'
           location: '.github/badges'
 
+      - name: Download failed test report badge
+        if: failure()
+        uses: carlosperate/download-file-action@v1
+        with:
+          file-url: https://img.shields.io/badge/tests-${{steps.junit.outputs.failed}}%20failed%2C%20${{steps.junit.outputs.passed}}%20passed%2C%20${{steps.junit.outputs.skipped}}%20skipped-critical
+          file-name: 'tests.svg'
+          location: '.github/badges'
+
       - name: Generate JaCoCo Badge
         id: jacoco
         uses: cicirello/jacoco-badge-generator@v2
@@ -59,7 +67,7 @@ jobs:
         uses: EndBug/add-and-commit@v7
         with:
           default_author: github_actions
-          message: 'commit JaCoCo badge'
+          message: 'commit changed badges'
           add: '*.svg'
 
       - name: Upload JaCoCo coverage report
