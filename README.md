@@ -1,6 +1,6 @@
 # NEAR RPC Kotlin API
 
-![ci-badge] ![Coverage](.github/badges/jacoco.svg) ![Branches](.github/badges/branches.svg)
+![ci-badge] ![Tests](.github/badges/tests.svg) ![Coverage](.github/badges/jacoco.svg) ![Branches](.github/badges/branches.svg)
 
 **NEAR RPC Kotlin API** is used to interact with NEAR network via RPC API. RPC API documentation can be found
 on [`NEAR RPC documentation`] website.
@@ -174,6 +174,7 @@ appearance of bugs during refactoring of future improvements.
 
 * [BorshJ] implementation in code base should be replaced by normal dependency, when it will be created
 * Fixed size arrays in BorshJ serializations should be moved to [BorshJ]
+* Rust enums serialization can be moved to external library
 
 ## Examples
 
