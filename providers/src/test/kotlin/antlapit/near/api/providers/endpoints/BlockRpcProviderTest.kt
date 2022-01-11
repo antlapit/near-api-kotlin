@@ -102,4 +102,17 @@ class BlockRpcProviderTest {
         assertTrue(e is InvalidShardIdException)
         assertEquals(1000, e.shardId)
     }
+
+    @Test
+    fun getChangesInBlock_whenLatest_thenCorrect() = runBlocking {
+        val finalChanges = endpoint.getChangesInLatestBlock()
+
+        val changesByBlockHash = endpoint.getChangesInBlock(finalChanges.blockHash)
+        assertEquals(finalChanges, changesByBlockHash, "changes in block by hash should equal changes in latest block")
+
+        val blockId = endpoint.getBlock(finalChanges.blockHash).header.height
+
+        val changesByBlockId = endpoint.getChangesInBlock(blockId)
+        assertEquals(changesByBlockId, changesByBlockHash, "changes in block by id and hash should be equal")
+    }
 }

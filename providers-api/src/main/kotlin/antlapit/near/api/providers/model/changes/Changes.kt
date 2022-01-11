@@ -6,16 +6,6 @@ import antlapit.near.api.providers.model.primitives.AccountId
 import antlapit.near.api.providers.model.primitives.CryptoHash
 import antlapit.near.api.providers.model.primitives.PublicKey
 
-data class AccessKeysChangesContainer(
-    val blockHash: CryptoHash,
-    val changes: List<AccessKeyChange> = emptyList()
-)
-
-data class AccessKeyChange(
-    val change: StateChange,
-    val cause: StateChangeCause
-)
-
 sealed interface StateChange {
     data class AccountUpdate(val accountId: AccountId, val account: Account) : StateChange
 
@@ -36,6 +26,16 @@ sealed interface StateChange {
     data class ContractCodeUpdate(val accountId: AccountId, val code: String) : StateChange
 
     data class ContractCodeDeletion(val accountId: AccountId) : StateChange
+}
+
+sealed interface StateChangeKind {
+    data class AccountTouched(val accountId: AccountId) : StateChangeKind
+
+    data class AccessKeyTouched(val accountId: AccountId) : StateChangeKind
+
+    data class DataTouched(val accountId: AccountId) : StateChangeKind
+
+    data class ContractCodeTouched(val accountId: AccountId) : StateChangeKind
 }
 
 sealed interface StateChangeCause {

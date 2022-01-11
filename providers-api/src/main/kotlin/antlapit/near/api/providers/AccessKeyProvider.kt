@@ -1,9 +1,9 @@
 package antlapit.near.api.providers
 
 import antlapit.near.api.providers.model.accesskey.AccessKeyInBlock
+import antlapit.near.api.providers.model.accesskey.AccessKeysChangesContainer
 import antlapit.near.api.providers.model.accesskey.AccessKeysContainer
 import antlapit.near.api.providers.model.account.AccountWithPublicKey
-import antlapit.near.api.providers.model.changes.AccessKeysChangesContainer
 import antlapit.near.api.providers.model.primitives.AccountId
 import antlapit.near.api.providers.model.primitives.BlockHeight
 import antlapit.near.api.providers.model.primitives.CryptoHash

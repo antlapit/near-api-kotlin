@@ -12,3 +12,6 @@ data class AccessKeyChangeMixin(
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 sealed interface StateChangeCauseMixin
+
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+sealed interface StateChangeKindMixin

@@ -1,6 +1,7 @@
 package antlapit.near.api.providers.endpoints
 
 import antlapit.near.api.providers.AccessKeyProvider
+import antlapit.near.api.providers.Constants
 import antlapit.near.api.providers.Finality
 import antlapit.near.api.providers.base.BlockSearch
 import antlapit.near.api.providers.base.BlockSearch.Companion.fromBlockHash
@@ -8,9 +9,9 @@ import antlapit.near.api.providers.base.BlockSearch.Companion.fromBlockId
 import antlapit.near.api.providers.base.BlockSearch.Companion.ofFinality
 import antlapit.near.api.providers.base.JsonRpcProvider
 import antlapit.near.api.providers.model.accesskey.AccessKeyInBlock
+import antlapit.near.api.providers.model.accesskey.AccessKeysChangesContainer
 import antlapit.near.api.providers.model.accesskey.AccessKeysContainer
 import antlapit.near.api.providers.model.account.AccountWithPublicKey
-import antlapit.near.api.providers.model.changes.AccessKeysChangesContainer
 import antlapit.near.api.providers.model.primitives.AccountId
 import antlapit.near.api.providers.model.primitives.BlockHeight
 import antlapit.near.api.providers.model.primitives.CryptoHash
@@ -93,7 +94,7 @@ class AccessKeyRpcProvider(private val jsonRpcProvider: JsonRpcProvider) : Acces
         keys: List<AccountWithPublicKey>,
         blockSearch: BlockSearch = BlockSearch.BLOCK_OPTIMISTIC,
         timeout: Long
-    ): AccessKeysChangesContainer = jsonRpcProvider.getChanges(
+    ): AccessKeysChangesContainer = getChanges(
         blockSearch = blockSearch,
         params = mapOf(
             "changes_type" to "single_access_key_changes",
@@ -112,7 +113,7 @@ class AccessKeyRpcProvider(private val jsonRpcProvider: JsonRpcProvider) : Acces
         getAccessKeyChanges(keys, fromBlockHash(blockHash), timeout)
 
     /**
-     * @param keys List of account ids
+     * @param accountIds List of account ids
      * @param blockSearch Block search strategy for querying blocks
      * @link https://docs.near.org/docs/api/rpc/access-keys#view-access-key-changes-single
      */
@@ -120,7 +121,7 @@ class AccessKeyRpcProvider(private val jsonRpcProvider: JsonRpcProvider) : Acces
         accountIds: List<AccountId>,
         blockSearch: BlockSearch = BlockSearch.BLOCK_OPTIMISTIC,
         timeout: Long
-    ): AccessKeysChangesContainer = jsonRpcProvider.getChanges(
+    ): AccessKeysChangesContainer = getChanges(
         blockSearch = blockSearch,
         params = mapOf(
             "changes_type" to "all_access_key_changes",
@@ -146,6 +147,15 @@ class AccessKeyRpcProvider(private val jsonRpcProvider: JsonRpcProvider) : Acces
         blockHash: CryptoHash,
         timeout: Long
     ) = getAllAccessKeysChanges(accountIds, fromBlockHash(blockHash), timeout)
+
+    /**
+     * Note that this is experimental feature
+     */
+    private suspend fun getChanges(
+        blockSearch: BlockSearch,
+        params: Map<String, Any?>,
+        timeout: Long = Constants.DEFAULT_TIMEOUT
+    ): AccessKeysChangesContainer = jsonRpcProvider.sendRpc("EXPERIMENTAL_changes", blockSearch, params, timeout)
 }
 
 

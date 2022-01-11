@@ -3,12 +3,13 @@ package antlapit.near.api.json
 import antlapit.near.api.common.TestData
 import antlapit.near.api.providers.camelCaseToSnakeCase
 import antlapit.near.api.providers.model.accesskey.AccessKey
+import antlapit.near.api.providers.model.accesskey.AccessKeyChange
 import antlapit.near.api.providers.model.accesskey.AccessKeyPermission
+import antlapit.near.api.providers.model.accesskey.AccessKeysChangesContainer
 import antlapit.near.api.providers.model.account.Account
-import antlapit.near.api.providers.model.changes.AccessKeyChange
-import antlapit.near.api.providers.model.changes.AccessKeysChangesContainer
 import antlapit.near.api.providers.model.changes.StateChange
 import antlapit.near.api.providers.model.changes.StateChangeCause
+import antlapit.near.api.providers.model.changes.StateChangeKind
 import antlapit.near.api.providers.model.primitives.PublicKey
 import com.fasterxml.jackson.module.kotlin.readValue
 import io.kotest.assertions.throwables.shouldNotThrow
@@ -346,5 +347,52 @@ class ChangesDeserializationTest : FunSpec({
             }
         }
 
+    }
+
+
+    context("State Change Kind") {
+        withData(
+            nameFn = { "${it.typed}" },
+            TestData(
+                """
+                {
+                    "type":"account_touched",
+                    "account_id":"tx1.api_kotlin.testnet"
+                }
+                """,
+                StateChangeKind.AccountTouched(accountId = "tx1.api_kotlin.testnet")
+            ),
+            TestData(
+                """
+                {
+                    "type":"access_key_touched",
+                    "account_id":"tx1.api_kotlin.testnet"
+                }
+                """,
+                StateChangeKind.AccessKeyTouched(accountId = "tx1.api_kotlin.testnet")
+            ),
+            TestData(
+                """
+                {
+                    "type":"data_touched",
+                    "account_id":"tx1.api_kotlin.testnet"
+                }
+                """,
+                StateChangeKind.DataTouched(accountId = "tx1.api_kotlin.testnet")
+            ),
+            TestData(
+                """
+                {
+                    "type":"contract_code_touched",
+                    "account_id":"tx1.api_kotlin.testnet"
+                }
+                """,
+                StateChangeKind.ContractCodeTouched(accountId = "tx1.api_kotlin.testnet")
+            ),
+        ) { (a, b) ->
+            shouldNotThrow<Throwable> {
+                objectMapper.readValue(a) as StateChangeKind shouldBe b
+            }
+        }
     }
 })

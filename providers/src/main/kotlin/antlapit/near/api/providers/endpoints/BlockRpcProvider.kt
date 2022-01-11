@@ -1,6 +1,7 @@
 package antlapit.near.api.providers.endpoints
 
 import antlapit.near.api.providers.BlockProvider
+import antlapit.near.api.providers.Constants
 import antlapit.near.api.providers.Finality
 import antlapit.near.api.providers.base.BlockSearch
 import antlapit.near.api.providers.base.BlockSearch.Companion.fromBlockHash
@@ -8,6 +9,7 @@ import antlapit.near.api.providers.base.BlockSearch.Companion.fromBlockId
 import antlapit.near.api.providers.base.BlockSearch.Companion.ofFinality
 import antlapit.near.api.providers.base.JsonRpcProvider
 import antlapit.near.api.providers.model.block.Block
+import antlapit.near.api.providers.model.block.BlockChangesContainer
 import antlapit.near.api.providers.model.block.Chunk
 import antlapit.near.api.providers.model.primitives.BlockHeight
 import antlapit.near.api.providers.model.primitives.CryptoHash
@@ -63,4 +65,21 @@ class BlockRpcProvider(private val jsonRpcProvider: JsonRpcProvider) : BlockProv
     override suspend fun getChunkInBlock(blockHash: CryptoHash, shardId: ShardId, timeout: Long) =
         getChunk(fromBlockHash(blockHash), shardId, timeout)
 
+
+    override suspend fun getChangesInLatestBlock(finality: Finality, timeout: Long) =
+        getChangesInBlock(ofFinality(finality), timeout)
+
+    override suspend fun getChangesInBlock(blockId: BlockHeight, timeout: Long) =
+        getChangesInBlock(fromBlockId(blockId), timeout)
+
+    override suspend fun getChangesInBlock(blockHash: CryptoHash, timeout: Long) =
+        getChangesInBlock(fromBlockHash(blockHash), timeout)
+
+    /**
+     * Note that this is experimental feature
+     */
+    private suspend fun getChangesInBlock(
+        blockSearch: BlockSearch,
+        timeout: Long = Constants.DEFAULT_TIMEOUT
+    ): BlockChangesContainer = jsonRpcProvider.sendRpc("EXPERIMENTAL_changes_in_block", blockSearch, timeout)
 }

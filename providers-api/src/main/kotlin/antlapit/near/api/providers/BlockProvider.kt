@@ -1,6 +1,7 @@
 package antlapit.near.api.providers
 
 import antlapit.near.api.providers.model.block.Block
+import antlapit.near.api.providers.model.block.BlockChangesContainer
 import antlapit.near.api.providers.model.block.Chunk
 import antlapit.near.api.providers.model.primitives.BlockHeight
 import antlapit.near.api.providers.model.primitives.CryptoHash
@@ -46,5 +47,21 @@ interface BlockProvider {
      */
     suspend fun getChunkInBlock(blockHash: CryptoHash, shardId: ShardId, timeout: Long = Constants.DEFAULT_TIMEOUT): Chunk
 
-    // TODO Changes in Block
+    /**
+     * Returns changes in block for given block
+     * @param finality Finality param for last block
+     */
+    suspend fun getChangesInLatestBlock(finality: Finality = Finality.OPTIMISTIC, timeout: Long = Constants.DEFAULT_TIMEOUT): BlockChangesContainer
+
+    /**
+     * Returns changes in block for given block
+     * @param blockId Numeric block identifier
+     */
+    suspend fun getChangesInBlock(blockId: BlockHeight, timeout: Long = Constants.DEFAULT_TIMEOUT): BlockChangesContainer
+
+    /**
+     * Returns changes in block for given block
+     * @param blockHash String block hash
+     */
+    suspend fun getChangesInBlock(blockHash: CryptoHash, timeout: Long = Constants.DEFAULT_TIMEOUT): BlockChangesContainer
 }

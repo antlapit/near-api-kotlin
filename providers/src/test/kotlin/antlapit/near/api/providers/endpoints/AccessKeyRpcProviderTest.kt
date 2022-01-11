@@ -102,10 +102,10 @@ class AccessKeyRpcProviderTest {
 
         val block = archivalBlockEndpoint.getBlock("6r9Kc66jNnkoDW2PyvqT9CLPvtaYnrcrU5Uq5htguB4a")
 
-        val changesByHash = archivalEndpoint.getAllAccessKeysChanges(accountIds, block.header.hash)
+        val changesByBlockHash = archivalEndpoint.getAllAccessKeysChanges(accountIds, block.header.hash)
 
         val changesByBlockId = archivalEndpoint.getAllAccessKeysChanges(accountIds, block.header.height)
-        assertEquals(changesByBlockId, changesByHash, "changes in block by id and hash should be equal")
+        assertEquals(changesByBlockId, changesByBlockHash, "changes in block by id and hash should be equal")
     }
 
     @Test
