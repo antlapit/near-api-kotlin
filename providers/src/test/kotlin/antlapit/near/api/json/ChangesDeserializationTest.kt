@@ -4,6 +4,7 @@ import antlapit.near.api.common.TestData
 import antlapit.near.api.providers.camelCaseToSnakeCase
 import antlapit.near.api.providers.model.accesskey.AccessKey
 import antlapit.near.api.providers.model.accesskey.AccessKeyPermission
+import antlapit.near.api.providers.model.account.Account
 import antlapit.near.api.providers.model.changes.AccessKeyChange
 import antlapit.near.api.providers.model.changes.AccessKeysChangesContainer
 import antlapit.near.api.providers.model.changes.StateChange
@@ -15,6 +16,7 @@ import io.kotest.common.ExperimentalKotest
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.datatest.withData
 import io.kotest.matchers.shouldBe
+import java.math.BigInteger
 
 /**
  * Access key change container deserialization test
@@ -76,12 +78,193 @@ class ChangesDeserializationTest : FunSpec({
         }
     }
 
+    context("State Change") {
+        withData(
+            nameFn = { "${it.typed}" },
+            TestData(
+                """
+                {
+                    "cause":{ "type":"initial_state" },
+                    "type":"account_update",
+                    "change":{
+                       "account_id":"tx1.api_kotlin.testnet",
+                       "account": {
+                            "amount": 10,
+                            "locked": 0,
+                            "code_hash": "ed25519:5zpBhMxTtD4ozFsBRV9v5hPKTDDFquHqj8gXGERGh6YF",
+                            "storage_usage": 0,
+                            "storage_paid_at": 0
+                       }
+                    }
+                }
+                """,
+                AccessKeyChange(
+                    cause = StateChangeCause.InitialState,
+                    change = StateChange.AccountUpdate(
+                        accountId = "tx1.api_kotlin.testnet",
+                        account = Account(
+                            amount = BigInteger.TEN,
+                            locked = BigInteger.ZERO,
+                            codeHash = "ed25519:5zpBhMxTtD4ozFsBRV9v5hPKTDDFquHqj8gXGERGh6YF",
+                            storageUsage = 0,
+                            storagePaidAt = 0
+                        )
+                    )
+                )
+            ),
+            TestData(
+                """
+                {
+                    "cause":{ "type":"initial_state" },
+                    "type":"account_deletion",
+                    "change":{
+                       "account_id":"tx1.api_kotlin.testnet"
+                    }
+                }
+                """,
+                AccessKeyChange(
+                    cause = StateChangeCause.InitialState,
+                    change = StateChange.AccountDeletion(
+                        accountId = "tx1.api_kotlin.testnet"
+                    )
+                )
+            ),
+            TestData(
+                """
+                {
+                    "cause":{ "type":"initial_state" },
+                    "type":"access_key_update",
+                    "change":{
+                       "account_id":"tx1.api_kotlin.testnet",
+                       "public_key":"ed25519:5zpBhMxTtD4ozFsBRV9v5hPKTDDFquHqj8gXGERGh6YF",
+                       "access_key":{
+                          "nonce":75126620000051,
+                          "permission":"FullAccess"
+                       }
+                    }
+                }
+                """,
+                AccessKeyChange(
+                    cause = StateChangeCause.InitialState,
+                    change = StateChange.AccessKeyUpdate(
+                        accountId = "tx1.api_kotlin.testnet",
+                        publicKey = PublicKey("ed25519:5zpBhMxTtD4ozFsBRV9v5hPKTDDFquHqj8gXGERGh6YF"),
+                        accessKey = AccessKey(
+                            nonce = 75126620000051,
+                            permission = AccessKeyPermission.FullAccess
+                        )
+                    )
+                )
+            ),
+            TestData(
+                """
+                {
+                    "cause":{ "type":"initial_state" },
+                    "type":"access_key_deletion",
+                    "change":{
+                       "account_id":"tx1.api_kotlin.testnet",
+                       "public_key":"ed25519:5zpBhMxTtD4ozFsBRV9v5hPKTDDFquHqj8gXGERGh6YF"
+                    }
+                }
+                """,
+                AccessKeyChange(
+                    cause = StateChangeCause.InitialState,
+                    change = StateChange.AccessKeyDeletion(
+                        accountId = "tx1.api_kotlin.testnet",
+                        publicKey = PublicKey("ed25519:5zpBhMxTtD4ozFsBRV9v5hPKTDDFquHqj8gXGERGh6YF")
+                    )
+                )
+            ),
+            TestData(
+                """
+                {
+                    "cause":{ "type":"initial_state" },
+                    "type":"data_update",
+                    "change":{
+                       "account_id":"tx1.api_kotlin.testnet",
+                       "key":"key",
+                       "value":"value"
+                    }
+                }
+                """,
+                AccessKeyChange(
+                    cause = StateChangeCause.InitialState,
+                    change = StateChange.DataUpdate(
+                        accountId = "tx1.api_kotlin.testnet",
+                        key = "key",
+                        value = "value"
+                    )
+                )
+            ),
+            TestData(
+                """
+                {
+                    "cause":{ "type":"initial_state" },
+                    "type":"data_deletion",
+                    "change":{
+                       "account_id":"tx1.api_kotlin.testnet",
+                       "key":"key"
+                    }
+                }
+                """,
+                AccessKeyChange(
+                    cause = StateChangeCause.InitialState,
+                    change = StateChange.DataDeletion(
+                        accountId = "tx1.api_kotlin.testnet",
+                        key = "key"
+                    )
+                )
+            ),
+            TestData(
+                """
+                {
+                    "cause":{ "type":"initial_state" },
+                    "type":"contract_code_update",
+                    "change":{
+                       "account_id":"tx1.api_kotlin.testnet",
+                       "code":"code"
+                    }
+                }
+                """,
+                AccessKeyChange(
+                    cause = StateChangeCause.InitialState,
+                    change = StateChange.ContractCodeUpdate(
+                        accountId = "tx1.api_kotlin.testnet",
+                        code = "code"
+                    )
+                )
+            ),
+            TestData(
+                """
+                {
+                    "cause":{ "type":"initial_state" },
+                    "type":"contract_code_deletion",
+                    "change":{
+                       "account_id":"tx1.api_kotlin.testnet",
+                       "key":"key"
+                    }
+                }
+                """,
+                AccessKeyChange(
+                    cause = StateChangeCause.InitialState,
+                    change = StateChange.ContractCodeDeletion(
+                        accountId = "tx1.api_kotlin.testnet"
+                    )
+                )
+            )
+        ) { (a, b) ->
+            shouldNotThrow<Throwable> {
+                objectMapper.readValue(a) as AccessKeyChange shouldBe b
+            }
+        }
+    }
+
     context("State change cause") {
         withData(
             nameFn = { "${it.typed}" },
             listOf(
                 TestData(
-            """
+                    """
                 {
                    "type":"transaction_processing",
                    "tx_hash":"DKUAQ9ovwb31AnzxyaVUkECBSHcjPoUKb6TZrsCy3b4J"
@@ -148,14 +331,18 @@ class ChangesDeserializationTest : FunSpec({
             nameFn = { "${it.typed}" },
             StateChangeCause::class.sealedSubclasses
                 .filter { it.objectInstance != null }
-                .map { TestData("""
+                .map {
+                    TestData(
+                        """
                     {
                         "type":"${it.objectInstance!!::class.simpleName!!.camelCaseToSnakeCase()}"
                     }
-                """.trimIndent(), it.objectInstance) },
+                """.trimIndent(), it.objectInstance
+                    )
+                },
         ) { (str, obj) ->
             shouldNotThrow<Throwable> {
-                (objectMapper.readValue(str) as StateChangeCause)::class shouldBe obj!!::class
+                objectMapper.readValue(str) as StateChangeCause shouldBe obj
             }
         }
 

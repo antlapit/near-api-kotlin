@@ -50,7 +50,15 @@ sealed interface StateChangeCause {
      * A type of update that is used to mark the initial storage update, e.g. during genesis
      * or in tests setup.
      */
-    object InitialState : StateChangeCause
+    object InitialState : StateChangeCause {
+        override fun equals(other: Any?): Boolean {
+            return other != null && other::class == this::class
+        }
+
+        override fun hashCode(): Int {
+            return super.hashCode()
+        }
+    }
 
     /**
      * Processing of a transaction.

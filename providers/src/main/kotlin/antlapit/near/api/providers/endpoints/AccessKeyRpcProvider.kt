@@ -93,8 +93,7 @@ class AccessKeyRpcProvider(private val jsonRpcProvider: JsonRpcProvider) : Acces
         keys: List<AccountWithPublicKey>,
         blockSearch: BlockSearch = BlockSearch.BLOCK_OPTIMISTIC,
         timeout: Long
-    ): AccessKeysChangesContainer = jsonRpcProvider.sendRpc(
-        method = "EXPERIMENTAL_changes",
+    ): AccessKeysChangesContainer = jsonRpcProvider.getChanges(
         blockSearch = blockSearch,
         params = mapOf(
             "changes_type" to "single_access_key_changes",
@@ -112,6 +111,41 @@ class AccessKeyRpcProvider(private val jsonRpcProvider: JsonRpcProvider) : Acces
     override suspend fun getAccessKeyChanges(keys: List<AccountWithPublicKey>, blockHash: CryptoHash, timeout: Long) =
         getAccessKeyChanges(keys, fromBlockHash(blockHash), timeout)
 
+    /**
+     * @param keys List of account ids
+     * @param blockSearch Block search strategy for querying blocks
+     * @link https://docs.near.org/docs/api/rpc/access-keys#view-access-key-changes-single
+     */
+    private suspend fun getAllAccessKeysChanges(
+        accountIds: List<AccountId>,
+        blockSearch: BlockSearch = BlockSearch.BLOCK_OPTIMISTIC,
+        timeout: Long
+    ): AccessKeysChangesContainer = jsonRpcProvider.getChanges(
+        blockSearch = blockSearch,
+        params = mapOf(
+            "changes_type" to "all_access_key_changes",
+            "account_ids" to accountIds
+        ),
+        timeout = timeout
+    )
+
+    override suspend fun getAllAccessKeysChanges(
+        accountIds: List<AccountId>,
+        finality: Finality,
+        timeout: Long
+    ) = getAllAccessKeysChanges(accountIds, ofFinality(finality), timeout)
+
+    override suspend fun getAllAccessKeysChanges(
+        accountIds: List<AccountId>,
+        blockId: BlockHeight,
+        timeout: Long
+    ) = getAllAccessKeysChanges(accountIds, fromBlockId(blockId), timeout)
+
+    override suspend fun getAllAccessKeysChanges(
+        accountIds: List<AccountId>,
+        blockHash: CryptoHash,
+        timeout: Long
+    ) = getAllAccessKeysChanges(accountIds, fromBlockHash(blockHash), timeout)
 }
 
 

@@ -8,7 +8,7 @@ import antlapit.near.api.providers.base.BlockSearch.Companion.fromBlockId
 import antlapit.near.api.providers.base.BlockSearch.Companion.ofFinality
 import antlapit.near.api.providers.base.JsonRpcProvider
 import antlapit.near.api.providers.base64
-import antlapit.near.api.providers.model.account.Account
+import antlapit.near.api.providers.model.account.AccountInBlock
 import antlapit.near.api.providers.model.account.CallResult
 import antlapit.near.api.providers.model.account.ContractCode
 import antlapit.near.api.providers.model.account.ContractState
@@ -29,7 +29,7 @@ class ContractRpcProvider(private val jsonRpcProvider: JsonRpcProvider) : Contra
         accountId: AccountId,
         blockSearch: BlockSearch = BlockSearch.BLOCK_OPTIMISTIC,
         timeout: Long
-    ): Account = jsonRpcProvider.query(
+    ): AccountInBlock = jsonRpcProvider.query(
         mapOf(
             "request_type" to "view_account",
             "account_id" to accountId

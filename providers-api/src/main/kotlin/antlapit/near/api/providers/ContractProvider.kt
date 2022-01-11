@@ -1,6 +1,6 @@
 package antlapit.near.api.providers
 
-import antlapit.near.api.providers.model.account.Account
+import antlapit.near.api.providers.model.account.AccountInBlock
 import antlapit.near.api.providers.model.account.CallResult
 import antlapit.near.api.providers.model.account.ContractCode
 import antlapit.near.api.providers.model.account.ContractState
@@ -19,7 +19,7 @@ interface ContractProvider {
     suspend fun getAccount(
         accountId: AccountId, finality: Finality = Finality.OPTIMISTIC,
         timeout: Long = Constants.DEFAULT_TIMEOUT
-    ): Account
+    ): AccountInBlock
 
     /**
      * Returns basic account information by numeric block id.
@@ -30,7 +30,7 @@ interface ContractProvider {
     suspend fun getAccount(
         accountId: AccountId, blockId: BlockHeight,
         timeout: Long = Constants.DEFAULT_TIMEOUT
-    ): Account
+    ): AccountInBlock
 
     /**
      * Returns basic account information by block hash.
@@ -41,7 +41,7 @@ interface ContractProvider {
     suspend fun getAccount(
         accountId: AccountId, blockHash: CryptoHash,
         timeout: Long = Constants.DEFAULT_TIMEOUT
-    ): Account
+    ): AccountInBlock
 
     /**
      * Returns the contract code (Wasm binary) deployed to the account by finality param.

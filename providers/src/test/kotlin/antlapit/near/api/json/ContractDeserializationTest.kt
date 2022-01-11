@@ -31,7 +31,7 @@ class ContractDeserializationTest : FunSpec({
                         "block_hash":"5R1zy2VSPnmkgt5AvkTTnyFcNLArcUgYuDqAy3GZG7kU"
                     }
                     """,
-                    Account(
+                    AccountInBlock(
                         amount = BigInteger("99998750632125700200000000"),
                         locked = BigInteger.ZERO,
                         codeHash = "11111111111111111111111111111111",
@@ -44,7 +44,7 @@ class ContractDeserializationTest : FunSpec({
             )
         ) { (a, b) ->
             shouldNotThrow<Throwable> {
-                objectMapper.readValue(a) as Account shouldBe b
+                objectMapper.readValue(a) as AccountInBlock shouldBe b
             }
 
         }

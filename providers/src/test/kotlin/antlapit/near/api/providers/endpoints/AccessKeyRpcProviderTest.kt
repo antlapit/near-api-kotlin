@@ -94,4 +94,26 @@ class AccessKeyRpcProviderTest {
         val finalChanges = archivalEndpoint.getAccessKeyChanges(keysRequest)
         assertNotNull(finalChanges.blockHash, "block hash should not be null")
     }
+
+    @Test
+    fun getAllAccessKeyChanges_whenConcreteBlock_thenCorrect() = runBlocking {
+        val accountId = "api_kotlin.testnet"
+        val accountIds = listOf(accountId)
+
+        val block = archivalBlockEndpoint.getBlock("6r9Kc66jNnkoDW2PyvqT9CLPvtaYnrcrU5Uq5htguB4a")
+
+        val changesByHash = archivalEndpoint.getAllAccessKeysChanges(accountIds, block.header.hash)
+
+        val changesByBlockId = archivalEndpoint.getAllAccessKeysChanges(accountIds, block.header.height)
+        assertEquals(changesByBlockId, changesByHash, "changes in block by id and hash should be equal")
+    }
+
+    @Test
+    fun getAllAccessKeyChanges_whenFinal_thenCorrect() = runBlocking {
+        val accountId = "api_kotlin.testnet"
+        val accountIds = listOf(accountId)
+
+        val finalChanges = archivalEndpoint.getAllAccessKeysChanges(accountIds)
+        assertNotNull(finalChanges.blockHash, "block hash should not be null")
+    }
 }

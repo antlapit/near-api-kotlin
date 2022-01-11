@@ -11,6 +11,14 @@ data class Account(
     val locked: Balance,
     val codeHash: CryptoHash,
     val storageUsage: StorageUsage,
+    val storagePaidAt: BlockHeight
+)
+
+data class AccountInBlock(
+    val amount: Balance,
+    val locked: Balance,
+    val codeHash: CryptoHash,
+    val storageUsage: StorageUsage,
     val storagePaidAt: BlockHeight,
     override val blockHeight: BlockHeight,
     override val blockHash: CryptoHash

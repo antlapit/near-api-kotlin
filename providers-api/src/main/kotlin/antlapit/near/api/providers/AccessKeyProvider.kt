@@ -127,6 +127,43 @@ interface AccessKeyProvider {
         timeout: Long = Constants.DEFAULT_TIMEOUT
     ): AccessKeysChangesContainer
 
-    // TODO all_access_key_changes
 
+    /**
+     * Returns changes to <b>all</b> access keys of a specific block.
+     * Multiple accounts can be quereied by passing an array of <b>accountIds</b>
+     *
+     * @param accountIds List of account ids
+     * @param finality Finality param for last block
+     */
+    suspend fun getAllAccessKeysChanges(
+        accountIds: List<AccountId>,
+        finality: Finality = Finality.OPTIMISTIC,
+        timeout: Long = Constants.DEFAULT_TIMEOUT
+    ): AccessKeysChangesContainer
+
+    /**
+     * Returns changes to <b>all</b> access keys of a specific block.
+     * Multiple accounts can be quereied by passing an array of <b>accountIds</b>
+     *
+     * @param accountIds List of account ids
+     * @param blockId Numeric block identifier
+     */
+    suspend fun getAllAccessKeysChanges(
+        accountIds: List<AccountId>,
+        blockId: BlockHeight,
+        timeout: Long = Constants.DEFAULT_TIMEOUT
+    ): AccessKeysChangesContainer
+
+    /**
+     * Returns changes to <b>all</b> access keys of a specific block.
+     * Multiple accounts can be quereied by passing an array of <b>accountIds</b>
+     *
+     * @param accountIds List of account ids
+     * @param blockHash String block hash
+     */
+    suspend fun getAllAccessKeysChanges(
+        accountIds: List<AccountId>,
+        blockHash: CryptoHash,
+        timeout: Long = Constants.DEFAULT_TIMEOUT
+    ): AccessKeysChangesContainer
 }
