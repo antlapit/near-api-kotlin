@@ -3,7 +3,7 @@ package antlapit.near.api.providers
 import antlapit.near.api.providers.model.accesskey.AccessKeyInBlock
 import antlapit.near.api.providers.model.accesskey.AccessKeysContainer
 import antlapit.near.api.providers.model.account.AccountWithPublicKey
-import antlapit.near.api.providers.model.changes.StateChangesContainer
+import antlapit.near.api.providers.model.changes.StateChanges
 import antlapit.near.api.providers.model.primitives.AccountId
 import antlapit.near.api.providers.model.primitives.BlockHeight
 import antlapit.near.api.providers.model.primitives.CryptoHash
@@ -101,7 +101,7 @@ interface AccessKeyProvider {
         keys: List<AccountWithPublicKey>,
         finality: Finality = Finality.OPTIMISTIC,
         timeout: Long = Constants.DEFAULT_TIMEOUT
-    ): StateChangesContainer
+    ): StateChanges
 
     /**
      * Returns access keys changes by account and public key.
@@ -113,7 +113,7 @@ interface AccessKeyProvider {
         keys: List<AccountWithPublicKey>,
         blockId: BlockHeight,
         timeout: Long = Constants.DEFAULT_TIMEOUT
-    ): StateChangesContainer
+    ): StateChanges
 
     /**
      * Returns access keys changes by account and public key.
@@ -125,7 +125,7 @@ interface AccessKeyProvider {
         keys: List<AccountWithPublicKey>,
         blockHash: CryptoHash,
         timeout: Long = Constants.DEFAULT_TIMEOUT
-    ): StateChangesContainer
+    ): StateChanges
 
 
     /**
@@ -139,7 +139,7 @@ interface AccessKeyProvider {
         accountIds: List<AccountId>,
         finality: Finality = Finality.OPTIMISTIC,
         timeout: Long = Constants.DEFAULT_TIMEOUT
-    ): StateChangesContainer
+    ): StateChanges
 
     /**
      * Returns changes to <b>all</b> access keys of a specific block.
@@ -152,7 +152,7 @@ interface AccessKeyProvider {
         accountIds: List<AccountId>,
         blockId: BlockHeight,
         timeout: Long = Constants.DEFAULT_TIMEOUT
-    ): StateChangesContainer
+    ): StateChanges
 
     /**
      * Returns changes to <b>all</b> access keys of a specific block.
@@ -165,5 +165,5 @@ interface AccessKeyProvider {
         accountIds: List<AccountId>,
         blockHash: CryptoHash,
         timeout: Long = Constants.DEFAULT_TIMEOUT
-    ): StateChangesContainer
+    ): StateChanges
 }

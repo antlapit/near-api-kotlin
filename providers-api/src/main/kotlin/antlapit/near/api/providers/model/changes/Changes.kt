@@ -4,17 +4,17 @@ import antlapit.near.api.providers.model.accesskey.AccessKey
 import antlapit.near.api.providers.model.account.Account
 import antlapit.near.api.providers.model.primitives.*
 
-data class StateChangesContainer(
+data class StateChanges(
     val blockHash: CryptoHash,
-    val changes: List<SingleStateChange> = emptyList()
+    val changes: List<StateChange> = emptyList()
 )
 
-data class SingleStateChange(
-    val change: StateChange,
+data class StateChange(
+    val change: StateChangeType,
     val cause: StateChangeCause
 )
 
-sealed interface StateChange {
+sealed interface StateChangeType {
     data class AccountUpdate(
         val accountId: AccountId,
         override val amount: Balance,
@@ -22,7 +22,7 @@ sealed interface StateChange {
         override val codeHash: CryptoHash,
         override val storageUsage: StorageUsage,
         override val storagePaidAt: BlockHeight
-    ) : Account(amount, locked, codeHash, storageUsage, storagePaidAt), StateChange {
+    ) : Account(amount, locked, codeHash, storageUsage, storagePaidAt), StateChangeType {
         constructor(accountId: AccountId, account: Account) : this(
             accountId,
             account.amount,
@@ -33,23 +33,23 @@ sealed interface StateChange {
         )
     }
 
-    data class AccountDeletion(val accountId: AccountId) : StateChange
+    data class AccountDeletion(val accountId: AccountId) : StateChangeType
 
     data class AccessKeyUpdate(
         val accountId: AccountId,
         val publicKey: PublicKey,
         val accessKey: AccessKey
-    ) : StateChange
+    ) : StateChangeType
 
-    data class AccessKeyDeletion(val accountId: AccountId, val publicKey: PublicKey) : StateChange
+    data class AccessKeyDeletion(val accountId: AccountId, val publicKey: PublicKey) : StateChangeType
 
-    data class DataUpdate(val accountId: AccountId, val keyBase64: String, val valueBase64: String) : StateChange
+    data class DataUpdate(val accountId: AccountId, val keyBase64: String, val valueBase64: String) : StateChangeType
 
-    data class DataDeletion(val accountId: AccountId, val keyBase64: String) : StateChange
+    data class DataDeletion(val accountId: AccountId, val keyBase64: String) : StateChangeType
 
-    data class ContractCodeUpdate(val accountId: AccountId, val codeBase64: String) : StateChange
+    data class ContractCodeUpdate(val accountId: AccountId, val codeBase64: String) : StateChangeType
 
-    data class ContractCodeDeletion(val accountId: AccountId) : StateChange
+    data class ContractCodeDeletion(val accountId: AccountId) : StateChangeType
 }
 
 sealed interface StateChangeKind {

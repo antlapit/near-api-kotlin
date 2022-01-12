@@ -4,10 +4,10 @@ import antlapit.near.api.providers.camelCaseToSnakeCase
 import antlapit.near.api.providers.model.accesskey.AccessKeyPermission
 import antlapit.near.api.providers.model.block.Action
 import antlapit.near.api.providers.model.block.ReceiptInfo
-import antlapit.near.api.providers.model.changes.SingleStateChange
 import antlapit.near.api.providers.model.changes.StateChange
 import antlapit.near.api.providers.model.changes.StateChangeCause
 import antlapit.near.api.providers.model.changes.StateChangeKind
+import antlapit.near.api.providers.model.changes.StateChangeType
 import antlapit.near.api.providers.model.primitives.*
 import antlapit.near.api.providers.model.transaction.ExecutionStatus
 import antlapit.near.api.providers.model.transaction.FinalExecutionStatus
@@ -79,12 +79,12 @@ class NearRpcModelsModule : Module() {
             }
         })
 
-        ctx.setMixInAnnotations(SingleStateChange::class.java, SingleStateChangeMixin::class.java)
+        ctx.setMixInAnnotations(StateChange::class.java, SingleStateChangeMixin::class.java)
         ctx.setMixInAnnotations(StateChangeCause::class.java, StateChangeCauseMixin::class.java)
         ctx.setMixInAnnotations(StateChangeKind::class.java, StateChangeKindMixin::class.java)
 
         val subTypes = ArrayList<NamedType>()
-        for (sealedSubclass in StateChange::class.sealedSubclasses) {
+        for (sealedSubclass in StateChangeType::class.sealedSubclasses) {
             val type = NamedType(sealedSubclass.java, sealedSubclass.simpleName!!.camelCaseToSnakeCase())
             subTypes.add(type)
         }

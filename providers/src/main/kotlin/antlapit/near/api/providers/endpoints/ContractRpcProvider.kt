@@ -12,7 +12,7 @@ import antlapit.near.api.providers.model.account.AccountInBlock
 import antlapit.near.api.providers.model.account.CallResult
 import antlapit.near.api.providers.model.account.ContractCode
 import antlapit.near.api.providers.model.account.ContractState
-import antlapit.near.api.providers.model.changes.StateChangesContainer
+import antlapit.near.api.providers.model.changes.StateChanges
 import antlapit.near.api.providers.model.primitives.AccountId
 import antlapit.near.api.providers.model.primitives.BlockHeight
 import antlapit.near.api.providers.model.primitives.CryptoHash
@@ -155,7 +155,7 @@ class ContractRpcProvider(private val jsonRpcProvider: JsonRpcProvider) : Contra
         accountIds: List<AccountId>,
         blockSearch: BlockSearch = BlockSearch.BLOCK_OPTIMISTIC,
         timeout: Long
-    ): StateChangesContainer = jsonRpcProvider.getChanges(
+    ): StateChanges = jsonRpcProvider.getChanges(
         blockSearch = blockSearch,
         params = mapOf(
             "changes_type" to "account_changes",
@@ -192,7 +192,7 @@ class ContractRpcProvider(private val jsonRpcProvider: JsonRpcProvider) : Contra
         keyPrefix: String = "",
         blockSearch: BlockSearch = BlockSearch.BLOCK_OPTIMISTIC,
         timeout: Long
-    ): StateChangesContainer = jsonRpcProvider.getChanges(
+    ): StateChanges = jsonRpcProvider.getChanges(
         blockSearch = blockSearch,
         params = mapOf(
             "changes_type" to "data_changes",
@@ -232,7 +232,7 @@ class ContractRpcProvider(private val jsonRpcProvider: JsonRpcProvider) : Contra
         accountIds: List<AccountId>,
         blockSearch: BlockSearch = BlockSearch.BLOCK_OPTIMISTIC,
         timeout: Long
-    ): StateChangesContainer = jsonRpcProvider.getChanges(
+    ): StateChanges = jsonRpcProvider.getChanges(
         blockSearch = blockSearch,
         params = mapOf(
             "changes_type" to "contract_code_changes",

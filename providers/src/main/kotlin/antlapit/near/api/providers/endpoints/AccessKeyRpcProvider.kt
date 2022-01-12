@@ -10,7 +10,7 @@ import antlapit.near.api.providers.base.JsonRpcProvider
 import antlapit.near.api.providers.model.accesskey.AccessKeyInBlock
 import antlapit.near.api.providers.model.accesskey.AccessKeysContainer
 import antlapit.near.api.providers.model.account.AccountWithPublicKey
-import antlapit.near.api.providers.model.changes.StateChangesContainer
+import antlapit.near.api.providers.model.changes.StateChanges
 import antlapit.near.api.providers.model.primitives.AccountId
 import antlapit.near.api.providers.model.primitives.BlockHeight
 import antlapit.near.api.providers.model.primitives.CryptoHash
@@ -93,7 +93,7 @@ class AccessKeyRpcProvider(private val jsonRpcProvider: JsonRpcProvider) : Acces
         keys: List<AccountWithPublicKey>,
         blockSearch: BlockSearch = BlockSearch.BLOCK_OPTIMISTIC,
         timeout: Long
-    ): StateChangesContainer = jsonRpcProvider.getChanges(
+    ): StateChanges = jsonRpcProvider.getChanges(
         blockSearch = blockSearch,
         params = mapOf(
             "changes_type" to "single_access_key_changes",
@@ -120,7 +120,7 @@ class AccessKeyRpcProvider(private val jsonRpcProvider: JsonRpcProvider) : Acces
         accountIds: List<AccountId>,
         blockSearch: BlockSearch = BlockSearch.BLOCK_OPTIMISTIC,
         timeout: Long
-    ): StateChangesContainer = jsonRpcProvider.getChanges(
+    ): StateChanges = jsonRpcProvider.getChanges(
         blockSearch = blockSearch,
         params = mapOf(
             "changes_type" to "all_access_key_changes",

@@ -48,14 +48,14 @@ class ChangesDeserializationTest : FunSpec({
                     }]
                 }
                 """,
-                    StateChangesContainer(
+                    StateChanges(
                         blockHash = "AWXoLJtyQaYkogEjR96NExSDXpwspw5UAfLaHUP8QyB2",
                         changes = listOf(
-                            SingleStateChange(
+                            StateChange(
                                 cause = StateChangeCause.TransactionProcessing(
                                     txHash = "DKUAQ9ovwb31AnzxyaVUkECBSHcjPoUKb6TZrsCy3b4J"
                                 ),
-                                change = StateChange.AccessKeyUpdate(
+                                change = StateChangeType.AccessKeyUpdate(
                                     accountId = "tx1.api_kotlin.testnet",
                                     publicKey = PublicKey("ed25519:5zpBhMxTtD4ozFsBRV9v5hPKTDDFquHqj8gXGERGh6YF"),
                                     accessKey = AccessKey(
@@ -70,7 +70,7 @@ class ChangesDeserializationTest : FunSpec({
             )
         ) { (a, b) ->
             shouldNotThrow<Throwable> {
-                objectMapper.readValue(a) as StateChangesContainer shouldBe b
+                objectMapper.readValue(a) as StateChanges shouldBe b
             }
         }
     }
@@ -85,19 +85,17 @@ class ChangesDeserializationTest : FunSpec({
                     "type":"account_update",
                     "change":{
                        "account_id":"tx1.api_kotlin.testnet",
-                       "account": {
-                            "amount": 10,
-                            "locked": 0,
-                            "code_hash": "ed25519:5zpBhMxTtD4ozFsBRV9v5hPKTDDFquHqj8gXGERGh6YF",
-                            "storage_usage": 0,
-                            "storage_paid_at": 0
-                       }
+                       "amount": 10,
+                       "locked": 0,
+                       "code_hash": "ed25519:5zpBhMxTtD4ozFsBRV9v5hPKTDDFquHqj8gXGERGh6YF",
+                       "storage_usage": 0,
+                       "storage_paid_at": 0
                     }
                 }
                 """,
-                SingleStateChange(
+                StateChange(
                     cause = StateChangeCause.InitialState,
-                    change = StateChange.AccountUpdate(
+                    change = StateChangeType.AccountUpdate(
                         accountId = "tx1.api_kotlin.testnet",
                         account = Account(
                             amount = BigInteger.TEN,
@@ -119,9 +117,9 @@ class ChangesDeserializationTest : FunSpec({
                     }
                 }
                 """,
-                SingleStateChange(
+                StateChange(
                     cause = StateChangeCause.InitialState,
-                    change = StateChange.AccountDeletion(
+                    change = StateChangeType.AccountDeletion(
                         accountId = "tx1.api_kotlin.testnet"
                     )
                 )
@@ -141,9 +139,9 @@ class ChangesDeserializationTest : FunSpec({
                     }
                 }
                 """,
-                SingleStateChange(
+                StateChange(
                     cause = StateChangeCause.InitialState,
-                    change = StateChange.AccessKeyUpdate(
+                    change = StateChangeType.AccessKeyUpdate(
                         accountId = "tx1.api_kotlin.testnet",
                         publicKey = PublicKey("ed25519:5zpBhMxTtD4ozFsBRV9v5hPKTDDFquHqj8gXGERGh6YF"),
                         accessKey = AccessKey(
@@ -164,9 +162,9 @@ class ChangesDeserializationTest : FunSpec({
                     }
                 }
                 """,
-                SingleStateChange(
+                StateChange(
                     cause = StateChangeCause.InitialState,
-                    change = StateChange.AccessKeyDeletion(
+                    change = StateChangeType.AccessKeyDeletion(
                         accountId = "tx1.api_kotlin.testnet",
                         publicKey = PublicKey("ed25519:5zpBhMxTtD4ozFsBRV9v5hPKTDDFquHqj8gXGERGh6YF")
                     )
@@ -184,9 +182,9 @@ class ChangesDeserializationTest : FunSpec({
                     }
                 }
                 """,
-                SingleStateChange(
+                StateChange(
                     cause = StateChangeCause.InitialState,
-                    change = StateChange.DataUpdate(
+                    change = StateChangeType.DataUpdate(
                         accountId = "tx1.api_kotlin.testnet",
                         keyBase64 = "key",
                         valueBase64 = "value"
@@ -204,9 +202,9 @@ class ChangesDeserializationTest : FunSpec({
                     }
                 }
                 """,
-                SingleStateChange(
+                StateChange(
                     cause = StateChangeCause.InitialState,
-                    change = StateChange.DataDeletion(
+                    change = StateChangeType.DataDeletion(
                         accountId = "tx1.api_kotlin.testnet",
                         keyBase64 = "key"
                     )
@@ -223,9 +221,9 @@ class ChangesDeserializationTest : FunSpec({
                     }
                 }
                 """,
-                SingleStateChange(
+                StateChange(
                     cause = StateChangeCause.InitialState,
-                    change = StateChange.ContractCodeUpdate(
+                    change = StateChangeType.ContractCodeUpdate(
                         accountId = "tx1.api_kotlin.testnet",
                         codeBase64 = "code"
                     )
@@ -241,16 +239,16 @@ class ChangesDeserializationTest : FunSpec({
                     }
                 }
                 """,
-                SingleStateChange(
+                StateChange(
                     cause = StateChangeCause.InitialState,
-                    change = StateChange.ContractCodeDeletion(
+                    change = StateChangeType.ContractCodeDeletion(
                         accountId = "tx1.api_kotlin.testnet"
                     )
                 )
             )
         ) { (a, b) ->
             shouldNotThrow<Throwable> {
-                objectMapper.readValue(a) as SingleStateChange shouldBe b
+                objectMapper.readValue(a) as StateChange shouldBe b
             }
         }
     }

@@ -4,7 +4,7 @@ import antlapit.near.api.providers.model.account.AccountInBlock
 import antlapit.near.api.providers.model.account.CallResult
 import antlapit.near.api.providers.model.account.ContractCode
 import antlapit.near.api.providers.model.account.ContractState
-import antlapit.near.api.providers.model.changes.StateChangesContainer
+import antlapit.near.api.providers.model.changes.StateChanges
 import antlapit.near.api.providers.model.primitives.AccountId
 import antlapit.near.api.providers.model.primitives.BlockHeight
 import antlapit.near.api.providers.model.primitives.CryptoHash
@@ -173,7 +173,7 @@ interface ContractProvider {
         accountIds: List<AccountId>,
         finality: Finality = Finality.OPTIMISTIC,
         timeout: Long = Constants.DEFAULT_TIMEOUT
-    ): StateChangesContainer
+    ): StateChanges
 
     /**
      * Returns account changes from transactions in a given account.
@@ -185,7 +185,7 @@ interface ContractProvider {
         accountIds: List<AccountId>,
         blockId: BlockHeight,
         timeout: Long = Constants.DEFAULT_TIMEOUT
-    ): StateChangesContainer
+    ): StateChanges
 
     /**
      * Returns account changes from transactions in a given account.
@@ -197,7 +197,7 @@ interface ContractProvider {
         accountIds: List<AccountId>,
         blockHash: CryptoHash,
         timeout: Long = Constants.DEFAULT_TIMEOUT
-    ): StateChangesContainer
+    ): StateChanges
 
 
     /**
@@ -213,7 +213,7 @@ interface ContractProvider {
         keyPrefix: String = "",
         finality: Finality = Finality.OPTIMISTIC,
         timeout: Long = Constants.DEFAULT_TIMEOUT
-    ): StateChangesContainer
+    ): StateChanges
 
     /**
      * Returns the state change details of a contract based on the key prefix (encoded to base64).
@@ -228,7 +228,7 @@ interface ContractProvider {
         keyPrefix: String = "",
         blockId: BlockHeight,
         timeout: Long = Constants.DEFAULT_TIMEOUT
-    ): StateChangesContainer
+    ): StateChanges
 
     /**
      * Returns the state change details of a contract based on the key prefix (encoded to base64).
@@ -243,7 +243,7 @@ interface ContractProvider {
         keyPrefix: String = "",
         blockHash: CryptoHash,
         timeout: Long = Constants.DEFAULT_TIMEOUT
-    ): StateChangesContainer
+    ): StateChanges
 
     /**
      * Returns code changes made when deploying a contract. Change is returned is a base64 encoded WASM file.
@@ -255,7 +255,7 @@ interface ContractProvider {
         accountIds: List<AccountId>,
         finality: Finality = Finality.OPTIMISTIC,
         timeout: Long = Constants.DEFAULT_TIMEOUT
-    ): StateChangesContainer
+    ): StateChanges
 
     /**
      * Returns code changes made when deploying a contract. Change is returned is a base64 encoded WASM file.
@@ -267,7 +267,7 @@ interface ContractProvider {
         accountIds: List<AccountId>,
         blockId: BlockHeight,
         timeout: Long = Constants.DEFAULT_TIMEOUT
-    ): StateChangesContainer
+    ): StateChanges
 
     /**
      * Returns code changes made when deploying a contract. Change is returned is a base64 encoded WASM file.
@@ -279,5 +279,5 @@ interface ContractProvider {
         accountIds: List<AccountId>,
         blockHash: CryptoHash,
         timeout: Long = Constants.DEFAULT_TIMEOUT
-    ): StateChangesContainer
+    ): StateChanges
 }
