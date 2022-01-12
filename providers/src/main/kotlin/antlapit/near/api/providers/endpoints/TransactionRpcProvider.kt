@@ -4,8 +4,10 @@ import antlapit.near.api.borsh.encode
 import antlapit.near.api.providers.TransactionProvider
 import antlapit.near.api.providers.base.JsonRpcProvider
 import antlapit.near.api.providers.base64
+import antlapit.near.api.providers.model.block.Receipt
 import antlapit.near.api.providers.model.primitives.CryptoHash
 import antlapit.near.api.providers.model.transaction.FinalExecutionOutcome
+import antlapit.near.api.providers.model.transaction.FinalExecutionOutcomeWithReceipts
 import antlapit.near.api.providers.model.transaction.SignedTransaction
 
 /**
@@ -59,4 +61,21 @@ class TransactionRpcProvider(private val jsonRpcProvider: JsonRpcProvider) : Tra
             timeout = timeout
         )
 
+    /**
+     * @link https://docs.near.org/docs/api/rpc/transactions#transaction-status
+     */
+    override suspend fun getTxWithReceipts(txHash: CryptoHash, txRecipientId: String, timeout: Long): FinalExecutionOutcomeWithReceipts =
+        jsonRpcProvider.sendRpc(
+            method = "EXPERIMENTAL_tx_status",
+            params = listOf(txHash, txRecipientId),
+            timeout = timeout
+        )
+
+    override suspend fun getReceipt(receiptId: CryptoHash, timeout: Long): Receipt = jsonRpcProvider.sendRpc(
+        method = "EXPERIMENTAL_receipt",
+        params = mapOf(
+            "receipt_id" to receiptId
+        ),
+        timeout
+    )
 }

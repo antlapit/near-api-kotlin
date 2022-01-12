@@ -17,10 +17,7 @@ import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.TestInstance
 import org.komputing.khash.sha256.extensions.sha256
 import java.math.BigInteger
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertFails
-import kotlin.test.assertTrue
+import kotlin.test.*
 import kotlin.time.ExperimentalTime
 
 @ExperimentalTime
@@ -182,6 +179,24 @@ internal class TransactionRpcProviderTest {
 
         val result2 = endpoint.sendTxAsync(signedToTx1)
         println("Processed transaction in explorer https://explorer.testnet.near.org/transactions/${result2}")
+    }
+
+    @Test
+    @Ignore
+    fun getTransactionStatusWithReceipts_whenSuccessValue_thenCorrect() = runBlocking {
+        val finalExecutionOutcome =
+            archivalEndpoint.getTxWithReceipts("AB6pehcunRvvo2ErEWnWsAUX3xFsDTy6He2SgiwqJZQt", "namlebao19.testnet")
+        assertEquals(FinalExecutionStatus.SuccessValue(""), finalExecutionOutcome.status)
+        assertEquals(1, finalExecutionOutcome.receipts.size)
+        return@runBlocking
+    }
+
+    @Test
+    @Ignore
+    fun getReceipt_whenSuccess_thenCorrect() = runBlocking {
+        val receipt = archivalEndpoint.getReceipt("J5auLFssiuMxFYyXT7Q4G26otMZzz4ryXkpL5U46Sc3Y")
+        assertEquals("namlebao19.testnet", receipt.receiverId)
+        assertEquals("namlebao19.testnet", receipt.predecessorId)
     }
 
     private suspend fun createTransferTx(

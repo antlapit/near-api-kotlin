@@ -4,7 +4,7 @@ import antlapit.near.api.providers.model.changes.StateChange
 import antlapit.near.api.providers.model.changes.StateChangeCause
 import com.fasterxml.jackson.annotation.JsonTypeInfo
 
-data class AccessKeyChangeMixin(
+data class SingleStateChangeMixin(
     @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXTERNAL_PROPERTY, property = "type")
     val change: StateChange,
     val cause: StateChangeCause

@@ -3,13 +3,9 @@ package antlapit.near.api.json
 import antlapit.near.api.common.TestData
 import antlapit.near.api.providers.camelCaseToSnakeCase
 import antlapit.near.api.providers.model.accesskey.AccessKey
-import antlapit.near.api.providers.model.accesskey.AccessKeyChange
 import antlapit.near.api.providers.model.accesskey.AccessKeyPermission
-import antlapit.near.api.providers.model.accesskey.AccessKeysChangesContainer
 import antlapit.near.api.providers.model.account.Account
-import antlapit.near.api.providers.model.changes.StateChange
-import antlapit.near.api.providers.model.changes.StateChangeCause
-import antlapit.near.api.providers.model.changes.StateChangeKind
+import antlapit.near.api.providers.model.changes.*
 import antlapit.near.api.providers.model.primitives.PublicKey
 import com.fasterxml.jackson.module.kotlin.readValue
 import io.kotest.assertions.throwables.shouldNotThrow
@@ -27,7 +23,7 @@ class ChangesDeserializationTest : FunSpec({
 
     val objectMapper = ObjectMapperFactory.newInstance()
 
-    context("Access Key Change Container") {
+    context("State Change Container") {
         withData(
             nameFn = { "${it.typed}" },
             listOf(
@@ -52,10 +48,10 @@ class ChangesDeserializationTest : FunSpec({
                     }]
                 }
                 """,
-                    AccessKeysChangesContainer(
+                    StateChangesContainer(
                         blockHash = "AWXoLJtyQaYkogEjR96NExSDXpwspw5UAfLaHUP8QyB2",
                         changes = listOf(
-                            AccessKeyChange(
+                            SingleStateChange(
                                 cause = StateChangeCause.TransactionProcessing(
                                     txHash = "DKUAQ9ovwb31AnzxyaVUkECBSHcjPoUKb6TZrsCy3b4J"
                                 ),
@@ -74,7 +70,7 @@ class ChangesDeserializationTest : FunSpec({
             )
         ) { (a, b) ->
             shouldNotThrow<Throwable> {
-                objectMapper.readValue(a) as AccessKeysChangesContainer shouldBe b
+                objectMapper.readValue(a) as StateChangesContainer shouldBe b
             }
         }
     }
@@ -99,7 +95,7 @@ class ChangesDeserializationTest : FunSpec({
                     }
                 }
                 """,
-                AccessKeyChange(
+                SingleStateChange(
                     cause = StateChangeCause.InitialState,
                     change = StateChange.AccountUpdate(
                         accountId = "tx1.api_kotlin.testnet",
@@ -123,7 +119,7 @@ class ChangesDeserializationTest : FunSpec({
                     }
                 }
                 """,
-                AccessKeyChange(
+                SingleStateChange(
                     cause = StateChangeCause.InitialState,
                     change = StateChange.AccountDeletion(
                         accountId = "tx1.api_kotlin.testnet"
@@ -145,7 +141,7 @@ class ChangesDeserializationTest : FunSpec({
                     }
                 }
                 """,
-                AccessKeyChange(
+                SingleStateChange(
                     cause = StateChangeCause.InitialState,
                     change = StateChange.AccessKeyUpdate(
                         accountId = "tx1.api_kotlin.testnet",
@@ -168,7 +164,7 @@ class ChangesDeserializationTest : FunSpec({
                     }
                 }
                 """,
-                AccessKeyChange(
+                SingleStateChange(
                     cause = StateChangeCause.InitialState,
                     change = StateChange.AccessKeyDeletion(
                         accountId = "tx1.api_kotlin.testnet",
@@ -183,17 +179,17 @@ class ChangesDeserializationTest : FunSpec({
                     "type":"data_update",
                     "change":{
                        "account_id":"tx1.api_kotlin.testnet",
-                       "key":"key",
-                       "value":"value"
+                       "key_base64":"key",
+                       "value_base64":"value"
                     }
                 }
                 """,
-                AccessKeyChange(
+                SingleStateChange(
                     cause = StateChangeCause.InitialState,
                     change = StateChange.DataUpdate(
                         accountId = "tx1.api_kotlin.testnet",
-                        key = "key",
-                        value = "value"
+                        keyBase64 = "key",
+                        valueBase64 = "value"
                     )
                 )
             ),
@@ -204,15 +200,15 @@ class ChangesDeserializationTest : FunSpec({
                     "type":"data_deletion",
                     "change":{
                        "account_id":"tx1.api_kotlin.testnet",
-                       "key":"key"
+                       "key_base64":"key"
                     }
                 }
                 """,
-                AccessKeyChange(
+                SingleStateChange(
                     cause = StateChangeCause.InitialState,
                     change = StateChange.DataDeletion(
                         accountId = "tx1.api_kotlin.testnet",
-                        key = "key"
+                        keyBase64 = "key"
                     )
                 )
             ),
@@ -223,15 +219,15 @@ class ChangesDeserializationTest : FunSpec({
                     "type":"contract_code_update",
                     "change":{
                        "account_id":"tx1.api_kotlin.testnet",
-                       "code":"code"
+                       "code_base64":"code"
                     }
                 }
                 """,
-                AccessKeyChange(
+                SingleStateChange(
                     cause = StateChangeCause.InitialState,
                     change = StateChange.ContractCodeUpdate(
                         accountId = "tx1.api_kotlin.testnet",
-                        code = "code"
+                        codeBase64 = "code"
                     )
                 )
             ),
@@ -241,12 +237,11 @@ class ChangesDeserializationTest : FunSpec({
                     "cause":{ "type":"initial_state" },
                     "type":"contract_code_deletion",
                     "change":{
-                       "account_id":"tx1.api_kotlin.testnet",
-                       "key":"key"
+                       "account_id":"tx1.api_kotlin.testnet"
                     }
                 }
                 """,
-                AccessKeyChange(
+                SingleStateChange(
                     cause = StateChangeCause.InitialState,
                     change = StateChange.ContractCodeDeletion(
                         accountId = "tx1.api_kotlin.testnet"
@@ -255,7 +250,7 @@ class ChangesDeserializationTest : FunSpec({
             )
         ) { (a, b) ->
             shouldNotThrow<Throwable> {
-                objectMapper.readValue(a) as AccessKeyChange shouldBe b
+                objectMapper.readValue(a) as SingleStateChange shouldBe b
             }
         }
     }

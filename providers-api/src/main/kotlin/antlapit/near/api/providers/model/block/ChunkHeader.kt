@@ -9,7 +9,7 @@ data class ChunkHeader(
     val outcomeRoot: CryptoHash,
     val prevStateRoot: StateRoot,
     val encodedMerkleRoot: CryptoHash,
-    val encodedLength: Long, // TODO Rust u64
+    val encodedLength: Long,
     val heightCreated: BlockHeight,
     val heightIncluded: BlockHeight,
     val shardId: ShardId,

@@ -1,8 +1,10 @@
 package antlapit.near.api.providers
 
+import antlapit.near.api.providers.model.block.Receipt
 import antlapit.near.api.providers.model.primitives.AccountId
 import antlapit.near.api.providers.model.primitives.CryptoHash
 import antlapit.near.api.providers.model.transaction.FinalExecutionOutcome
+import antlapit.near.api.providers.model.transaction.FinalExecutionOutcomeWithReceipts
 import antlapit.near.api.providers.model.transaction.SignedTransaction
 
 interface TransactionProvider {
@@ -47,7 +49,29 @@ interface TransactionProvider {
         timeout: Long = Constants.DEFAULT_TIMEOUT
     ): FinalExecutionOutcome
 
-    // TODO Transaction Status with Receipts
-    // TODO Receipt by ID
+    /**
+     * Queries status of a transaction by hash and returns the final transaction result and details of all receipts.
+     *
+     * @link https://docs.near.org/docs/api/rpc/transactions#transaction-status-with-receipts
+     *
+     * @param txHash Transaction hash
+     * @param txRecipientId Sender account id
+     */
+    suspend fun getTxWithReceipts(
+        txHash: CryptoHash,
+        txRecipientId: AccountId,
+        timeout: Long = Constants.DEFAULT_TIMEOUT
+    ): FinalExecutionOutcomeWithReceipts
 
+    /**
+     * Fetches a receipt by it's ID (as is, without a status or execution outcome)
+     *
+     * @link https://docs.near.org/docs/api/rpc/transactions#receipt-by-id
+     *
+     * @param receiptId Valid receipt id
+     */
+    suspend fun getReceipt(
+        receiptId: CryptoHash,
+        timeout: Long = Constants.DEFAULT_TIMEOUT
+    ) : Receipt
 }

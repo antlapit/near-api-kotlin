@@ -40,6 +40,17 @@ class UnknownBlockException(info: Any?) : HandlerError("Unknown block: $info")
 class UnknownChunkException(val chunkHash: CryptoHash) : HandlerError("Unknown chunk: $chunkHash")
 
 /**
+ * Reason: The receipt with the given receipt_id was never observed on the node
+ * <br />
+ * Solution:
+ * <ul>
+ *    <li>Check the provided receipt_id is correct</li>
+ *    <li>Send a request on a different node</li>
+ * </ul>
+ */
+class UnknownReceiptException(val receiptId: CryptoHash) : HandlerError("Unknown receipt: $receiptId")
+
+/**
  * Reason: Provided shard_id does not exist
  * <br />
  * Solution:
@@ -96,7 +107,8 @@ class UnknownAccountException(
  * </ul>
  */
 class UnknownAccessKeyException(
-    val publicKey: PublicKey, val blockHeight: BlockHeight,
+    val publicKey: PublicKey,
+    val blockHeight: BlockHeight,
     val blockHash: CryptoHash
 ) : HandlerError("Unknown access key: $publicKey in block(height=$blockHeight, hash=$blockHash)")
 

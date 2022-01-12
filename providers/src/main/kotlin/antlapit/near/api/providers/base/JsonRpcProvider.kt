@@ -40,6 +40,17 @@ class JsonRpcProvider(
         install(HttpTimeout)
     }
 
+    /**
+     * Note that this is experimental feature
+     */
+    suspend inline fun <reified T> getChanges(
+        blockSearch: BlockSearch,
+        params: Map<String, Any?>,
+        timeout: Long = Constants.DEFAULT_TIMEOUT
+    ): T {
+        return sendRpc(method = "EXPERIMENTAL_changes", params = mergeParams(params, blockSearch), timeout)
+    }
+
     suspend inline fun <reified T> sendRpc(
         method: String,
         blockSearch: BlockSearch,

@@ -60,6 +60,18 @@ class ExceptionFactoryTest : FunSpec({
                 {
                    "name":"HANDLER_ERROR",
                    "cause":{
+                      "name":"UNKNOWN_RECEIPT",
+                      "info":{"receipt_id": "123"}
+                   }
+                }
+                """.trimIndent(),
+                UnknownReceiptException(receiptId = "123")
+            ),
+            TestData(
+                """
+                {
+                   "name":"HANDLER_ERROR",
+                   "cause":{
                       "name":"INVALID_SHARD_ID",
                       "info":{"shard_id": 1}
                    }

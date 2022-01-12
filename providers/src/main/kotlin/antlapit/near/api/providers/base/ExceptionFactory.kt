@@ -38,6 +38,7 @@ class ExceptionFactory(
                 "HANDLER_ERROR" -> when (cause) {
                     "UNKNOWN_BLOCK" -> UnknownBlockException(info)
                     "UNKNOWN_CHUNK" -> UnknownChunkException(info.get("chunk_hash").asText())
+                    "UNKNOWN_RECEIPT" -> UnknownReceiptException(info.get("receipt_id").asText())
                     "INVALID_SHARD_ID" -> InvalidShardIdException(info.get("shard_id").asLong())
                     "NOT_SYNCED_YET" -> NotSyncedException(info)
                     "INVALID_ACCOUNT" -> InvalidAccountException(

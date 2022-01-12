@@ -1,17 +1,53 @@
 package antlapit.near.api.providers.model.transaction
 
+import antlapit.near.api.providers.model.block.Receipt
 import antlapit.near.api.providers.model.primitives.*
 
-data class FinalExecutionOutcome(
+open class FinalExecutionOutcome(
     /// Execution status. Contains the result in case of successful execution.
-    val status: FinalExecutionStatus,
+    open val status: FinalExecutionStatus,
     /// Signed Transaction
-    val transaction: SignedTransactionView,
+    open val transaction: SignedTransactionView,
     /// The execution outcome of the signed transaction.
-    val transactionOutcome: ExecutionOutcomeWithIdView,
+    open val transactionOutcome: ExecutionOutcomeWithIdView,
     /// The execution outcome of receipts.
-    val receiptsOutcome: List<ExecutionOutcomeWithIdView> = emptyList(),
-)
+    open val receiptsOutcome: List<ExecutionOutcomeWithIdView> = emptyList(),
+) {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as FinalExecutionOutcome
+
+        if (status != other.status) return false
+        if (transaction != other.transaction) return false
+        if (transactionOutcome != other.transactionOutcome) return false
+        if (receiptsOutcome != other.receiptsOutcome) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = status.hashCode()
+        result = 31 * result + transaction.hashCode()
+        result = 31 * result + transactionOutcome.hashCode()
+        result = 31 * result + receiptsOutcome.hashCode()
+        return result
+    }
+}
+
+data class FinalExecutionOutcomeWithReceipts(
+    /// Execution status. Contains the result in case of successful execution.
+    override val status: FinalExecutionStatus,
+    /// Signed Transaction
+    override val transaction: SignedTransactionView,
+    /// The execution outcome of the signed transaction.
+    override val transactionOutcome: ExecutionOutcomeWithIdView,
+    /// The execution outcome of receipts.
+    override val receiptsOutcome: List<ExecutionOutcomeWithIdView> = emptyList(),
+
+    val receipts: List<Receipt> = emptyList()
+) : FinalExecutionOutcome(status, transaction, transactionOutcome, receiptsOutcome)
 
 data class ExecutionOutcomeWithIdView(
     val proof: MerklePath,

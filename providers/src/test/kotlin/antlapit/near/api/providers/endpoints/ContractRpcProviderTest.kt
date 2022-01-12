@@ -13,21 +13,23 @@ import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.TestInstance
 import java.io.File
 import java.util.*
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertFails
-import kotlin.test.assertTrue
+import kotlin.test.*
 
 @ExperimentalCoroutinesApi
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ContractRpcProviderTest {
 
     private val client = JsonRpcProvider(JsonRpcConfig(NetworkEnum.TESTNET))
+    private val archivalClient = JsonRpcProvider(JsonRpcConfig(NetworkEnum.TESTNET_ARCHIVAL))
     private lateinit var endpoint: ContractProvider
+    private lateinit var archivalEndpoint: ContractProvider
+    private lateinit var archivalBlockEndpoint: BlockRpcProvider
 
     @BeforeAll
     fun initEndpoint() {
         endpoint = ContractRpcProvider(client)
+        archivalEndpoint = ContractRpcProvider(archivalClient)
+        archivalBlockEndpoint = BlockRpcProvider(archivalClient)
     }
 
     @AfterAll
@@ -95,12 +97,12 @@ class ContractRpcProviderTest {
 
     @Test
     fun getContractState_whenLatest_thenCorrect() = runBlocking {
-        val contractState = endpoint.getContractState(baseAccount, Finality.OPTIMISTIC)
+        val contractState = endpoint.getContractState(baseAccount, finality = Finality.OPTIMISTIC)
 
-        val contractStateByBlockId = endpoint.getContractState(baseAccount, contractState.blockHeight)
+        val contractStateByBlockId = endpoint.getContractState(baseAccount, blockId = contractState.blockHeight)
         assertEquals(contractState, contractStateByBlockId)
 
-        val contractStateByBlockHash = endpoint.getContractState(baseAccount, contractState.blockHash)
+        val contractStateByBlockHash = endpoint.getContractState(baseAccount, blockHash = contractState.blockHash)
         assertEquals(contractState, contractStateByBlockHash)
         return@runBlocking
     }
@@ -120,6 +122,80 @@ class ContractRpcProviderTest {
             "smart contract should return expected string"
         )
         return@runBlocking
+    }
+
+    @Test
+    fun getAccountsChanges_whenConcreteBlock_thenCorrect() = runBlocking {
+        val accountId = "api_kotlin.testnet"
+        val accountIds = listOf(accountId)
+
+        val block = archivalBlockEndpoint.getBlock("6r9Kc66jNnkoDW2PyvqT9CLPvtaYnrcrU5Uq5htguB4a")
+
+        val changesByBlockHash = archivalEndpoint.getAccountsChanges(accountIds, block.header.hash)
+
+        val changesByBlockId = archivalEndpoint.getAccountsChanges(accountIds, block.header.height)
+        assertEquals(changesByBlockId, changesByBlockHash, "changes in block by id and hash should be equal")
+    }
+
+    @Test
+    fun getAccountsChanges_whenFinal_thenCorrect() : Unit = runBlocking {
+        val accountId = "api_kotlin.testnet"
+        val accountIds = listOf(accountId)
+
+        val finalChanges = endpoint.getAccountsChanges(accountIds)
+        assertNotNull(finalChanges.blockHash, "block hash should not be null")
+    }
+
+    @Test
+    fun getContractStateChanges_whenConcreteBlock_thenCorrect() = runBlocking {
+        val accountIds = listOf(testContractName)
+
+        val block = archivalBlockEndpoint.getBlock("NvLBgCsEeRMzrMdLN8G1YFY1yD9mUmG3THcz8k7DEvv")
+
+        val changesByBlockHash = archivalEndpoint.getContractStateChanges(
+            accountIds = accountIds,
+            blockHash = block.header.hash
+        )
+
+        val changesByBlockId = archivalEndpoint.getContractStateChanges(
+            accountIds = accountIds,
+            blockId = block.header.height
+        )
+        assertEquals(changesByBlockId, changesByBlockHash, "changes in block by id and hash should be equal")
+    }
+
+    @Test
+    fun getContractStateChanges_whenFinal_thenCorrect() : Unit = runBlocking {
+        val accountIds = listOf(testContractName)
+
+        val finalChanges = endpoint.getContractStateChanges(accountIds)
+        assertNotNull(finalChanges.blockHash, "block hash should not be null")
+    }
+
+    @Test
+    fun getContractCodeChanges_whenConcreteBlock_thenCorrect() = runBlocking {
+        val accountIds = listOf(testContractName)
+
+        val block = archivalBlockEndpoint.getBlock("NvLBgCsEeRMzrMdLN8G1YFY1yD9mUmG3THcz8k7DEvv")
+
+        val changesByBlockHash = archivalEndpoint.getContractCodeChanges(
+            accountIds = accountIds,
+            blockHash = block.header.hash
+        )
+
+        val changesByBlockId = archivalEndpoint.getContractCodeChanges(
+            accountIds = accountIds,
+            blockId = block.header.height
+        )
+        assertEquals(changesByBlockId, changesByBlockHash, "changes in block by id and hash should be equal")
+    }
+
+    @Test
+    fun getContractCodeChanges_whenFinal_thenCorrect() : Unit = runBlocking {
+        val accountIds = listOf(testContractName)
+
+        val finalChanges = endpoint.getContractCodeChanges(accountIds)
+        assertNotNull(finalChanges.blockHash, "block hash should not be null")
     }
 
     companion object {
