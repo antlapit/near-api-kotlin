@@ -219,13 +219,6 @@ internal class TransactionRpcProviderTest {
         assertEquals(tx2Account, receipt.predecessorId)
     }
 
-    @Test
-    fun getReceipt_whenSuccess_thenCorrect() = runBlocking {
-        val receipt = endpoint.getReceipt("5to3JYHVNzj8kDsrD7NDzzM3GPmYDYqAa9v1sFbj6x6X")
-        assertEquals("namlebao19.testnet", receipt.receiverId)
-        assertEquals("namlebao19.testnet", receipt.predecessorId)
-    }
-
     private suspend fun createTransferTx(
         senderId: String,
         senderPublicKey: PublicKey,
