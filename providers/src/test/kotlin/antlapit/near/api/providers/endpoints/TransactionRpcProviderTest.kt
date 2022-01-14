@@ -17,7 +17,10 @@ import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.TestInstance
 import org.komputing.khash.sha256.extensions.sha256
 import java.math.BigInteger
-import kotlin.test.*
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFails
+import kotlin.test.assertTrue
 import kotlin.time.ExperimentalTime
 
 @ExperimentalTime
@@ -181,20 +184,44 @@ internal class TransactionRpcProviderTest {
         println("Processed transaction in explorer https://explorer.testnet.near.org/transactions/${result2}")
     }
 
+    /**
+     * This test performs 2 synchronous token transfers and <b>checks receipts</b>:
+     * <ul>
+     *     <li>from tx1.api_kotlin.testnet to tx2.api_kotlin.testnet with amount 1N</li>
+     *     <li>from tx2.api_kotlin.testnet to tx1.api_kotlin.testnet with amount 1N</li>
+     * </ul>
+     *
+     * This test sometimes produce INVALID_TRANSACTION error, so retry added for this test
+     */
     @Test
-    @Ignore
-    fun getTransactionStatusWithReceipts_whenSuccessValue_thenCorrect() = runBlocking {
-        val finalExecutionOutcome =
-            archivalEndpoint.getTxWithReceipts("AB6pehcunRvvo2ErEWnWsAUX3xFsDTy6He2SgiwqJZQt", "namlebao19.testnet")
-        assertEquals(FinalExecutionStatus.SuccessValue(""), finalExecutionOutcome.status)
-        assertEquals(1, finalExecutionOutcome.receipts.size)
-        return@runBlocking
+    fun sendTxAndWait_whenCheckingReceipts_thenCorrect() = runBlocking {
+        val transferAmount = BigInteger("1000000000000000000000000")
+
+        // transfer token from tx1.api_kotlin.testnet to tx2.api_kotlin.testnet
+        var result: FinalExecutionOutcome =
+            transferTestBody(tx1Account, tx1Public, tx1Private, tx2Account, transferAmount)
+
+        val resultTransaction = result.transaction
+        assertEquals(tx1Public, resultTransaction.publicKey)
+        assertEquals(tx1Account, resultTransaction.signerId)
+        assertEquals(tx2Account, resultTransaction.receiverId)
+        assertEquals(Action.Transfer(transferAmount), resultTransaction.actions[0])
+
+        // transfer token from tx1.api_kotlin.testnet to tx2.api_kotlin.testnet
+        result = transferTestBody(tx2Account, tx2Public, tx2Private, tx1Account, transferAmount)
+
+        // checking receipts
+        val txWithReceipts = endpoint.getTxWithReceipts(result.transaction.hash, tx2Account)
+        assertEquals(2, txWithReceipts.receipts.size)
+
+        val receipt = endpoint.getReceipt(txWithReceipts.receipts[0].receiptId)
+        assertEquals(tx1Account, receipt.receiverId)
+        assertEquals(tx2Account, receipt.predecessorId)
     }
 
     @Test
-    @Ignore
     fun getReceipt_whenSuccess_thenCorrect() = runBlocking {
-        val receipt = archivalEndpoint.getReceipt("J5auLFssiuMxFYyXT7Q4G26otMZzz4ryXkpL5U46Sc3Y")
+        val receipt = endpoint.getReceipt("5to3JYHVNzj8kDsrD7NDzzM3GPmYDYqAa9v1sFbj6x6X")
         assertEquals("namlebao19.testnet", receipt.receiverId)
         assertEquals("namlebao19.testnet", receipt.predecessorId)
     }

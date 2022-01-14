@@ -24,7 +24,7 @@ class ExceptionFactory(
                 // FIXME old field, but currently contains more info than cause
                 val oldData = error["data"]
 
-                constructException(name, causeName, if (causeInfo.isEmpty) oldData else causeInfo)
+                constructException(name, causeName, if (causeInfo == null || causeInfo.isEmpty) oldData else causeInfo)
             }
             else -> {
                 ProviderException("Undefined response error")

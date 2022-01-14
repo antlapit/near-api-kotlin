@@ -9,8 +9,8 @@ import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.TestInstance
-import kotlin.test.Ignore
 import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
@@ -21,7 +21,7 @@ import kotlin.test.assertTrue
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 internal class NetworkRpcProviderTest {
 
-    private val client = JsonRpcProvider(JsonRpcConfig(NetworkEnum.MAINNET_ARCHIVAL))
+    private val client = JsonRpcProvider(JsonRpcConfig(NetworkEnum.TESTNET))
     private lateinit var endpoint: NetworkRpcProvider
     private lateinit var blockProvider: BlockRpcProvider
 
@@ -60,11 +60,19 @@ internal class NetworkRpcProviderTest {
     }
 
     @Test
-    @Ignore
     fun getValidationStatusOfBlock_thenCorrect() = runBlocking {
-        // FIXME validation status by block is not working!
-        // Always getting VALIDATOR_INFO_UNAVAILABLE
-        val statusByBlockId = endpoint.getValidationStatus(blockId = 54483512)
+        val latestStatus = endpoint.getValidationStatus(6 * Constants.DEFAULT_TIMEOUT)
+
+        // getting last block of previous epoch, which is guaranteed to exist
+        val block = blockProvider.getBlock(latestStatus.epochStartHeight - 1)
+
+        val statusByBlockId = endpoint.getValidationStatus(blockId = block.header.height)
+        val statusByBlockHash = endpoint.getValidationStatus(blockHash = block.header.hash)
+        assertEquals(
+            statusByBlockId,
+            statusByBlockHash,
+            "status by block id should equals status by block hash"
+        )
         return@runBlocking
     }
 }
