@@ -1,5 +1,11 @@
 name: Build pipeline
-on: [ push, pull_request ]
+on:
+  push:
+    branches-ignore:
+      - 'v*'
+  pull_request:
+    branches-ignore:
+      - 'v*'
 jobs:
   build:
     runs-on: ubuntu-latest

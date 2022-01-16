@@ -23,7 +23,7 @@ jobs:
           PROJECT_VERSION: ${{ github.event.release.name }}
         run: ./gradlew build
 
-      - name: Publish package on main branch
+      - name: Publish package
         run: ./gradlew publish
         if: success()
         env:
