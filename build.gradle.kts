@@ -1,5 +1,5 @@
-group = "antlapit.near.api"
-version = "1.0.0-SNAPSHOT"
+group = "org.near.api"
+version = System.getenv("PROJECT_VERSION")
 
 subprojects {
 
@@ -59,6 +59,9 @@ subprojects {
             csv.required.set(true)
         }
     }
+    tasks.javadoc {
+
+    }
 
     sourceSets {
         main {
@@ -69,6 +72,8 @@ subprojects {
     java {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
+        withJavadocJar()
+        withSourcesJar()
     }
 
     publishing {
