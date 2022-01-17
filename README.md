@@ -88,17 +88,12 @@ in [RustEnumSerializers].
 ![badge][badge-jvm]
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/antlapit/near-api-kotlin)
 
-**NEAR RPC Kotlin API** can be used in your project as a Maven or Gradle dependency. Dependencies are located in Github
+* **NEAR RPC Kotlin API** can be used in your project as a Maven or Gradle dependency. Dependencies are located in Github
 packages - https://maven.pkg.github.com/antlapit/near-api-kotlin
+* Don't forget to specify your Github credentials.
 
-#### Adding artifact repository
-
-**Github maven repository**
-
-(!) Don't forget to specify your Github credentials.
-
+#### Maven (repository)
 ```xml
-
 <repositories>
     <repository>
         <id>near-kotlin-api</id>
@@ -106,7 +101,23 @@ packages - https://maven.pkg.github.com/antlapit/near-api-kotlin
     </repository>
 </repositories>
 ```
+#### Maven (dependencies)
+```xml
+<dependencies>
+    <dependency>
+        <groupId>org.near.api</groupId>
+        <artifactId>providers-api</artifactId>
+        <version>${version}</version>
+    </dependency>
+    <dependency>
+        <groupId>org.near.api</groupId>
+        <artifactId>providers</artifactId>
+        <version>${version}</version>
+    </dependency>
+</dependencies>
+```
 
+#### Gradle (repository)
 ```kotlin
 repositories {
     maven {
@@ -115,45 +126,11 @@ repositories {
     }
 }
 ```
-
-#### Providers API
-
-**Maven**
-
-```xml
-
-<dependency>
-    <groupId>org.near.api</groupId>
-    <artifactId>providers-api</artifactId>
-    <version>${version}</version>
-</dependency>
-```
-
-**Gradle**
-
+#### Gradle (dependencies)
 ```kotlin
+
 depencencies {
     implementation('org.near.api:providers-api:${version}')
-}
-```
-
-#### Providers implementation
-
-**Maven**
-
-```xml
-
-<dependency>
-    <groupId>org.near.api</groupId>
-    <artifactId>providers</artifactId>
-    <version>${version}</version>
-</dependency>
-```
-
-**Gradle**
-
-```kotlin
-depencencies {
     implementation('org.near.api:providers:${version}')
 }
 ```
@@ -163,16 +140,10 @@ depencencies {
 ![badge][badge-jvm]
 [![](https://jitpack.io/v/antlapit/near-api-kotlin.svg)](https://jitpack.io/#antlapit/near-api-kotlin)
 
-**NEAR RPC Kotlin API** is available in JitPack.
+* **NEAR RPC Kotlin API** is available in JitPack.
 
-#### Adding artifact repository
-
-**Github maven repository**
-
-(!) Don't forget to specify your Github credentials.
-
+#### Maven (repository)
 ```xml
-
 <repositories>
     <repository>
         <id>jitpack</id>
@@ -180,52 +151,34 @@ depencencies {
     </repository>
 </repositories>
 ```
+#### Maven (dependencies)
+```xml
+<dependencies>
+    <dependency>
+        <groupId>com.github.antlapit.near-api-kotlin</groupId>
+        <artifactId>providers-api</artifactId>
+        <version>${version}</version>
+    </dependency>
+    <dependency>
+        <groupId>com.github.antlapit.near-api-kotlin</groupId>
+        <artifactId>providers</artifactId>
+        <version>${version}</version>
+    </dependency>
+</dependencies>
+```
 
+#### Gradle (repository)
 ```kotlin
 repositories {
-    maven { url="https://jitpack.io" }
+    maven { 
+        url = "https://jitpack.io" 
+    }
 }
 ```
-
-
-#### Providers API
-
-**Maven**
-
-```xml
-
-<dependency>
-    <groupId>com.github.antlapit.near-api-kotlin</groupId>
-    <artifactId>providers-api</artifactId>
-    <version>${version}</version>
-</dependency>
-```
-
-**Kotlin**
-
+#### Gradle (dependencies)
 ```kotlin
 depencencies {
     implementation('com.github.antlapit.near-api-kotlin:providers-api:${version}')
-}
-```
-
-#### Providers implementation
-
-**Maven**
-
-```xml
-
-<dependency>
-    <groupId>com.github.antlapit.near-api-kotlin</groupId>
-    <artifactId>providers</artifactId>
-    <version>${version}</version>
-</dependency>
-```
-
-**Gradle**
-
-```kotlin
-depencencies {
     implementation('com.github.antlapit.near-api-kotlin:providers:${version}')
 }
 ```
@@ -256,7 +209,7 @@ appearance of bugs during refactoring of future improvements.
 
 ## Examples
 
-Under construction. Expecting in February 2022.
+NEAR Kotlin API examples are placed in [`near-api-kotlin-examples`]
 
 [`NEAR RPC documentation`]: https://docs.near.org/docs/api/rpc
 
@@ -354,3 +307,5 @@ Under construction. Expecting in February 2022.
 [badge-gradle]: https://img.shields.io/badge/tool-gradle-blue.svg
 
 [badge-jvm]: http://img.shields.io/badge/platform-jvm-orange.svg?style=flat
+
+[`near-api-kotlin-examples`]: https://github.com/antlapit/near-api-kotlin-examples
