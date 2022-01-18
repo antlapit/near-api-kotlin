@@ -130,8 +130,8 @@ repositories {
 ```kotlin
 
 depencencies {
-    implementation('org.near.api:providers-api:${version}')
-    implementation('org.near.api:providers:${version}')
+    implementation("org.near.api:providers-api:${version}")
+    implementation("org.near.api:providers:${version}")
 }
 ```
 
@@ -178,8 +178,8 @@ repositories {
 #### Gradle (dependencies)
 ```kotlin
 depencencies {
-    implementation('com.github.antlapit.near-api-kotlin:providers-api:${version}')
-    implementation('com.github.antlapit.near-api-kotlin:providers:${version}')
+    implementation("com.github.antlapit.near-api-kotlin:providers-api:${version}")
+    implementation("com.github.antlapit.near-api-kotlin:providers:${version}")
 }
 ```
 

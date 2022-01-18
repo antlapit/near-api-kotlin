@@ -18,8 +18,8 @@ dependencies {
     val ktorVersion = "1.6.2"
     implementation("io.ktor:ktor-client-core:$ktorVersion")
     implementation("io.ktor:ktor-client-cio:$ktorVersion")
-    implementation("io.ktor:ktor-client-logging:$ktorVersion")
     implementation("io.ktor:ktor-client-jackson:$ktorVersion")
+    api("io.ktor:ktor-client-logging:$ktorVersion")
 
     // Jackson for serialization
     val jacksonVersion = "2.10.2"

@@ -22,8 +22,9 @@ import java.util.*
  */
 class JsonRpcProvider(
     val config: JsonRpcConfig = JsonRpcConfig(),
-    private val objectMapper: ObjectMapper = ObjectMapperFactory.newInstance()
 ) : Closeable {
+
+    private val objectMapper: ObjectMapper = ObjectMapperFactory.newInstance()
 
     val exceptionFactory: ExceptionFactory = ExceptionFactory(objectMapper)
 

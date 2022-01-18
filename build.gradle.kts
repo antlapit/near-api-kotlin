@@ -59,10 +59,6 @@ subprojects {
             csv.required.set(true)
         }
     }
-    tasks.javadoc {
-
-    }
-
     sourceSets {
         main {
             java.srcDirs("src/main/kotlin")
