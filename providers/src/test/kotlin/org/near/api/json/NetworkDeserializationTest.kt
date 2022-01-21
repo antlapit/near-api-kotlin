@@ -7,9 +7,9 @@ import io.kotest.core.spec.style.FunSpec
 import io.kotest.datatest.withData
 import io.kotest.matchers.shouldBe
 import org.near.api.common.TestData
-import org.near.api.providers.model.networkinfo.*
-import org.near.api.providers.model.primitives.PublicKey
-import org.near.api.providers.model.validators.*
+import org.near.api.model.networkinfo.*
+import org.near.api.model.primitives.PublicKey
+import org.near.api.model.validators.*
 import java.math.BigInteger
 import java.net.InetAddress
 import java.net.InetSocketAddress

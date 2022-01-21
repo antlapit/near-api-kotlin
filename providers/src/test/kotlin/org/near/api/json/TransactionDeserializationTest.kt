@@ -7,13 +7,11 @@ import io.kotest.core.spec.style.FunSpec
 import io.kotest.datatest.withData
 import io.kotest.matchers.shouldBe
 import org.near.api.common.TestData
-import org.near.api.providers.model.accesskey.AccessKey
-import org.near.api.providers.model.accesskey.AccessKeyPermission
-import org.near.api.providers.model.block.Action
-import org.near.api.providers.model.primitives.ActionErrorKind
-import org.near.api.providers.model.primitives.PublicKey
-import org.near.api.providers.model.primitives.TxExecutionError
-import org.near.api.providers.model.transaction.*
+import org.near.api.model.block.Action
+import org.near.api.model.primitives.ActionErrorKind
+import org.near.api.model.primitives.PublicKey
+import org.near.api.model.primitives.TxExecutionError
+import org.near.api.model.transaction.*
 import java.math.BigInteger
 
 @ExperimentalKotest
@@ -220,9 +218,9 @@ class TransactionDeserializationTest : FunSpec({
                             actions = listOf(
                                 Action.AddKey(
                                     publicKey = PublicKey("ed25519:28PPWHwSLteXJE2HSpbHnbgrsKri9tTWwp62sUFh2WpA"),
-                                    accessKey = AccessKey(
+                                    accessKey = org.near.api.model.accesskey.AccessKey(
                                         nonce = 0,
-                                        permission = AccessKeyPermission.FullAccess
+                                        permission = org.near.api.model.accesskey.AccessKeyPermission.FullAccess
                                     )
                                 )
                             ),

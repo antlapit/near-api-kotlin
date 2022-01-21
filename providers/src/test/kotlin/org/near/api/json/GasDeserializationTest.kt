@@ -7,7 +7,7 @@ import io.kotest.core.spec.style.FunSpec
 import io.kotest.datatest.withData
 import io.kotest.matchers.shouldBe
 import org.near.api.common.TestData
-import org.near.api.providers.model.gas.GasPrice
+import org.near.api.model.gas.GasPrice
 import java.math.BigInteger
 
 @ExperimentalKotest

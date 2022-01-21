@@ -5,20 +5,19 @@ import com.fasterxml.jackson.databind.Module
 import com.fasterxml.jackson.databind.jsontype.NamedType
 import com.fasterxml.jackson.databind.module.SimpleDeserializers
 import com.fasterxml.jackson.databind.module.SimpleSerializers
-import org.near.api.providers.camelCaseToSnakeCase
-import org.near.api.providers.model.accesskey.AccessKeyPermission
-import org.near.api.providers.model.block.Action
-import org.near.api.providers.model.block.ReceiptInfo
-import org.near.api.providers.model.changes.StateChange
-import org.near.api.providers.model.changes.StateChangeCause
-import org.near.api.providers.model.changes.StateChangeKind
-import org.near.api.providers.model.changes.StateChangeType
-import org.near.api.providers.model.config.Rational
-import org.near.api.providers.model.config.ShardLayout
-import org.near.api.providers.model.primitives.*
-import org.near.api.providers.model.transaction.ExecutionStatus
-import org.near.api.providers.model.transaction.FinalExecutionStatus
-import org.near.api.providers.model.validators.ValidatorKickoutReason
+import org.near.api.model.block.Action
+import org.near.api.model.block.ReceiptInfo
+import org.near.api.model.changes.StateChange
+import org.near.api.model.changes.StateChangeCause
+import org.near.api.model.changes.StateChangeKind
+import org.near.api.model.changes.StateChangeType
+import org.near.api.model.config.Rational
+import org.near.api.model.config.ShardLayout
+import org.near.api.model.primitives.*
+import org.near.api.model.transaction.ExecutionStatus
+import org.near.api.model.transaction.FinalExecutionStatus
+import org.near.api.model.validators.ValidatorKickoutReason
+import org.near.api.provider.camelCaseToSnakeCase
 
 
 class NearRpcModelsModule : Module() {
@@ -46,7 +45,7 @@ class NearRpcModelsModule : Module() {
                 addDeserializer(PublicKey::class.java, PublicKeyDeserializer())
 
                 // access key
-                addDeserializer(AccessKeyPermission::class.java, RustEnumDeserializer(AccessKeyPermission::class))
+                addDeserializer(org.near.api.model.accesskey.AccessKeyPermission::class.java, RustEnumDeserializer(org.near.api.model.accesskey.AccessKeyPermission::class))
 
                 // block
                 addDeserializer(Action::class.java, RustEnumDeserializer(Action::class))

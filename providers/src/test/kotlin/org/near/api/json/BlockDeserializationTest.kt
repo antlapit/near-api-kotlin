@@ -7,14 +7,12 @@ import io.kotest.core.spec.style.FunSpec
 import io.kotest.datatest.withData
 import io.kotest.matchers.shouldBe
 import org.near.api.common.TestData
-import org.near.api.providers.model.accesskey.AccessKey
-import org.near.api.providers.model.accesskey.AccessKeyPermission
-import org.near.api.providers.model.block.*
-import org.near.api.providers.model.primitives.PublicKey
-import org.near.api.providers.model.primitives.SlashedValidator
-import org.near.api.providers.model.transaction.SignedTransactionView
-import org.near.api.providers.model.validators.ValidatorStakeStructVersion
-import org.near.api.providers.model.validators.ValidatorStakeView
+import org.near.api.model.block.*
+import org.near.api.model.primitives.PublicKey
+import org.near.api.model.primitives.SlashedValidator
+import org.near.api.model.transaction.SignedTransactionView
+import org.near.api.model.validators.ValidatorStakeStructVersion
+import org.near.api.model.validators.ValidatorStakeView
 import java.math.BigInteger
 
 @ExperimentalKotest
@@ -435,9 +433,9 @@ class BlockDeserializationTest : FunSpec({
                 }
             """, Action.AddKey(
                     publicKey = PublicKey("ed25519:SkvGRgDPF2vPM8uiusmYNAoXtv5421yptvwS82cXQZvtkPb5ynyqXhyPaPoaLw9LE86bHahjgkC4VrSgr6aXEog"),
-                    accessKey = AccessKey(
+                    accessKey = org.near.api.model.accesskey.AccessKey(
                         nonce = 69877007000001,
-                        permission = AccessKeyPermission.FullAccess
+                        permission = org.near.api.model.accesskey.AccessKeyPermission.FullAccess
                     )
                 )
             ),

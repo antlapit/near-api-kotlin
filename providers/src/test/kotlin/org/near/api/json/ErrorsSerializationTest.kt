@@ -6,9 +6,9 @@ import io.kotest.core.spec.style.FunSpec
 import io.kotest.datatest.withData
 import io.kotest.matchers.shouldBe
 import org.near.api.common.TestData
-import org.near.api.providers.model.primitives.ActionsValidationError
-import org.near.api.providers.model.primitives.InvalidAccessKeyErrorType
-import org.near.api.providers.model.primitives.InvalidTxError
+import org.near.api.model.primitives.ActionsValidationError
+import org.near.api.model.primitives.InvalidAccessKeyErrorType
+import org.near.api.model.primitives.InvalidTxError
 import java.math.BigInteger
 
 @ExperimentalKotest

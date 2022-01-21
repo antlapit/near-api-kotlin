@@ -6,10 +6,8 @@ import io.kotest.core.spec.style.FunSpec
 import io.kotest.datatest.withData
 import io.kotest.matchers.shouldBe
 import org.near.api.common.TestData
-import org.near.api.providers.model.accesskey.AccessKey
-import org.near.api.providers.model.accesskey.AccessKeyPermission
-import org.near.api.providers.model.block.Action
-import org.near.api.providers.model.primitives.PublicKey
+import org.near.api.model.block.Action
+import org.near.api.model.primitives.PublicKey
 import java.math.BigInteger
 
 @ExperimentalKotest
@@ -50,9 +48,9 @@ class ActionSerializationTest : FunSpec({
                 """{"AddKey":{"public_key":"ed25519:SkvGRgDPF2vPM8uiusmYNAoXtv5421yptvwS82cXQZvtkPb5ynyqXhyPaPoaLw9LE86bHahjgkC4VrSgr6aXEog","access_key":{"nonce":69877007000001,"permission":"FullAccess"}}}""",
                 Action.AddKey(
                     publicKey = PublicKey("ed25519:SkvGRgDPF2vPM8uiusmYNAoXtv5421yptvwS82cXQZvtkPb5ynyqXhyPaPoaLw9LE86bHahjgkC4VrSgr6aXEog"),
-                    accessKey = AccessKey(
+                    accessKey = org.near.api.model.accesskey.AccessKey(
                         nonce = 69877007000001,
-                        permission = AccessKeyPermission.FullAccess
+                        permission = org.near.api.model.accesskey.AccessKeyPermission.FullAccess
                     )
                 )
             ),

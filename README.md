@@ -38,6 +38,7 @@ Every API group in [`NEAR RPC documentation`] has a separate interface:
 * [BlockProvider] for [`Block / Chunk`] endpoint
 * [ContractProvider] for [`Accounts / Contracts`] endpoint
 * [GasProvider] for [`Gas`] endpoint
+* [ProtocolProvider] for [`Protocol`] endpoint
 * [NetworkProvider] for [`Network`] endpoint
 * [TransactionProvider] for [`Transactions`] endpoint
 
@@ -67,7 +68,7 @@ contains [Ktor] client that should be closed after final API call. [JsonRpcProvi
 [`Network interfaces`] interface can be used for custom network implementation, but it is recommended to use
 predefined [NetworkEnum].
 
-Other providers ([AccessKeyRpcProvider], [BlockRpcProvider], [ContractRpcProvider], [GasRpcProvider],
+Other providers ([AccessKeyRpcProvider], [BlockRpcProvider], [ContractRpcProvider], [GasRpcProvider], [ProtocolProvider],
 [NetworkRpcProvider], [TransactionRpcProvider]) implements high level operations of RPC endpoints. These classes
 require [JsonRpcProvider] as a constructor parameter. (!) While using the same instance of [JsonRpcProvider] for
 different providers, don't forget that closing [JsonRpcProvider] in one place will lead to errors in other places.
@@ -130,8 +131,8 @@ repositories {
 ```kotlin
 
 depencencies {
-    implementation("org.near.api:providers-api:${version}")
-    implementation("org.near.api:providers:${version}")
+    implementation("org.near.api:provider-api:${version}")
+    implementation("org.near.api:provider:${version}")
 }
 ```
 
@@ -178,8 +179,8 @@ repositories {
 #### Gradle (dependencies)
 ```kotlin
 depencencies {
-    implementation("com.github.antlapit.near-api-kotlin:providers-api:${version}")
-    implementation("com.github.antlapit.near-api-kotlin:providers:${version}")
+    implementation("com.github.antlapit.near-api-kotlin:provider-api:${version}")
+    implementation("com.github.antlapit.near-api-kotlin:provider:${version}")
 }
 ```
 
@@ -260,42 +261,42 @@ NEAR Kotlin API examples are placed in [`near-api-kotlin-examples`]
 
 [`Kotlin sealed classes`]: https://kotlinlang.org/docs/sealed-classes.html
 
-[AccessKeyProvider]: https://github.com/antlapit/near-api-kotlin/tree/main/providers-api/src/main/kotlin/org/near/api/providers/AccessKeyProvider.kt
+[AccessKeyProvider]: https://github.com/antlapit/near-api-kotlin/tree/main/providers-api/src/main/kotlin/org/near/api/endpoints/AccessKeyProvider.kt
 
-[BlockProvider]: https://github.com/antlapit/near-api-kotlin/tree/main/providers-api/src/main/kotlin/org/near/api/providers/BlockProvider.kt
+[BlockProvider]: https://github.com/antlapit/near-api-kotlin/tree/main/providers-api/src/main/kotlin/org/near/api/endpoints/BlockProvider.kt
 
-[ContractProvider]: https://github.com/antlapit/near-api-kotlin/tree/main/providers-api/src/main/kotlin/org/near/api/providers/ContractProvider.kt
+[ContractProvider]: https://github.com/antlapit/near-api-kotlin/tree/main/providers-api/src/main/kotlin/org/near/api/endpoints/ContractProvider.kt
 
-[GasProvider]: https://github.com/antlapit/near-api-kotlin/tree/main/providers-api/src/main/kotlin/org/near/api/providers/GasProvider.kt
+[GasProvider]: https://github.com/antlapit/near-api-kotlin/tree/main/providers-api/src/main/kotlin/org/near/api/endpoints/GasProvider.kt
 
-[NetworkProvider]: https://github.com/antlapit/near-api-kotlin/tree/main/providers-api/src/main/kotlin/org/near/api/providers/NetworkProvider.kt
+[NetworkProvider]: https://github.com/antlapit/near-api-kotlin/tree/main/providers-api/src/main/kotlin/org/near/api/endpoints/NetworkProvider.kt
 
-[ProtocolProvider]: https://github.com/antlapit/near-api-kotlin/tree/main/providers-api/src/main/kotlin/org/near/api/providers/ProtocolProvider.kt
+[ProtocolProvider]: https://github.com/antlapit/near-api-kotlin/tree/main/providers-api/src/main/kotlin/org/near/api/endpoints/ProtocolProvider.kt
 
-[TransactionProvider]: https://github.com/antlapit/near-api-kotlin/tree/main/providers-api/src/main/kotlin/org/near/api/providers/TransactionProvider.kt
+[TransactionProvider]: https://github.com/antlapit/near-api-kotlin/tree/main/providers-api/src/main/kotlin/org/near/api/endpoints/TransactionProvider.kt
 
-[RustBridge]: https://github.com/antlapit/near-api-kotlin/tree/main/providers-api/src/main/kotlin/org/near/api/providers/model/rust/RustBridge.kt
+[RustBridge]: https://github.com/antlapit/near-api-kotlin/tree/main/providers-api/src/main/kotlin/org/near/api/model/rust/RustBridge.kt
 
 
-[`Network interfaces`]: https://github.com/antlapit/near-api-kotlin/tree/main/providers/src/main/kotlin/org/near/api/providers/base/config/Network.kt
+[`Network interfaces`]: https://github.com/antlapit/near-api-kotlin/tree/main/providers/src/main/kotlin/org/near/api/provider/config/Network.kt
 
-[NetworkEnum]: https://github.com/antlapit/near-api-kotlin/tree/main/providers/src/main/kotlin/org/near/api/providers/base/config/NetworkEnum.kt
+[NetworkEnum]: https://github.com/antlapit/near-api-kotlin/tree/main/providers/src/main/kotlin/org/near/api/provider/config/NetworkEnum.kt
 
-[JsonRpcProvider]: https://github.com/antlapit/near-api-kotlin/tree/main/providers/src/main/kotlin/org/near/api/providers/base/JsonRpcProvider.kt
+[JsonRpcProvider]: https://github.com/antlapit/near-api-kotlin/tree/main/providers/src/main/kotlin/org/near/api/provider/JsonRpcProvider.kt
 
-[AccessKeyRpcProvider]: https://github.com/antlapit/near-api-kotlin/tree/main/providers/src/main/kotlin/org/near/api/providers/endpoints/AccessKeyRpcProvider.kt
+[AccessKeyRpcProvider]: https://github.com/antlapit/near-api-kotlin/tree/main/providers/src/main/kotlin/org/near/api/endpoints/AccessKeyRpcProvider.kt
 
-[BlockRpcProvider]: https://github.com/antlapit/near-api-kotlin/tree/main/providers/src/main/kotlin/org/near/api/providers/endpoints/BlockRpcProvider.kt
+[BlockRpcProvider]: https://github.com/antlapit/near-api-kotlin/tree/main/providers/src/main/kotlin/org/near/api/endpoints/BlockRpcProvider.kt
 
-[ContractRpcProvider]: https://github.com/antlapit/near-api-kotlin/tree/main/providers/src/main/kotlin/org/near/api/providers/endpoints/ContractRpcProvider.kt
+[ContractRpcProvider]: https://github.com/antlapit/near-api-kotlin/tree/main/providers/src/main/kotlin/org/near/api/endpoints/ContractRpcProvider.kt
 
-[GasRpcProvider]: https://github.com/antlapit/near-api-kotlin/tree/main/providers/src/main/kotlin/org/near/api/providers/endpoints/GasRpcProvider.kt
+[GasRpcProvider]: https://github.com/antlapit/near-api-kotlin/tree/main/providers/src/main/kotlin/org/near/api/endpoints/GasRpcProvider.kt
 
-[NetworkRpcProvider]: https://github.com/antlapit/near-api-kotlin/tree/main/providers/src/main/kotlin/org/near/api/providers/endpoints/NetworkRpcProvider.kt
+[NetworkRpcProvider]: https://github.com/antlapit/near-api-kotlin/tree/main/providers/src/main/kotlin/org/near/api/endpoints/NetworkRpcProvider.kt
 
-[ProtocolRpcProvider]: https://github.com/antlapit/near-api-kotlin/tree/main/providers/src/main/kotlin/org/near/api/providers/endpoints/ProtocolRpcProvider.kt
+[ProtocolRpcProvider]: https://github.com/antlapit/near-api-kotlin/tree/main/providers/src/main/kotlin/org/near/api/endpoints/ProtocolRpcProvider.kt
 
-[TransactionRpcProvider]: https://github.com/antlapit/near-api-kotlin/tree/main/providers/src/main/kotlin/org/near/api/providers/endpoints/TransactionRpcProvider.kt
+[TransactionRpcProvider]: https://github.com/antlapit/near-api-kotlin/tree/main/providers/src/main/kotlin/org/near/api/endpoints/TransactionRpcProvider.kt
 
 [RustEnumSerializers]: https://github.com/antlapit/near-api-kotlin/tree/main/providers/src/main/kotlin/org/near/api/json/RustEnumSerializers.kt
 

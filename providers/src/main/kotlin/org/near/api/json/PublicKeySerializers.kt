@@ -3,7 +3,7 @@ package org.near.api.json
 import com.fasterxml.jackson.databind.DeserializationContext
 import com.fasterxml.jackson.databind.deser.std.FromStringDeserializer
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializerBase
-import org.near.api.providers.model.primitives.PublicKey
+import org.near.api.model.primitives.PublicKey
 
 class PublicKeySerializer : ToStringSerializerBase(PublicKey::class.java) {
     override fun valueToString(value: Any?): String {

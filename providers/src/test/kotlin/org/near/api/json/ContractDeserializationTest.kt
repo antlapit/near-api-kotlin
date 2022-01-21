@@ -7,7 +7,10 @@ import io.kotest.core.spec.style.FunSpec
 import io.kotest.datatest.withData
 import io.kotest.matchers.shouldBe
 import org.near.api.common.TestData
-import org.near.api.providers.model.account.*
+import org.near.api.model.account.CallResult
+import org.near.api.model.account.ContractCode
+import org.near.api.model.account.ContractState
+import org.near.api.model.account.ContractStateItem
 import java.math.BigInteger
 
 @ExperimentalKotest
@@ -31,7 +34,7 @@ class ContractDeserializationTest : FunSpec({
                         "block_hash":"5R1zy2VSPnmkgt5AvkTTnyFcNLArcUgYuDqAy3GZG7kU"
                     }
                     """,
-                    AccountInBlock(
+                    org.near.api.model.account.AccountInBlock(
                         amount = BigInteger("99998750632125700200000000"),
                         locked = BigInteger.ZERO,
                         codeHash = "11111111111111111111111111111111",
@@ -44,7 +47,7 @@ class ContractDeserializationTest : FunSpec({
             )
         ) { (a, b) ->
             shouldNotThrow<Throwable> {
-                objectMapper.readValue(a) as AccountInBlock shouldBe b
+                objectMapper.readValue(a) as org.near.api.model.account.AccountInBlock shouldBe b
             }
 
         }

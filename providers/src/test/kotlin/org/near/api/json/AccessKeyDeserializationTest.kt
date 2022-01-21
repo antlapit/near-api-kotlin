@@ -7,8 +7,7 @@ import io.kotest.core.spec.style.FunSpec
 import io.kotest.datatest.withData
 import io.kotest.matchers.shouldBe
 import org.near.api.common.TestData
-import org.near.api.providers.model.accesskey.*
-import org.near.api.providers.model.primitives.PublicKey
+import org.near.api.model.primitives.PublicKey
 import java.math.BigInteger
 
 /**
@@ -39,15 +38,15 @@ class AccessKeyDeserializationTest : FunSpec({
                     ]
                 }
                 """,
-                    AccessKeysContainer(
+                    org.near.api.model.accesskey.AccessKeysContainer(
                         blockHeight = 73947176,
                         blockHash = "jav58J75jTCkAouUyT8fEzoRTqoNaZpX1hGQZNKbU7c",
                         keys = listOf(
-                            AccessKeyInfo(
+                            org.near.api.model.accesskey.AccessKeyInfo(
                                 publicKey = PublicKey("ed25519:6PKfSu4zZarrFVk1Z4uf8kjiNwbMHSaiUmBgaWYF1dCj"),
-                                accessKey = AccessKey(
+                                accessKey = org.near.api.model.accesskey.AccessKey(
                                     nonce = 69877007000001,
-                                    permission = AccessKeyPermission.FullAccess,
+                                    permission = org.near.api.model.accesskey.AccessKeyPermission.FullAccess,
                                 )
                             )
                         )
@@ -56,7 +55,7 @@ class AccessKeyDeserializationTest : FunSpec({
             )
         ) { (a, b) ->
             shouldNotThrow<Throwable> {
-                objectMapper.readValue(a) as AccessKeysContainer shouldBe b
+                objectMapper.readValue(a) as org.near.api.model.accesskey.AccessKeysContainer shouldBe b
             }
         }
     }
@@ -74,9 +73,9 @@ class AccessKeyDeserializationTest : FunSpec({
                     "block_hash": "jav58J75jTCkAouUyT8fEzoRTqoNaZpX1hGQZNKbU7c"
                 }
                 """,
-                    AccessKeyInBlock(
+                    org.near.api.model.accesskey.AccessKeyInBlock(
                         nonce = 69877007000001,
-                        permission = AccessKeyPermission.FullAccess,
+                        permission = org.near.api.model.accesskey.AccessKeyPermission.FullAccess,
                         blockHeight = 73947176,
                         blockHash = "jav58J75jTCkAouUyT8fEzoRTqoNaZpX1hGQZNKbU7c"
                     )
@@ -84,7 +83,7 @@ class AccessKeyDeserializationTest : FunSpec({
             )
         ) { (a, b) ->
             shouldNotThrow<Throwable> {
-                objectMapper.readValue(a) as AccessKeyInBlock shouldBe b
+                objectMapper.readValue(a) as org.near.api.model.accesskey.AccessKeyInBlock shouldBe b
             }
         }
     }
@@ -94,7 +93,7 @@ class AccessKeyDeserializationTest : FunSpec({
             nameFn = { "${it.typed}" },
             TestData(
                 "\"FullAccess\"",
-                AccessKeyPermission.FullAccess
+                org.near.api.model.accesskey.AccessKeyPermission.FullAccess
             ),
             TestData(
                 """
@@ -106,7 +105,7 @@ class AccessKeyDeserializationTest : FunSpec({
                     }
                 }
                 """,
-                AccessKeyPermission.FunctionCall(
+                org.near.api.model.accesskey.AccessKeyPermission.FunctionCall(
                     allowance = BigInteger("250000000000000000000000"),
                     receiverId = "dummy.testnet",
                     methodNames = listOf("test")
@@ -114,7 +113,7 @@ class AccessKeyDeserializationTest : FunSpec({
             )
         ) { (a, b) ->
             shouldNotThrow<Throwable> {
-                objectMapper.readValue(a) as AccessKeyPermission shouldBe b
+                objectMapper.readValue(a) as org.near.api.model.accesskey.AccessKeyPermission shouldBe b
             }
         }
     }

@@ -1,8 +1,8 @@
 package org.near.api.json
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo
-import org.near.api.providers.model.changes.StateChangeCause
-import org.near.api.providers.model.changes.StateChangeType
+import org.near.api.model.changes.StateChangeCause
+import org.near.api.model.changes.StateChangeType
 
 data class SingleStateChangeMixin(
     @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXTERNAL_PROPERTY, property = "type")

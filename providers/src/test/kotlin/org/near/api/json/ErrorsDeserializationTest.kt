@@ -7,7 +7,7 @@ import io.kotest.core.spec.style.FunSpec
 import io.kotest.datatest.withData
 import io.kotest.matchers.shouldBe
 import org.near.api.common.TestData
-import org.near.api.providers.model.primitives.*
+import org.near.api.model.primitives.*
 import java.math.BigInteger
 
 @ExperimentalKotest

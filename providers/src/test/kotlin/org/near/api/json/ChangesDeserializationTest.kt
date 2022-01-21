@@ -7,12 +7,9 @@ import io.kotest.core.spec.style.FunSpec
 import io.kotest.datatest.withData
 import io.kotest.matchers.shouldBe
 import org.near.api.common.TestData
-import org.near.api.providers.camelCaseToSnakeCase
-import org.near.api.providers.model.accesskey.AccessKey
-import org.near.api.providers.model.accesskey.AccessKeyPermission
-import org.near.api.providers.model.account.Account
-import org.near.api.providers.model.changes.*
-import org.near.api.providers.model.primitives.PublicKey
+import org.near.api.model.changes.*
+import org.near.api.model.primitives.PublicKey
+import org.near.api.provider.camelCaseToSnakeCase
 import java.math.BigInteger
 
 /**
@@ -58,9 +55,9 @@ class ChangesDeserializationTest : FunSpec({
                                 change = StateChangeType.AccessKeyUpdate(
                                     accountId = "tx1.api_kotlin.testnet",
                                     publicKey = PublicKey("ed25519:5zpBhMxTtD4ozFsBRV9v5hPKTDDFquHqj8gXGERGh6YF"),
-                                    accessKey = AccessKey(
+                                    accessKey = org.near.api.model.accesskey.AccessKey(
                                         nonce = 75126620000051,
-                                        permission = AccessKeyPermission.FullAccess
+                                        permission = org.near.api.model.accesskey.AccessKeyPermission.FullAccess
                                     )
                                 )
                             )
@@ -97,7 +94,7 @@ class ChangesDeserializationTest : FunSpec({
                     cause = StateChangeCause.InitialState,
                     change = StateChangeType.AccountUpdate(
                         accountId = "tx1.api_kotlin.testnet",
-                        account = Account(
+                        account = org.near.api.model.account.Account(
                             amount = BigInteger.TEN,
                             locked = BigInteger.ZERO,
                             codeHash = "ed25519:5zpBhMxTtD4ozFsBRV9v5hPKTDDFquHqj8gXGERGh6YF",
@@ -144,9 +141,9 @@ class ChangesDeserializationTest : FunSpec({
                     change = StateChangeType.AccessKeyUpdate(
                         accountId = "tx1.api_kotlin.testnet",
                         publicKey = PublicKey("ed25519:5zpBhMxTtD4ozFsBRV9v5hPKTDDFquHqj8gXGERGh6YF"),
-                        accessKey = AccessKey(
+                        accessKey = org.near.api.model.accesskey.AccessKey(
                             nonce = 75126620000051,
-                            permission = AccessKeyPermission.FullAccess
+                            permission = org.near.api.model.accesskey.AccessKeyPermission.FullAccess
                         )
                     )
                 )

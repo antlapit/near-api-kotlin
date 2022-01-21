@@ -6,8 +6,8 @@ import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.core.JsonToken
 import com.fasterxml.jackson.databind.*
 import com.fasterxml.jackson.databind.ser.BeanSerializerModifier
-import org.near.api.providers.model.rust.RustEnum
-import org.near.api.providers.model.rust.RustSinglePropertyEnumItem
+import org.near.api.model.rust.RustEnum
+import org.near.api.model.rust.RustSinglePropertyEnumItem
 import kotlin.reflect.KClass
 import kotlin.reflect.full.allSuperclasses
 import kotlin.reflect.full.primaryConstructor
