@@ -15,11 +15,11 @@ interface TransactionProvider {
      * @param signedTx Signed Transaction in bytes
      * @return Transaction hash
      */
-    suspend fun sendTxAsync(signedTx: ByteArray, timeout: Long = org.near.api.providers.Constants.Companion.DEFAULT_TIMEOUT): CryptoHash
+    suspend fun sendTxAsync(signedTx: ByteArray, timeout: Long = Constants.DEFAULT_TIMEOUT): CryptoHash
 
     suspend fun sendTxAsync(
         signedTransaction: SignedTransaction,
-        timeout: Long = org.near.api.providers.Constants.Companion.DEFAULT_TIMEOUT
+        timeout: Long = Constants.DEFAULT_TIMEOUT
     ): CryptoHash
 
     /**
@@ -28,11 +28,11 @@ interface TransactionProvider {
      * @param signedTx Signed Transaction
      * @param timeout
      */
-    suspend fun sendTxAndWait(signedTx: ByteArray, timeout: Long = org.near.api.providers.Constants.Companion.DEFAULT_TIMEOUT): FinalExecutionOutcome
+    suspend fun sendTxAndWait(signedTx: ByteArray, timeout: Long = Constants.DEFAULT_TIMEOUT): FinalExecutionOutcome
 
     suspend fun sendTxAndWait(
         signedTransaction: SignedTransaction,
-        timeout: Long = org.near.api.providers.Constants.Companion.DEFAULT_TIMEOUT
+        timeout: Long = Constants.DEFAULT_TIMEOUT
     ): FinalExecutionOutcome
 
     /**
@@ -46,7 +46,7 @@ interface TransactionProvider {
     suspend fun getTx(
         txHash: CryptoHash,
         txRecipientId: AccountId,
-        timeout: Long = org.near.api.providers.Constants.Companion.DEFAULT_TIMEOUT
+        timeout: Long = Constants.DEFAULT_TIMEOUT
     ): FinalExecutionOutcome
 
     /**
@@ -60,7 +60,7 @@ interface TransactionProvider {
     suspend fun getTxWithReceipts(
         txHash: CryptoHash,
         txRecipientId: AccountId,
-        timeout: Long = org.near.api.providers.Constants.Companion.DEFAULT_TIMEOUT
+        timeout: Long = Constants.DEFAULT_TIMEOUT
     ): FinalExecutionOutcomeWithReceipts
 
     /**
@@ -72,6 +72,6 @@ interface TransactionProvider {
      */
     suspend fun getReceipt(
         receiptId: CryptoHash,
-        timeout: Long = org.near.api.providers.Constants.Companion.DEFAULT_TIMEOUT
+        timeout: Long = Constants.DEFAULT_TIMEOUT
     ) : Receipt
 }

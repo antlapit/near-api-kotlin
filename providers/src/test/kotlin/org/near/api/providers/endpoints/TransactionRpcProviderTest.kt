@@ -11,6 +11,7 @@ import org.near.api.providers.Constants.Companion.DEFAULT_TIMEOUT
 import org.near.api.providers.base.JsonRpcProvider
 import org.near.api.providers.base.config.JsonRpcConfig
 import org.near.api.providers.base.config.NetworkEnum
+import org.near.api.providers.exception.InvalidTransactionException
 import org.near.api.providers.model.block.Action
 import org.near.api.providers.model.primitives.*
 import org.near.api.providers.model.transaction.*
@@ -145,7 +146,7 @@ internal class TransactionRpcProviderTest {
                 val result = endpoint.sendTxAndWait(signedToTx2, DEFAULT_TIMEOUT * 6)
                 println("Processed transaction in explorer https://explorer.testnet.near.org/transactions/${result.transaction.hash}")
                 return result
-            } catch (e: org.near.api.providers.exception.InvalidTransactionException) {
+            } catch (e: InvalidTransactionException) {
                 if (e.txExecutionError != null && (e.txExecutionError is InvalidTxError.InvalidNonce || e.txExecutionError is InvalidTxError.Expired)) {
                     --counter
                     println("Invalid transaction exception - retries left $counter")

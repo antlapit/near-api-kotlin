@@ -13,6 +13,8 @@ import org.near.api.providers.model.changes.StateChange
 import org.near.api.providers.model.changes.StateChangeCause
 import org.near.api.providers.model.changes.StateChangeKind
 import org.near.api.providers.model.changes.StateChangeType
+import org.near.api.providers.model.config.Rational
+import org.near.api.providers.model.config.ShardLayout
 import org.near.api.providers.model.primitives.*
 import org.near.api.providers.model.transaction.ExecutionStatus
 import org.near.api.providers.model.transaction.FinalExecutionStatus
@@ -76,12 +78,18 @@ class NearRpcModelsModule : Module() {
                     ValidatorKickoutReason::class.java,
                     RustEnumDeserializer(ValidatorKickoutReason::class)
                 )
+                // validators
+                addDeserializer(
+                    ShardLayout::class.java,
+                    RustEnumDeserializer(ShardLayout::class)
+                )
             }
         })
 
         ctx.setMixInAnnotations(StateChange::class.java, SingleStateChangeMixin::class.java)
         ctx.setMixInAnnotations(StateChangeCause::class.java, StateChangeCauseMixin::class.java)
         ctx.setMixInAnnotations(StateChangeKind::class.java, StateChangeKindMixin::class.java)
+        ctx.setMixInAnnotations(Rational::class.java, RationalMixin::class.java)
 
         val subTypes = ArrayList<NamedType>()
         for (sealedSubclass in StateChangeType::class.sealedSubclasses) {

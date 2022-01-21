@@ -1,5 +1,7 @@
 package org.near.api.providers.endpoints
 
+import org.near.api.providers.BlockProvider
+import org.near.api.providers.Finality
 import org.near.api.providers.base.BlockSearch
 import org.near.api.providers.base.BlockSearch.Companion.fromBlockHash
 import org.near.api.providers.base.BlockSearch.Companion.fromBlockId
@@ -16,7 +18,7 @@ import org.near.api.providers.model.primitives.ShardId
  * RPC endpoint for working with Blocks / Chunks
  * @link https://docs.near.org/docs/api/rpc/block-chunk
  */
-class BlockRpcProvider(private val jsonRpcProvider: JsonRpcProvider) : org.near.api.providers.BlockProvider {
+class BlockRpcProvider(private val jsonRpcProvider: JsonRpcProvider) : BlockProvider {
 
     /**
      * @link https://docs.near.org/docs/api/rpc/block-chunk#block-details
@@ -28,7 +30,7 @@ class BlockRpcProvider(private val jsonRpcProvider: JsonRpcProvider) : org.near.
             timeout
         )
 
-    override suspend fun getLatestBlock(finality: org.near.api.providers.Finality, timeout: Long) = getBlock(ofFinality(finality), timeout)
+    override suspend fun getLatestBlock(finality: Finality, timeout: Long) = getBlock(ofFinality(finality), timeout)
 
     override suspend fun getBlock(blockId: BlockHeight, timeout: Long) = getBlock(fromBlockId(blockId), timeout)
 
@@ -63,7 +65,7 @@ class BlockRpcProvider(private val jsonRpcProvider: JsonRpcProvider) : org.near.
         getChunk(fromBlockHash(blockHash), shardId, timeout)
 
 
-    override suspend fun getChangesInLatestBlock(finality: org.near.api.providers.Finality, timeout: Long) =
+    override suspend fun getChangesInLatestBlock(finality: Finality, timeout: Long) =
         getChangesInBlock(ofFinality(finality), timeout)
 
     override suspend fun getChangesInBlock(blockId: BlockHeight, timeout: Long) =

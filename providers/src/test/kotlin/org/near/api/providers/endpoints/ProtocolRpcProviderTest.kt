@@ -4,27 +4,27 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.near.api.providers.BlockProvider
-import org.near.api.providers.GasProvider
+import org.near.api.providers.ProtocolProvider
 import org.near.api.providers.base.JsonRpcProvider
 import org.near.api.providers.base.config.JsonRpcConfig
 import org.near.api.providers.base.config.NetworkEnum
-import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
 @ExperimentalCoroutinesApi
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class GasRpcProviderTest {
+class ProtocolRpcProviderTest {
 
     private val client = JsonRpcProvider(JsonRpcConfig(NetworkEnum.TESTNET))
-    private lateinit var endpoint: GasProvider
+    private lateinit var endpoint: ProtocolProvider
     private lateinit var blockProvider: BlockProvider
 
     @BeforeAll
     fun initEndpoint() {
-        endpoint = GasRpcProvider(client)
+        endpoint = ProtocolRpcProvider(client)
         blockProvider = BlockRpcProvider(client)
     }
 
@@ -34,24 +34,30 @@ class GasRpcProviderTest {
     }
 
     @Test
-    fun getLatestGasPrice_thenCorrect() = runBlocking {
-        // latest block
-        val finalGasPrice = endpoint.getLatestGasPrice()
-        assertNotNull(finalGasPrice.gasPrice)
+    fun getGenesisConfig_thenCorrect() = runBlocking {
+        val genesisConfig = endpoint.getGenesisConfig()
+        assertNotNull(genesisConfig.protocolVersion)
         return@runBlocking
     }
 
     @Test
-    fun getGasPrice_byBlock_thenCorrect() = runBlocking {
-        val block = blockProvider.getLatestBlock()
-
-        // latest queried block by hash
-        val priceByHash = endpoint.getGasPrice(block.header.hash)
-
-        // latest queried block by id
-        val priceById = endpoint.getGasPrice(block.header.height)
-        assertEquals(priceByHash, priceById, "gas price should equals by block id and hash")
+    fun getLatestProtocolConfig_thenCorrect() = runBlocking {
+        // latest block
+        val protocolConfig = endpoint.getLatestProtocolConfig()
+        assertNotNull(protocolConfig.protocolVersion)
         return@runBlocking
     }
 
+    @Test
+    fun getProtocolConfig_byBlock_thenCorrect() = runBlocking {
+        val block = blockProvider.getLatestBlock()
+
+        // latest queried block by hash
+        val protocolConfigByHash = endpoint.getProtocolConfig(block.header.hash)
+
+        // latest queried block by id
+        val protocolConfigById = endpoint.getProtocolConfig(block.header.height)
+        assertEquals(protocolConfigByHash, protocolConfigById, "config config should equals by block id and hash")
+        return@runBlocking
+    }
 }

@@ -5,6 +5,7 @@ import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.TestInstance
+import org.near.api.providers.BlockProvider
 import org.near.api.providers.base.JsonRpcProvider
 import org.near.api.providers.base.config.JsonRpcConfig
 import org.near.api.providers.base.config.NetworkEnum
@@ -18,7 +19,7 @@ import kotlin.test.assertTrue
 class BlockRpcProviderTest {
 
     private val client = JsonRpcProvider(JsonRpcConfig(NetworkEnum.TESTNET))
-    private lateinit var endpoint: org.near.api.providers.BlockProvider
+    private lateinit var endpoint: BlockProvider
 
     @BeforeAll
     fun initEndpoint() {

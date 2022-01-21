@@ -2,6 +2,7 @@ package org.near.api.providers.base
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
+import org.near.api.providers.exception.*
 import org.near.api.providers.model.primitives.PublicKey
 import org.near.api.providers.model.primitives.TxExecutionError
 
@@ -9,12 +10,12 @@ class ExceptionFactory(
     private val objectMapper: ObjectMapper
 ) {
     fun emptyResult() =
-        org.near.api.providers.exception.ProviderException("Empty result in response without specifying error")
+        ProviderException("Empty result in response without specifying error")
 
-    fun fromJsonNode(error: JsonNode): org.near.api.providers.exception.ProviderException {
+    fun fromJsonNode(error: JsonNode): ProviderException {
         return when {
             error.isTextual -> {
-                org.near.api.providers.exception.ProviderException(error.asText())
+                ProviderException(error.asText())
             }
             error.isObject -> {
                 val name = error["name"].asText()
@@ -27,68 +28,68 @@ class ExceptionFactory(
                 constructException(name, causeName, if (causeInfo == null || causeInfo.isEmpty) oldData else causeInfo)
             }
             else -> {
-                org.near.api.providers.exception.ProviderException("Undefined response error")
+                ProviderException("Undefined response error")
             }
         }
     }
 
-    private fun constructException(error: String, cause: String, info: JsonNode): org.near.api.providers.exception.ProviderException {
+    private fun constructException(error: String, cause: String, info: JsonNode): ProviderException {
         return try {
             when (error) {
                 "HANDLER_ERROR" -> when (cause) {
-                    "UNKNOWN_BLOCK" -> org.near.api.providers.exception.UnknownBlockException(info)
-                    "UNKNOWN_CHUNK" -> org.near.api.providers.exception.UnknownChunkException(
+                    "UNKNOWN_BLOCK" -> UnknownBlockException(info)
+                    "UNKNOWN_CHUNK" -> UnknownChunkException(
                         info.get("chunk_hash").asText()
                     )
-                    "UNKNOWN_RECEIPT" -> org.near.api.providers.exception.UnknownReceiptException(
+                    "UNKNOWN_RECEIPT" -> UnknownReceiptException(
                         info.get("receipt_id").asText()
                     )
-                    "INVALID_SHARD_ID" -> org.near.api.providers.exception.InvalidShardIdException(
+                    "INVALID_SHARD_ID" -> InvalidShardIdException(
                         info.get("shard_id").asLong()
                     )
-                    "NOT_SYNCED_YET" -> org.near.api.providers.exception.NotSyncedException(info)
-                    "INVALID_ACCOUNT" -> org.near.api.providers.exception.InvalidAccountException(
+                    "NOT_SYNCED_YET" -> NotSyncedException(info)
+                    "INVALID_ACCOUNT" -> InvalidAccountException(
                         info.get("requested_account_id").asText(),
                         info.get("block_height").asLong(),
                         info.get("block_hash").asText()
                     )
-                    "UNKNOWN_ACCOUNT" -> org.near.api.providers.exception.UnknownAccountException(
+                    "UNKNOWN_ACCOUNT" -> UnknownAccountException(
                         info.get("requested_account_id").asText(),
                         info.get("block_height").asLong(),
                         info.get("block_hash").asText()
                     )
-                    "UNKNOWN_ACCESS_KEY" -> org.near.api.providers.exception.UnknownAccessKeyException(
+                    "UNKNOWN_ACCESS_KEY" -> UnknownAccessKeyException(
                         PublicKey(info.get("public_key").asText()),
                         info.get("block_height").asLong(),
                         info.get("block_hash").asText()
                     )
-                    "UNAVAILABLE_SHARD" -> org.near.api.providers.exception.UnavailableShardException(info)
-                    "NO_SYNCED_BLOCKS" -> org.near.api.providers.exception.NoSyncedBlocksException(info)
+                    "UNAVAILABLE_SHARD" -> UnavailableShardException(info)
+                    "NO_SYNCED_BLOCKS" -> NoSyncedBlocksException(info)
                     "INVALID_TRANSACTION" -> {
                         val txError =
                             objectMapper.treeToValue(info.get("TxExecutionError"), TxExecutionError::class.java)
-                        org.near.api.providers.exception.InvalidTransactionException(txExecutionError = txError)
+                        InvalidTransactionException(txExecutionError = txError)
                     }
-                    "TIMEOUT_ERROR" -> org.near.api.providers.exception.TimeoutErrorException(info)
-                    "UNKNOWN_EPOCH" -> org.near.api.providers.exception.UnknownEpochException(info)
-                    else -> org.near.api.providers.exception.ProviderException(error, cause)
+                    "TIMEOUT_ERROR" -> TimeoutErrorException(info)
+                    "UNKNOWN_EPOCH" -> UnknownEpochException(info)
+                    else -> ProviderException(error, cause)
                 }
                 "REQUEST_VALIDATION_ERROR" -> when (cause) {
-                    "PARSE_ERROR" -> org.near.api.providers.exception.ParseErrorException(
+                    "PARSE_ERROR" -> ParseErrorException(
                         info.get("error_message").asText()
                     )
-                    else -> org.near.api.providers.exception.ProviderException(error, cause)
+                    else -> ProviderException(error, cause)
                 }
                 "INTERNAL_ERROR" -> when (cause) {
-                    "INTERNAL_ERROR" -> org.near.api.providers.exception.InternalErrorException(
+                    "INTERNAL_ERROR" -> InternalErrorException(
                         info.get("error_message").asText()
                     )
-                    else -> org.near.api.providers.exception.ProviderException(error, cause)
+                    else -> ProviderException(error, cause)
                 }
-                else -> org.near.api.providers.exception.ProviderException(error, cause)
+                else -> ProviderException(error, cause)
             }
         } catch (e: Throwable) {
-            org.near.api.providers.exception.ProviderException(error, cause, e)
+            ProviderException(error, cause, e)
         }
     }
 }

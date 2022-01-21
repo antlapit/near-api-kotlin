@@ -5,9 +5,11 @@ import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.TestInstance
+import org.near.api.providers.ContractProvider
 import org.near.api.providers.base.JsonRpcProvider
 import org.near.api.providers.base.config.JsonRpcConfig
 import org.near.api.providers.base.config.NetworkEnum
+import org.near.api.providers.exception.UnknownAccountException
 import java.io.File
 import java.util.*
 import kotlin.test.*
@@ -18,8 +20,8 @@ class ContractRpcProviderTest {
 
     private val client = JsonRpcProvider(JsonRpcConfig(NetworkEnum.TESTNET))
     private val archivalClient = JsonRpcProvider(JsonRpcConfig(NetworkEnum.TESTNET_ARCHIVAL))
-    private lateinit var endpoint: org.near.api.providers.ContractProvider
-    private lateinit var archivalEndpoint: org.near.api.providers.ContractProvider
+    private lateinit var endpoint: ContractProvider
+    private lateinit var archivalEndpoint: ContractProvider
     private lateinit var archivalBlockEndpoint: BlockRpcProvider
 
     @BeforeAll
@@ -56,7 +58,7 @@ class ContractRpcProviderTest {
         ) {
             endpoint.getAccount("not_existing.api_kotlin.testnet")
         }
-        assertTrue(e is org.near.api.providers.exception.UnknownAccountException)
+        assertTrue(e is UnknownAccountException)
         assertEquals("not_existing.api_kotlin.testnet", e.requestedAccountId)
     }
 

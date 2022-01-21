@@ -34,6 +34,11 @@ open class FinalExecutionOutcome(
         result = 31 * result + receiptsOutcome.hashCode()
         return result
     }
+
+    override fun toString(): String {
+        return "FinalExecutionOutcome(status=$status, transaction=$transaction, transactionOutcome=$transactionOutcome, receiptsOutcome=$receiptsOutcome)"
+    }
+
 }
 
 data class FinalExecutionOutcomeWithReceipts(

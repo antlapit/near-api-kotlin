@@ -1,5 +1,7 @@
 package org.near.api.providers.endpoints
 
+import org.near.api.providers.ContractProvider
+import org.near.api.providers.Finality
 import org.near.api.providers.base.BlockSearch
 import org.near.api.providers.base.BlockSearch.Companion.fromBlockHash
 import org.near.api.providers.base.BlockSearch.Companion.fromBlockId
@@ -19,7 +21,7 @@ import org.near.api.providers.model.primitives.CryptoHash
  * RPC endpoint for working with Accounts / Contracts
  * @link https://docs.near.org/docs/api/rpc/contracts
  */
-class ContractRpcProvider(private val jsonRpcProvider: JsonRpcProvider) : org.near.api.providers.ContractProvider {
+class ContractRpcProvider(private val jsonRpcProvider: JsonRpcProvider) : ContractProvider {
 
     /**
      * @link https://docs.near.org/docs/api/rpc/contracts#view-account
@@ -37,7 +39,7 @@ class ContractRpcProvider(private val jsonRpcProvider: JsonRpcProvider) : org.ne
         timeout
     )
 
-    override suspend fun getAccount(accountId: AccountId, finality: org.near.api.providers.Finality, timeout: Long) =
+    override suspend fun getAccount(accountId: AccountId, finality: Finality, timeout: Long) =
         getAccount(accountId, ofFinality(finality), timeout)
 
     override suspend fun getAccount(accountId: AccountId, blockId: BlockHeight, timeout: Long) =
@@ -63,7 +65,7 @@ class ContractRpcProvider(private val jsonRpcProvider: JsonRpcProvider) : org.ne
             timeout
         )
 
-    override suspend fun getContractCode(accountId: AccountId, finality: org.near.api.providers.Finality, timeout: Long) =
+    override suspend fun getContractCode(accountId: AccountId, finality: Finality, timeout: Long) =
         getContractCode(accountId, ofFinality(finality), timeout)
 
     override suspend fun getContractCode(accountId: AccountId, blockId: BlockHeight, timeout: Long) =
@@ -91,7 +93,7 @@ class ContractRpcProvider(private val jsonRpcProvider: JsonRpcProvider) : org.ne
             timeout
         )
 
-    override suspend fun getContractState(accountId: AccountId, keyPrefix: String, finality: org.near.api.providers.Finality, timeout: Long) =
+    override suspend fun getContractState(accountId: AccountId, keyPrefix: String, finality: Finality, timeout: Long) =
         getContractState(accountId, keyPrefix, ofFinality(finality), timeout)
 
     override suspend fun getContractState(
@@ -131,7 +133,7 @@ class ContractRpcProvider(private val jsonRpcProvider: JsonRpcProvider) : org.ne
 
     override suspend fun callFunction(
         accountId: AccountId, methodName: String,
-        args: String, finality: org.near.api.providers.Finality, timeout: Long
+        args: String, finality: Finality, timeout: Long
     ) = callFunction(accountId, methodName, args, ofFinality(finality), timeout)
 
     override suspend fun callFunction(
@@ -164,7 +166,7 @@ class ContractRpcProvider(private val jsonRpcProvider: JsonRpcProvider) : org.ne
 
     override suspend fun getAccountsChanges(
         accountIds: List<AccountId>,
-        finality: org.near.api.providers.Finality,
+        finality: Finality,
         timeout: Long
     ) = getAccountsChanges(accountIds, ofFinality(finality), timeout)
 
@@ -203,7 +205,7 @@ class ContractRpcProvider(private val jsonRpcProvider: JsonRpcProvider) : org.ne
     override suspend fun getContractStateChanges(
         accountIds: List<AccountId>,
         keyPrefix: String,
-        finality: org.near.api.providers.Finality,
+        finality: Finality,
         timeout: Long
     ) = getContractStateChanges(accountIds, keyPrefix, ofFinality(finality), timeout)
 
@@ -241,7 +243,7 @@ class ContractRpcProvider(private val jsonRpcProvider: JsonRpcProvider) : org.ne
 
     override suspend fun getContractCodeChanges(
         accountIds: List<AccountId>,
-        finality: org.near.api.providers.Finality,
+        finality: Finality,
         timeout: Long
     ) = getContractCodeChanges(accountIds, ofFinality(finality), timeout)
 

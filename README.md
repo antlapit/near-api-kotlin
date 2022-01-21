@@ -270,6 +270,8 @@ NEAR Kotlin API examples are placed in [`near-api-kotlin-examples`]
 
 [NetworkProvider]: https://github.com/antlapit/near-api-kotlin/tree/main/providers-api/src/main/kotlin/org/near/api/providers/NetworkProvider.kt
 
+[ProtocolProvider]: https://github.com/antlapit/near-api-kotlin/tree/main/providers-api/src/main/kotlin/org/near/api/providers/ProtocolProvider.kt
+
 [TransactionProvider]: https://github.com/antlapit/near-api-kotlin/tree/main/providers-api/src/main/kotlin/org/near/api/providers/TransactionProvider.kt
 
 [RustBridge]: https://github.com/antlapit/near-api-kotlin/tree/main/providers-api/src/main/kotlin/org/near/api/providers/model/rust/RustBridge.kt
@@ -290,6 +292,8 @@ NEAR Kotlin API examples are placed in [`near-api-kotlin-examples`]
 [GasRpcProvider]: https://github.com/antlapit/near-api-kotlin/tree/main/providers/src/main/kotlin/org/near/api/providers/endpoints/GasRpcProvider.kt
 
 [NetworkRpcProvider]: https://github.com/antlapit/near-api-kotlin/tree/main/providers/src/main/kotlin/org/near/api/providers/endpoints/NetworkRpcProvider.kt
+
+[ProtocolRpcProvider]: https://github.com/antlapit/near-api-kotlin/tree/main/providers/src/main/kotlin/org/near/api/providers/endpoints/ProtocolRpcProvider.kt
 
 [TransactionRpcProvider]: https://github.com/antlapit/near-api-kotlin/tree/main/providers/src/main/kotlin/org/near/api/providers/endpoints/TransactionRpcProvider.kt
 

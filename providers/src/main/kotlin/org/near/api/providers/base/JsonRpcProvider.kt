@@ -47,7 +47,7 @@ class JsonRpcProvider(
     suspend inline fun <reified T> getChanges(
         blockSearch: BlockSearch,
         params: Map<String, Any?>,
-        timeout: Long = org.near.api.providers.Constants.DEFAULT_TIMEOUT
+        timeout: Long = Constants.DEFAULT_TIMEOUT
     ): T {
         return sendRpc(method = "EXPERIMENTAL_changes", params = mergeParams(params, blockSearch), timeout)
     }
@@ -56,7 +56,7 @@ class JsonRpcProvider(
         method: String,
         blockSearch: BlockSearch,
         params: Map<String, Any?>,
-        timeout: Long = org.near.api.providers.Constants.DEFAULT_TIMEOUT
+        timeout: Long = Constants.DEFAULT_TIMEOUT
     ): T {
         return sendRpc(method = method, params = mergeParams(params, blockSearch), timeout)
     }
@@ -64,7 +64,7 @@ class JsonRpcProvider(
     suspend inline fun <reified T> sendRpc(
         method: String,
         blockSearch: BlockSearch,
-        timeout: Long = org.near.api.providers.Constants.DEFAULT_TIMEOUT
+        timeout: Long = Constants.DEFAULT_TIMEOUT
     ): T {
         return sendRpc(method = method, params = mergeParams(emptyMap(), blockSearch), timeout)
     }
@@ -81,7 +81,7 @@ class JsonRpcProvider(
     suspend inline fun <reified T> sendRpc(
         method: String,
         params: Any? = null,
-        timeout: Long = org.near.api.providers.Constants.DEFAULT_TIMEOUT
+        timeout: Long = Constants.DEFAULT_TIMEOUT
     ): T {
         val response = client.post<GenericRpcResponse<T>>(config.getAddress()) {
             contentType(ContentType.Application.Json)
@@ -108,7 +108,7 @@ class JsonRpcProvider(
     suspend inline fun <reified T> query(
         queryObj: Map<String, Any>,
         blockSearch: BlockSearch,
-        timeout: Long = org.near.api.providers.Constants.DEFAULT_TIMEOUT
+        timeout: Long = Constants.DEFAULT_TIMEOUT
     ): T =
         sendRpc(method = "query", params = mergeParams(queryObj, blockSearch), timeout = timeout)
 
@@ -121,7 +121,7 @@ class JsonRpcProvider(
      *
      * @see Constants
      */
-    suspend inline fun <reified T> query(path: String, data: String, timeout: Long = org.near.api.providers.Constants.DEFAULT_TIMEOUT) =
+    suspend inline fun <reified T> query(path: String, data: String, timeout: Long = Constants.DEFAULT_TIMEOUT) =
         sendRpc<T>(method = "query", params = arrayListOf(path, data), timeout = timeout)
 
     data class GenericRpcRequest(val method: String, val params: Any?) {

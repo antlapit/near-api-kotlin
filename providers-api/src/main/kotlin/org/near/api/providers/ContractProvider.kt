@@ -18,8 +18,8 @@ interface ContractProvider {
      * @param finality Finality param for last block
      */
     suspend fun getAccount(
-        accountId: AccountId, finality: org.near.api.providers.Finality = org.near.api.providers.Finality.OPTIMISTIC,
-        timeout: Long = org.near.api.providers.Constants.Companion.DEFAULT_TIMEOUT
+        accountId: AccountId, finality: Finality = Finality.OPTIMISTIC,
+        timeout: Long = Constants.DEFAULT_TIMEOUT
     ): AccountInBlock
 
     /**
@@ -30,7 +30,7 @@ interface ContractProvider {
      */
     suspend fun getAccount(
         accountId: AccountId, blockId: BlockHeight,
-        timeout: Long = org.near.api.providers.Constants.Companion.DEFAULT_TIMEOUT
+        timeout: Long = Constants.DEFAULT_TIMEOUT
     ): AccountInBlock
 
     /**
@@ -41,7 +41,7 @@ interface ContractProvider {
      */
     suspend fun getAccount(
         accountId: AccountId, blockHash: CryptoHash,
-        timeout: Long = org.near.api.providers.Constants.Companion.DEFAULT_TIMEOUT
+        timeout: Long = Constants.DEFAULT_TIMEOUT
     ): AccountInBlock
 
     /**
@@ -52,8 +52,8 @@ interface ContractProvider {
      * @param finality Finality param for last block
      */
     suspend fun getContractCode(
-        accountId: AccountId, finality: org.near.api.providers.Finality = org.near.api.providers.Finality.OPTIMISTIC,
-        timeout: Long = org.near.api.providers.Constants.Companion.DEFAULT_TIMEOUT
+        accountId: AccountId, finality: Finality = Finality.OPTIMISTIC,
+        timeout: Long = Constants.DEFAULT_TIMEOUT
     ): ContractCode
 
     /**
@@ -65,7 +65,7 @@ interface ContractProvider {
      */
     suspend fun getContractCode(
         accountId: AccountId, blockId: BlockHeight,
-        timeout: Long = org.near.api.providers.Constants.Companion.DEFAULT_TIMEOUT
+        timeout: Long = Constants.DEFAULT_TIMEOUT
     ): ContractCode
 
     /**
@@ -79,7 +79,7 @@ interface ContractProvider {
     suspend fun getContractCode(
         accountId: AccountId,
         blockHash: CryptoHash,
-        timeout: Long = org.near.api.providers.Constants.Companion.DEFAULT_TIMEOUT
+        timeout: Long = Constants.DEFAULT_TIMEOUT
     ): ContractCode
 
     /**
@@ -92,8 +92,8 @@ interface ContractProvider {
     suspend fun getContractState(
         accountId: AccountId,
         keyPrefix: String = "",
-        finality: org.near.api.providers.Finality = org.near.api.providers.Finality.OPTIMISTIC,
-        timeout: Long = org.near.api.providers.Constants.Companion.DEFAULT_TIMEOUT
+        finality: Finality = Finality.OPTIMISTIC,
+        timeout: Long = Constants.DEFAULT_TIMEOUT
     ): ContractState
 
     /**
@@ -107,7 +107,7 @@ interface ContractProvider {
         accountId: AccountId,
         keyPrefix: String = "",
         blockId: BlockHeight,
-        timeout: Long = org.near.api.providers.Constants.Companion.DEFAULT_TIMEOUT
+        timeout: Long = Constants.DEFAULT_TIMEOUT
     ): ContractState
 
     /**
@@ -121,7 +121,7 @@ interface ContractProvider {
         accountId: AccountId,
         keyPrefix: String = "",
         blockHash: CryptoHash,
-        timeout: Long = org.near.api.providers.Constants.Companion.DEFAULT_TIMEOUT
+        timeout: Long = Constants.DEFAULT_TIMEOUT
     ): ContractState
 
     /**
@@ -133,8 +133,8 @@ interface ContractProvider {
      * @param finality Finality param for last block
      */
     suspend fun callFunction(
-        accountId: AccountId, methodName: String, args: String, finality: org.near.api.providers.Finality = org.near.api.providers.Finality.OPTIMISTIC,
-        timeout: Long = org.near.api.providers.Constants.Companion.DEFAULT_TIMEOUT
+        accountId: AccountId, methodName: String, args: String, finality: Finality = Finality.OPTIMISTIC,
+        timeout: Long = Constants.DEFAULT_TIMEOUT
     ): CallResult
 
     /**
@@ -147,7 +147,7 @@ interface ContractProvider {
      */
     suspend fun callFunction(
         accountId: AccountId, methodName: String, args: String, blockId: BlockHeight,
-        timeout: Long = org.near.api.providers.Constants.Companion.DEFAULT_TIMEOUT
+        timeout: Long = Constants.DEFAULT_TIMEOUT
     ): CallResult
 
     /**
@@ -160,7 +160,7 @@ interface ContractProvider {
      */
     suspend fun callFunction(
         accountId: AccountId, methodName: String, args: String, blockHash: CryptoHash,
-        timeout: Long = org.near.api.providers.Constants.Companion.DEFAULT_TIMEOUT
+        timeout: Long = Constants.DEFAULT_TIMEOUT
     ): CallResult
 
     /**
@@ -171,8 +171,8 @@ interface ContractProvider {
      */
     suspend fun getAccountsChanges(
         accountIds: List<AccountId>,
-        finality: org.near.api.providers.Finality = org.near.api.providers.Finality.OPTIMISTIC,
-        timeout: Long = org.near.api.providers.Constants.Companion.DEFAULT_TIMEOUT
+        finality: Finality = Finality.OPTIMISTIC,
+        timeout: Long = Constants.DEFAULT_TIMEOUT
     ): StateChanges
 
     /**
@@ -184,7 +184,7 @@ interface ContractProvider {
     suspend fun getAccountsChanges(
         accountIds: List<AccountId>,
         blockId: BlockHeight,
-        timeout: Long = org.near.api.providers.Constants.Companion.DEFAULT_TIMEOUT
+        timeout: Long = Constants.DEFAULT_TIMEOUT
     ): StateChanges
 
     /**
@@ -196,7 +196,7 @@ interface ContractProvider {
     suspend fun getAccountsChanges(
         accountIds: List<AccountId>,
         blockHash: CryptoHash,
-        timeout: Long = org.near.api.providers.Constants.Companion.DEFAULT_TIMEOUT
+        timeout: Long = Constants.DEFAULT_TIMEOUT
     ): StateChanges
 
 
@@ -211,8 +211,8 @@ interface ContractProvider {
     suspend fun getContractStateChanges(
         accountIds: List<AccountId>,
         keyPrefix: String = "",
-        finality: org.near.api.providers.Finality = org.near.api.providers.Finality.OPTIMISTIC,
-        timeout: Long = org.near.api.providers.Constants.Companion.DEFAULT_TIMEOUT
+        finality: Finality = Finality.OPTIMISTIC,
+        timeout: Long = Constants.DEFAULT_TIMEOUT
     ): StateChanges
 
     /**
@@ -227,7 +227,7 @@ interface ContractProvider {
         accountIds: List<AccountId>,
         keyPrefix: String = "",
         blockId: BlockHeight,
-        timeout: Long = org.near.api.providers.Constants.Companion.DEFAULT_TIMEOUT
+        timeout: Long = Constants.DEFAULT_TIMEOUT
     ): StateChanges
 
     /**
@@ -242,7 +242,7 @@ interface ContractProvider {
         accountIds: List<AccountId>,
         keyPrefix: String = "",
         blockHash: CryptoHash,
-        timeout: Long = org.near.api.providers.Constants.Companion.DEFAULT_TIMEOUT
+        timeout: Long = Constants.DEFAULT_TIMEOUT
     ): StateChanges
 
     /**
@@ -253,8 +253,8 @@ interface ContractProvider {
      */
     suspend fun getContractCodeChanges(
         accountIds: List<AccountId>,
-        finality: org.near.api.providers.Finality = org.near.api.providers.Finality.OPTIMISTIC,
-        timeout: Long = org.near.api.providers.Constants.Companion.DEFAULT_TIMEOUT
+        finality: Finality = Finality.OPTIMISTIC,
+        timeout: Long = Constants.DEFAULT_TIMEOUT
     ): StateChanges
 
     /**
@@ -266,7 +266,7 @@ interface ContractProvider {
     suspend fun getContractCodeChanges(
         accountIds: List<AccountId>,
         blockId: BlockHeight,
-        timeout: Long = org.near.api.providers.Constants.Companion.DEFAULT_TIMEOUT
+        timeout: Long = Constants.DEFAULT_TIMEOUT
     ): StateChanges
 
     /**
@@ -278,6 +278,6 @@ interface ContractProvider {
     suspend fun getContractCodeChanges(
         accountIds: List<AccountId>,
         blockHash: CryptoHash,
-        timeout: Long = org.near.api.providers.Constants.Companion.DEFAULT_TIMEOUT
+        timeout: Long = Constants.DEFAULT_TIMEOUT
     ): StateChanges
 }

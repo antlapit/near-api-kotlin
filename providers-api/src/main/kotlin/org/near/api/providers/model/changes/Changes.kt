@@ -127,7 +127,7 @@ sealed interface StateChangeCause {
 
     /**
      * State change that is happens due to migration that happens in first block of an epoch
-     * after protocol upgrade
+     * after config upgrade
      */
     object Migration : StateChangeCause
 

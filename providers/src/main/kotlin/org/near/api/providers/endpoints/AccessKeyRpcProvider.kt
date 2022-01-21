@@ -1,5 +1,7 @@
 package org.near.api.providers.endpoints
 
+import org.near.api.providers.AccessKeyProvider
+import org.near.api.providers.Finality
 import org.near.api.providers.base.BlockSearch
 import org.near.api.providers.base.BlockSearch.Companion.fromBlockHash
 import org.near.api.providers.base.BlockSearch.Companion.fromBlockId
@@ -18,7 +20,7 @@ import org.near.api.providers.model.primitives.PublicKey
  * RPC endpoint for accessing Access Keys
  * @link https://docs.near.org/docs/api/rpc/access-keys
  */
-class AccessKeyRpcProvider(private val jsonRpcProvider: JsonRpcProvider) : org.near.api.providers.AccessKeyProvider {
+class AccessKeyRpcProvider(private val jsonRpcProvider: JsonRpcProvider) : AccessKeyProvider {
 
     /**
      * @param accountId Account Identifier
@@ -41,7 +43,7 @@ class AccessKeyRpcProvider(private val jsonRpcProvider: JsonRpcProvider) : org.n
         timeout
     )
 
-    override suspend fun getAccessKey(accountId: AccountId, publicKey: PublicKey, finality: org.near.api.providers.Finality, timeout: Long) =
+    override suspend fun getAccessKey(accountId: AccountId, publicKey: PublicKey, finality: Finality, timeout: Long) =
         getAccessKey(accountId, publicKey, ofFinality(finality), timeout)
 
     override suspend fun getAccessKey(accountId: AccountId, publicKey: PublicKey, blockId: BlockHeight, timeout: Long) =
@@ -73,7 +75,7 @@ class AccessKeyRpcProvider(private val jsonRpcProvider: JsonRpcProvider) : org.n
         timeout
     )
 
-    override suspend fun getAccessKeyList(accountId: AccountId, finality: org.near.api.providers.Finality, timeout: Long) =
+    override suspend fun getAccessKeyList(accountId: AccountId, finality: Finality, timeout: Long) =
         getAccessKeyList(accountId, ofFinality(finality), timeout)
 
     override suspend fun getAccessKeyList(accountId: AccountId, blockId: BlockHeight, timeout: Long) =
@@ -100,7 +102,7 @@ class AccessKeyRpcProvider(private val jsonRpcProvider: JsonRpcProvider) : org.n
         timeout = timeout
     )
 
-    override suspend fun getAccessKeyChanges(keys: List<AccountWithPublicKey>, finality: org.near.api.providers.Finality, timeout: Long) =
+    override suspend fun getAccessKeyChanges(keys: List<AccountWithPublicKey>, finality: Finality, timeout: Long) =
         getAccessKeyChanges(keys, ofFinality(finality), timeout)
 
     override suspend fun getAccessKeyChanges(keys: List<AccountWithPublicKey>, blockId: BlockHeight, timeout: Long) =
@@ -129,7 +131,7 @@ class AccessKeyRpcProvider(private val jsonRpcProvider: JsonRpcProvider) : org.n
 
     override suspend fun getAllAccessKeysChanges(
         accountIds: List<AccountId>,
-        finality: org.near.api.providers.Finality,
+        finality: Finality,
         timeout: Long
     ) = getAllAccessKeysChanges(accountIds, ofFinality(finality), timeout)
 

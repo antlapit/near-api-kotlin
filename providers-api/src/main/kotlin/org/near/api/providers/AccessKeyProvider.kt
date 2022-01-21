@@ -21,8 +21,8 @@ interface AccessKeyProvider {
     suspend fun getAccessKey(
         accountId: AccountId,
         publicKey: PublicKey,
-        finality: org.near.api.providers.Finality = org.near.api.providers.Finality.OPTIMISTIC,
-        timeout: Long = org.near.api.providers.Constants.Companion.DEFAULT_TIMEOUT
+        finality: Finality = Finality.OPTIMISTIC,
+        timeout: Long = Constants.DEFAULT_TIMEOUT
     ): AccessKeyInBlock
 
 
@@ -37,7 +37,7 @@ interface AccessKeyProvider {
         accountId: AccountId,
         publicKey: PublicKey,
         blockId: BlockHeight,
-        timeout: Long = org.near.api.providers.Constants.Companion.DEFAULT_TIMEOUT
+        timeout: Long = Constants.DEFAULT_TIMEOUT
     ): AccessKeyInBlock
 
     /**
@@ -51,7 +51,7 @@ interface AccessKeyProvider {
         accountId: AccountId,
         publicKey: PublicKey,
         blockHash: CryptoHash,
-        timeout: Long = org.near.api.providers.Constants.Companion.DEFAULT_TIMEOUT
+        timeout: Long = Constants.DEFAULT_TIMEOUT
     ): AccessKeyInBlock
 
     /**
@@ -62,8 +62,8 @@ interface AccessKeyProvider {
      */
     suspend fun getAccessKeyList(
         accountId: AccountId,
-        finality: org.near.api.providers.Finality = org.near.api.providers.Finality.OPTIMISTIC,
-        timeout: Long = org.near.api.providers.Constants.Companion.DEFAULT_TIMEOUT
+        finality: Finality = Finality.OPTIMISTIC,
+        timeout: Long = Constants.DEFAULT_TIMEOUT
     ): AccessKeysContainer
 
     /**
@@ -75,7 +75,7 @@ interface AccessKeyProvider {
     suspend fun getAccessKeyList(
         accountId: AccountId,
         blockId: BlockHeight,
-        timeout: Long = org.near.api.providers.Constants.Companion.DEFAULT_TIMEOUT
+        timeout: Long = Constants.DEFAULT_TIMEOUT
     ): AccessKeysContainer
 
     /**
@@ -87,7 +87,7 @@ interface AccessKeyProvider {
     suspend fun getAccessKeyList(
         accountId: AccountId,
         blockHash: CryptoHash,
-        timeout: Long = org.near.api.providers.Constants.Companion.DEFAULT_TIMEOUT
+        timeout: Long = Constants.DEFAULT_TIMEOUT
     ): AccessKeysContainer
 
 
@@ -99,8 +99,8 @@ interface AccessKeyProvider {
      */
     suspend fun getAccessKeyChanges(
         keys: List<AccountWithPublicKey>,
-        finality: org.near.api.providers.Finality = org.near.api.providers.Finality.OPTIMISTIC,
-        timeout: Long = org.near.api.providers.Constants.Companion.DEFAULT_TIMEOUT
+        finality: Finality = Finality.OPTIMISTIC,
+        timeout: Long = Constants.DEFAULT_TIMEOUT
     ): StateChanges
 
     /**
@@ -112,7 +112,7 @@ interface AccessKeyProvider {
     suspend fun getAccessKeyChanges(
         keys: List<AccountWithPublicKey>,
         blockId: BlockHeight,
-        timeout: Long = org.near.api.providers.Constants.Companion.DEFAULT_TIMEOUT
+        timeout: Long = Constants.DEFAULT_TIMEOUT
     ): StateChanges
 
     /**
@@ -124,7 +124,7 @@ interface AccessKeyProvider {
     suspend fun getAccessKeyChanges(
         keys: List<AccountWithPublicKey>,
         blockHash: CryptoHash,
-        timeout: Long = org.near.api.providers.Constants.Companion.DEFAULT_TIMEOUT
+        timeout: Long = Constants.DEFAULT_TIMEOUT
     ): StateChanges
 
 
@@ -137,8 +137,8 @@ interface AccessKeyProvider {
      */
     suspend fun getAllAccessKeysChanges(
         accountIds: List<AccountId>,
-        finality: org.near.api.providers.Finality = org.near.api.providers.Finality.OPTIMISTIC,
-        timeout: Long = org.near.api.providers.Constants.Companion.DEFAULT_TIMEOUT
+        finality: Finality = Finality.OPTIMISTIC,
+        timeout: Long = Constants.DEFAULT_TIMEOUT
     ): StateChanges
 
     /**
@@ -151,7 +151,7 @@ interface AccessKeyProvider {
     suspend fun getAllAccessKeysChanges(
         accountIds: List<AccountId>,
         blockId: BlockHeight,
-        timeout: Long = org.near.api.providers.Constants.Companion.DEFAULT_TIMEOUT
+        timeout: Long = Constants.DEFAULT_TIMEOUT
     ): StateChanges
 
     /**
@@ -164,6 +164,6 @@ interface AccessKeyProvider {
     suspend fun getAllAccessKeysChanges(
         accountIds: List<AccountId>,
         blockHash: CryptoHash,
-        timeout: Long = org.near.api.providers.Constants.Companion.DEFAULT_TIMEOUT
+        timeout: Long = Constants.DEFAULT_TIMEOUT
     ): StateChanges
 }

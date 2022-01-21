@@ -14,7 +14,7 @@ open class ProviderException(
     ) : this("Generic RPC client exception ${errorType}, caused by $errorCause", cause)
 }
 
-sealed class HandlerError(message: String?) : org.near.api.providers.exception.ProviderException(message)
+sealed class HandlerError(message: String?) : ProviderException(message)
 
 
 /**
@@ -26,7 +26,7 @@ sealed class HandlerError(message: String?) : org.near.api.providers.exception.P
  *    <li>If the block had been produced more than 5 epochs ago, try to send your request to an archival node</li>
  * </ul>
  */
-class UnknownBlockException(info: Any?) : org.near.api.providers.exception.HandlerError("Unknown block: $info")
+class UnknownBlockException(info: Any?) : HandlerError("Unknown block: $info")
 
 /**
  * Reason: The requested chunk can't be found in a database
@@ -37,7 +37,7 @@ class UnknownBlockException(info: Any?) : org.near.api.providers.exception.Handl
  *    <li>If the chunk had been produced more than 5 epochs ago, try to send your request to an archival node</li>
  * </ul>
  */
-class UnknownChunkException(val chunkHash: CryptoHash) : org.near.api.providers.exception.HandlerError("Unknown chunk: $chunkHash")
+class UnknownChunkException(val chunkHash: CryptoHash) : HandlerError("Unknown chunk: $chunkHash")
 
 /**
  * Reason: The receipt with the given receipt_id was never observed on the node
@@ -48,7 +48,7 @@ class UnknownChunkException(val chunkHash: CryptoHash) : org.near.api.providers.
  *    <li>Send a request on a different node</li>
  * </ul>
  */
-class UnknownReceiptException(val receiptId: CryptoHash) : org.near.api.providers.exception.HandlerError("Unknown receipt: $receiptId")
+class UnknownReceiptException(val receiptId: CryptoHash) : HandlerError("Unknown receipt: $receiptId")
 
 /**
  * Reason: Provided shard_id does not exist
@@ -58,7 +58,7 @@ class UnknownReceiptException(val receiptId: CryptoHash) : org.near.api.provider
  *    <li>Provide shard_id for an existing shard</li>
  * </ul>
  */
-class InvalidShardIdException(val shardId: ShardId) : org.near.api.providers.exception.HandlerError("Invalid shard id: $shardId")
+class InvalidShardIdException(val shardId: ShardId) : HandlerError("Invalid shard id: $shardId")
 
 /**
  * Reason: The node is still syncing and the requested chunk is not in the database yet
@@ -69,7 +69,7 @@ class InvalidShardIdException(val shardId: ShardId) : org.near.api.providers.exc
  *    <li>Send a request to a different node which is synced</li>
  * </ul>
  */
-class NotSyncedException(info: Any?) : org.near.api.providers.exception.HandlerError("Not synced: $info")
+class NotSyncedException(info: Any?) : HandlerError("Not synced: $info")
 
 /**
  * Reason: The requested <b>account_id</b> is invalid
@@ -80,7 +80,7 @@ class InvalidAccountException(
     val requestedAccountId: AccountId,
     val blockHeight: BlockHeight,
     val blockHash: CryptoHash
-) : org.near.api.providers.exception.HandlerError("Invalid account: $requestedAccountId in block(height=$blockHeight, hash=$blockHash)")
+) : HandlerError("Invalid account: $requestedAccountId in block(height=$blockHeight, hash=$blockHash)")
 
 /**
  * Reason: The requested <b>account_id</b> has not been found while viewing since the account has not been created or has been already deleted
@@ -95,7 +95,7 @@ class UnknownAccountException(
     val requestedAccountId: AccountId,
     val blockHeight: BlockHeight,
     val blockHash: CryptoHash
-) : org.near.api.providers.exception.HandlerError("Unknown account: $requestedAccountId in block(height=$blockHeight, hash=$blockHash)")
+) : HandlerError("Unknown account: $requestedAccountId in block(height=$blockHeight, hash=$blockHash)")
 
 /**
  * Reason: The requested <b>public_key</b> has not been found while viewing since the public key has not been created or has been already deleted
@@ -110,14 +110,14 @@ class UnknownAccessKeyException(
     val publicKey: PublicKey,
     val blockHeight: BlockHeight,
     val blockHash: CryptoHash
-) : org.near.api.providers.exception.HandlerError("Unknown access key: $publicKey in block(height=$blockHeight, hash=$blockHash)")
+) : HandlerError("Unknown access key: $publicKey in block(height=$blockHeight, hash=$blockHash)")
 
 /**
  * Reason: The node was unable to found the requested data because it does not track the shard where data is present
  * <br />
  * Solution: Send a request to a different node which might track the shard
  */
-class UnavailableShardException(info: Any?) : org.near.api.providers.exception.HandlerError("Unavailable shard: $info")
+class UnavailableShardException(info: Any?) : HandlerError("Unavailable shard: $info")
 
 /**
  * Reason: The node is still syncing and the requested block is not in the database yet
@@ -128,7 +128,7 @@ class UnavailableShardException(info: Any?) : org.near.api.providers.exception.H
  *    <li>Send a request to a different node which is synced</li>
  * </ul>
  */
-class NoSyncedBlocksException(info: Any?) : org.near.api.providers.exception.HandlerError("No synced blocks: $info")
+class NoSyncedBlocksException(info: Any?) : HandlerError("No synced blocks: $info")
 
 /**
  * Reason: An error happened during transaction execution
@@ -138,7 +138,7 @@ class NoSyncedBlocksException(info: Any?) : org.near.api.providers.exception.Han
  *    <li>See error.cause.info for details</li>
  * </ul>
  */
-class InvalidTransactionException(val txExecutionError: TxExecutionError?) : org.near.api.providers.exception.HandlerError(
+class InvalidTransactionException(val txExecutionError: TxExecutionError?) : HandlerError(
     "Invalid transaction $txExecutionError"
 ) {
 
@@ -146,7 +146,7 @@ class InvalidTransactionException(val txExecutionError: TxExecutionError?) : org
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as org.near.api.providers.exception.InvalidTransactionException
+        other as InvalidTransactionException
 
         if (txExecutionError != other.txExecutionError) return false
 
@@ -169,7 +169,7 @@ class InvalidTransactionException(val txExecutionError: TxExecutionError?) : org
  *    <li>Check that the signer account id has enough tokens to cover the transaction fees (keep in mind that some tokens on each account are locked to cover the storage cost)</li>
  * </ul>
  */
-class TimeoutErrorException(info: Any?) : org.near.api.providers.exception.HandlerError("Timeout: $info")
+class TimeoutErrorException(info: Any?) : HandlerError("Timeout: $info")
 
 /**
  * Reason: An epoch for the provided block can't be found in a database
@@ -180,10 +180,10 @@ class TimeoutErrorException(info: Any?) : org.near.api.providers.exception.Handl
  *    <li>If the block had been produced more than 5 epochs ago, try to send your request to an archival node</li>
  * </ul>
  */
-class UnknownEpochException(info: Any?) : org.near.api.providers.exception.HandlerError("Unknown epoch: $info")
+class UnknownEpochException(info: Any?) : HandlerError("Unknown epoch: $info")
 
 
-sealed class RequestValidationError(message: String?) : org.near.api.providers.exception.ProviderException(message)
+sealed class RequestValidationError(message: String?) : ProviderException(message)
 
 /**
  * Reason: Passed arguments can't be parsed by JSON RPC server (missing arguments, wrong format, etc.)
@@ -194,9 +194,9 @@ sealed class RequestValidationError(message: String?) : org.near.api.providers.e
  *    <li>Check info for more details</li>
  * </ul>
  */
-class ParseErrorException(val errorMessage: String?) : org.near.api.providers.exception.RequestValidationError("Parse error: $errorMessage")
+class ParseErrorException(val errorMessage: String?) : RequestValidationError("Parse error: $errorMessage")
 
-sealed class InternalError(message: String?) : org.near.api.providers.exception.ProviderException(message)
+sealed class InternalError(message: String?) : ProviderException(message)
 
 /**
  * Reason: Something went wrong with the node itself or overloaded
@@ -208,4 +208,4 @@ sealed class InternalError(message: String?) : org.near.api.providers.exception.
  *    <li>Check info for more details</li>
  * </ul>
  */
-class InternalErrorException(val errorMessage: String?) : org.near.api.providers.exception.InternalError("Internal error: $errorMessage")
+class InternalErrorException(val errorMessage: String?) : InternalError("Internal error: $errorMessage")
