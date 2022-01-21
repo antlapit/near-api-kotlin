@@ -33,14 +33,15 @@ class AccessKeyRpcProvider(private val jsonRpcProvider: JsonRpcProvider) : Acces
         publicKey: PublicKey,
         blockSearch: BlockSearch,
         timeout: Long
-    ): AccessKeyInBlock = jsonRpcProvider.query(
-        mapOf(
+    ): AccessKeyInBlock = jsonRpcProvider.sendRpc(
+        method = "query",
+        blockSearch = blockSearch,
+        params = mapOf(
             "request_type" to "view_access_key",
             "account_id" to accountId,
             "public_key" to publicKey
         ),
-        blockSearch,
-        timeout
+        timeout = timeout
     )
 
     override suspend fun getAccessKey(accountId: AccountId, publicKey: PublicKey, finality: Finality, timeout: Long) =
@@ -66,12 +67,13 @@ class AccessKeyRpcProvider(private val jsonRpcProvider: JsonRpcProvider) : Acces
         accountId: AccountId,
         blockSearch: BlockSearch = BlockSearch.BLOCK_OPTIMISTIC,
         timeout: Long
-    ): AccessKeysContainer = jsonRpcProvider.query(
-        mapOf(
+    ): AccessKeysContainer = jsonRpcProvider.sendRpc(
+        method = "query",
+        blockSearch = blockSearch,
+        params = mapOf(
             "request_type" to "view_access_key_list",
             "account_id" to accountId
         ),
-        blockSearch,
         timeout
     )
 
@@ -93,7 +95,8 @@ class AccessKeyRpcProvider(private val jsonRpcProvider: JsonRpcProvider) : Acces
         keys: List<AccountWithPublicKey>,
         blockSearch: BlockSearch = BlockSearch.BLOCK_OPTIMISTIC,
         timeout: Long
-    ): StateChanges = jsonRpcProvider.getChanges(
+    ): StateChanges = jsonRpcProvider.sendRpc(
+        method = "EXPERIMENTAL_changes",
         blockSearch = blockSearch,
         params = mapOf(
             "changes_type" to "single_access_key_changes",
@@ -120,7 +123,8 @@ class AccessKeyRpcProvider(private val jsonRpcProvider: JsonRpcProvider) : Acces
         accountIds: List<AccountId>,
         blockSearch: BlockSearch = BlockSearch.BLOCK_OPTIMISTIC,
         timeout: Long
-    ): StateChanges = jsonRpcProvider.getChanges(
+    ): StateChanges = jsonRpcProvider.sendRpc(
+        method = "EXPERIMENTAL_changes",
         blockSearch = blockSearch,
         params = mapOf(
             "changes_type" to "all_access_key_changes",

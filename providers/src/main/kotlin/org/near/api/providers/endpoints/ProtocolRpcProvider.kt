@@ -11,7 +11,7 @@ import org.near.api.providers.model.primitives.CryptoHash
 
 /**
  * RPC endpoint for getting config info
- * @link https://docs.near.org/docs/api/rpc/config
+ * @link https://docs.near.org/docs/api/rpc/protocol
  */
 class ProtocolRpcProvider(private val jsonRpcProvider: JsonRpcProvider) : ProtocolProvider {
 
@@ -30,8 +30,8 @@ class ProtocolRpcProvider(private val jsonRpcProvider: JsonRpcProvider) : Protoc
     private suspend fun getProtocolConfigGeneral(blockSearch: BlockSearch, timeout: Long): ProtocolConfig =
         jsonRpcProvider.sendRpc(
             method = "EXPERIMENTAL_protocol_config",
-            blockSearch,
-            timeout
+            blockSearch = blockSearch,
+            timeout = timeout
         )
 
     override suspend fun getLatestProtocolConfig(finality: Finality, timeout: Long) =

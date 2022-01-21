@@ -30,12 +30,13 @@ class ContractRpcProvider(private val jsonRpcProvider: JsonRpcProvider) : Contra
         accountId: AccountId,
         blockSearch: BlockSearch = BlockSearch.BLOCK_OPTIMISTIC,
         timeout: Long
-    ): AccountInBlock = jsonRpcProvider.query(
-        mapOf(
+    ): AccountInBlock = jsonRpcProvider.sendRpc(
+        method = "query",
+        blockSearch = blockSearch,
+        params = mapOf(
             "request_type" to "view_account",
             "account_id" to accountId
         ),
-        blockSearch,
         timeout
     )
 
@@ -56,12 +57,13 @@ class ContractRpcProvider(private val jsonRpcProvider: JsonRpcProvider) : Contra
         accountId: AccountId,
         blockSearch: BlockSearch = BlockSearch.BLOCK_OPTIMISTIC, timeout: Long
     ): ContractCode =
-        jsonRpcProvider.query(
-            mapOf(
+        jsonRpcProvider.sendRpc(
+            method = "query",
+            blockSearch = blockSearch,
+            params = mapOf(
                 "request_type" to "view_code",
                 "account_id" to accountId,
             ),
-            blockSearch,
             timeout
         )
 
@@ -83,13 +85,14 @@ class ContractRpcProvider(private val jsonRpcProvider: JsonRpcProvider) : Contra
         blockSearch: BlockSearch = BlockSearch.BLOCK_OPTIMISTIC,
         timeout: Long
     ): ContractState =
-        jsonRpcProvider.query(
-            mapOf(
+        jsonRpcProvider.sendRpc(
+            method = "query",
+            blockSearch = blockSearch,
+            params = mapOf(
                 "request_type" to "view_state",
                 "account_id" to accountId,
                 "prefix_base64" to keyPrefix
             ),
-            blockSearch,
             timeout
         )
 
@@ -120,14 +123,15 @@ class ContractRpcProvider(private val jsonRpcProvider: JsonRpcProvider) : Contra
         methodName: String,
         args: String,
         blockSearch: BlockSearch = BlockSearch.BLOCK_OPTIMISTIC, timeout: Long
-    ): CallResult = jsonRpcProvider.query(
-        mapOf(
+    ): CallResult = jsonRpcProvider.sendRpc(
+        method = "query",
+        blockSearch = blockSearch,
+        params = mapOf(
             "request_type" to "call_function",
             "account_id" to accountId,
             "method_name" to methodName,
             "args_base64" to args.toByteArray().base64()
         ),
-        blockSearch,
         timeout
     )
 
@@ -155,7 +159,8 @@ class ContractRpcProvider(private val jsonRpcProvider: JsonRpcProvider) : Contra
         accountIds: List<AccountId>,
         blockSearch: BlockSearch = BlockSearch.BLOCK_OPTIMISTIC,
         timeout: Long
-    ): StateChanges = jsonRpcProvider.getChanges(
+    ): StateChanges = jsonRpcProvider.sendRpc(
+        method = "EXPERIMENTAL_changes",
         blockSearch = blockSearch,
         params = mapOf(
             "changes_type" to "account_changes",
@@ -192,7 +197,8 @@ class ContractRpcProvider(private val jsonRpcProvider: JsonRpcProvider) : Contra
         keyPrefix: String = "",
         blockSearch: BlockSearch = BlockSearch.BLOCK_OPTIMISTIC,
         timeout: Long
-    ): StateChanges = jsonRpcProvider.getChanges(
+    ): StateChanges = jsonRpcProvider.sendRpc(
+        method = "EXPERIMENTAL_changes",
         blockSearch = blockSearch,
         params = mapOf(
             "changes_type" to "data_changes",
@@ -232,7 +238,8 @@ class ContractRpcProvider(private val jsonRpcProvider: JsonRpcProvider) : Contra
         accountIds: List<AccountId>,
         blockSearch: BlockSearch = BlockSearch.BLOCK_OPTIMISTIC,
         timeout: Long
-    ): StateChanges = jsonRpcProvider.getChanges(
+    ): StateChanges = jsonRpcProvider.sendRpc(
+        method = "EXPERIMENTAL_changes",
         blockSearch = blockSearch,
         params = mapOf(
             "changes_type" to "contract_code_changes",

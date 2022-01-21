@@ -42,31 +42,26 @@ class JsonRpcProvider(
     }
 
     /**
-     * Note that this is experimental feature
+     * Method for sending RPC request with block reference
+     *
+     * @param method Method code
+     * @param blockSearch block reference
+     * @param params Method params as Map
+     * @param timeout Request timeout in ms (default - Constants.DEFAULT_TIMEOUT)
+     *
+     * @see Constants
      */
-    suspend inline fun <reified T> getChanges(
-        blockSearch: BlockSearch,
-        params: Map<String, Any?>,
-        timeout: Long = Constants.DEFAULT_TIMEOUT
-    ): T {
-        return sendRpc(method = "EXPERIMENTAL_changes", params = mergeParams(params, blockSearch), timeout)
-    }
-
     suspend inline fun <reified T> sendRpc(
         method: String,
         blockSearch: BlockSearch,
-        params: Map<String, Any?>,
+        params: Map<String, Any?> = emptyMap(),
         timeout: Long = Constants.DEFAULT_TIMEOUT
     ): T {
-        return sendRpc(method = method, params = mergeParams(params, blockSearch), timeout)
-    }
-
-    suspend inline fun <reified T> sendRpc(
-        method: String,
-        blockSearch: BlockSearch,
-        timeout: Long = Constants.DEFAULT_TIMEOUT
-    ): T {
-        return sendRpc(method = method, params = mergeParams(emptyMap(), blockSearch), timeout)
+        return sendRpc(
+            method = method,
+            params = mergeParams(params, blockSearch),
+            timeout
+        )
     }
 
     /**
@@ -98,31 +93,7 @@ class JsonRpcProvider(
         }
     }
 
-    /**
-     * @param queryObj Generic map with query params
-     * @param blockSearch Block searching params (id, hash, finality)
-     * @param timeout Request timeout in ms (default - Constants.DEFAULT_TIMEOUT)
-     *
-     * @see Constants
-     */
-    suspend inline fun <reified T> query(
-        queryObj: Map<String, Any>,
-        blockSearch: BlockSearch,
-        timeout: Long = Constants.DEFAULT_TIMEOUT
-    ): T =
-        sendRpc(method = "query", params = mergeParams(queryObj, blockSearch), timeout = timeout)
-
-    /**
-     * Some undocumented feature of RPC API - querying contract by path and data
-     *
-     * @param path Smart-contract path
-     * @param data Some data to call with
-     * @param timeout Request timeout in ms (default - Constants.DEFAULT_TIMEOUT)
-     *
-     * @see Constants
-     */
-    suspend inline fun <reified T> query(path: String, data: String, timeout: Long = Constants.DEFAULT_TIMEOUT) =
-        sendRpc<T>(method = "query", params = arrayListOf(path, data), timeout = timeout)
+    override fun close() = client.close()
 
     data class GenericRpcRequest(val method: String, val params: Any?) {
         @Suppress("unused")
@@ -149,6 +120,4 @@ class JsonRpcProvider(
             return paramsMap
         }
     }
-
-    override fun close() = client.close()
 }

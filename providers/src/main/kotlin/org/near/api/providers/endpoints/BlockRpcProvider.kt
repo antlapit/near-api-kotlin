@@ -26,8 +26,8 @@ class BlockRpcProvider(private val jsonRpcProvider: JsonRpcProvider) : BlockProv
     private suspend fun getBlock(blockSearch: BlockSearch = BlockSearch.BLOCK_OPTIMISTIC, timeout: Long): Block =
         jsonRpcProvider.sendRpc(
             method = "block",
-            blockSearch,
-            timeout
+            blockSearch = blockSearch,
+            timeout = timeout
         )
 
     override suspend fun getLatestBlock(finality: Finality, timeout: Long) = getBlock(ofFinality(finality), timeout)
@@ -80,5 +80,9 @@ class BlockRpcProvider(private val jsonRpcProvider: JsonRpcProvider) : BlockProv
     private suspend fun getChangesInBlock(
         blockSearch: BlockSearch,
         timeout: Long = org.near.api.providers.Constants.DEFAULT_TIMEOUT
-    ): BlockChangesContainer = jsonRpcProvider.sendRpc("EXPERIMENTAL_changes_in_block", blockSearch, timeout)
+    ): BlockChangesContainer = jsonRpcProvider.sendRpc(
+        method = "EXPERIMENTAL_changes_in_block",
+        blockSearch = blockSearch,
+        timeout = timeout
+    )
 }
