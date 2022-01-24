@@ -6,10 +6,10 @@ import io.kotest.common.ExperimentalKotest
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.datatest.withData
 import io.kotest.matchers.shouldBe
+import org.near.api.camelCaseToSnakeCase
 import org.near.api.common.TestData
 import org.near.api.model.changes.*
 import org.near.api.model.primitives.PublicKey
-import org.near.api.provider.camelCaseToSnakeCase
 import java.math.BigInteger
 
 /**

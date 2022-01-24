@@ -5,12 +5,13 @@ import io.kotest.common.ExperimentalKotest
 import io.kotest.core.Tuple2
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.datatest.withData
+import io.kotest.matchers.shouldBe
+import org.near.api.decodeBase64
 import org.near.api.model.block.Action
 import org.near.api.model.primitives.PublicKey
 import org.near.api.model.transaction.SignedTransaction
 import org.near.api.model.transaction.Transaction
 import org.near.api.model.transaction.TransactionSignature
-import org.near.api.provider.decodeBase64
 import java.math.BigInteger
 
 @ExperimentalKotest
