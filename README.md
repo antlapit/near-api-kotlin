@@ -272,46 +272,46 @@ NEAR Kotlin API examples are placed in [`near-api-kotlin-examples`]
 
 [`Kotlin sealed classes`]: https://kotlinlang.org/docs/sealed-classes.html
 
-[AccessKeysEndpoint]: https://github.com/antlapit/near-api-kotlin/tree/main/providers-api/src/main/kotlin/org/near/api/endpoints/AccessKeysEndpoint.kt
+[AccessKeysEndpoint]: https://github.com/antlapit/near-api-kotlin/blob/main/providers-api/src/main/kotlin/org/near/api/endpoints/AccessKeysEndpoint.kt
 
-[BlockEndpoint]: https://github.com/antlapit/near-api-kotlin/tree/main/providers-api/src/main/kotlin/org/near/api/endpoints/BlockEndpoint.kt
+[BlockEndpoint]: https://github.com/antlapit/near-api-kotlin/blob/main/providers-api/src/main/kotlin/org/near/api/endpoints/BlockEndpoint.kt
 
-[ContractsEndpoint]: https://github.com/antlapit/near-api-kotlin/tree/main/providers-api/src/main/kotlin/org/near/api/endpoints/ContractsEndpoint.kt
+[ContractsEndpoint]: https://github.com/antlapit/near-api-kotlin/blob/main/providers-api/src/main/kotlin/org/near/api/endpoints/ContractsEndpoint.kt
 
-[GasEndpoint]: https://github.com/antlapit/near-api-kotlin/tree/main/providers-api/src/main/kotlin/org/near/api/endpoints/GasEndpoint.kt
+[GasEndpoint]: https://github.com/antlapit/near-api-kotlin/blob/main/providers-api/src/main/kotlin/org/near/api/endpoints/GasEndpoint.kt
 
-[NetworkEndpoint]: https://github.com/antlapit/near-api-kotlin/tree/main/providers-api/src/main/kotlin/org/near/api/endpoints/NetworkEndpoint.kt
+[NetworkEndpoint]: https://github.com/antlapit/near-api-kotlin/blob/main/providers-api/src/main/kotlin/org/near/api/endpoints/NetworkEndpoint.kt
 
-[ProtocolEndpoint]: https://github.com/antlapit/near-api-kotlin/tree/main/providers-api/src/main/kotlin/org/near/api/endpoints/ProtocolEndpoint.kt
+[ProtocolEndpoint]: https://github.com/antlapit/near-api-kotlin/blob/main/providers-api/src/main/kotlin/org/near/api/endpoints/ProtocolEndpoint.kt
 
-[TransactionsEndpoint]: https://github.com/antlapit/near-api-kotlin/tree/main/providers-api/src/main/kotlin/org/near/api/endpoints/TransactionsEndpoint.kt
+[TransactionsEndpoint]: https://github.com/antlapit/near-api-kotlin/blob/main/providers-api/src/main/kotlin/org/near/api/endpoints/TransactionsEndpoint.kt
 
-[RustBridge]: https://github.com/antlapit/near-api-kotlin/tree/main/providers-api/src/main/kotlin/org/near/api/model/rust/RustBridge.kt
+[RustBridge]: https://github.com/antlapit/near-api-kotlin/blob/main/providers-api/src/main/kotlin/org/near/api/model/rust/RustBridge.kt
 
 
-[`Network interfaces`]: https://github.com/antlapit/near-api-kotlin/tree/main/providers/src/main/kotlin/org/near/api/provider/config/Network.kt
+[`Network interfaces`]: https://github.com/antlapit/near-api-kotlin/blob/main/providers/src/main/kotlin/org/near/api/provider/config/Network.kt
 
-[NetworkEnum]: https://github.com/antlapit/near-api-kotlin/tree/main/providers/src/main/kotlin/org/near/api/provider/config/NetworkEnum.kt
+[NetworkEnum]: https://github.com/antlapit/near-api-kotlin/blob/main/providers/src/main/kotlin/org/near/api/provider/config/NetworkEnum.kt
 
-[JsonRpcProvider]: https://github.com/antlapit/near-api-kotlin/tree/main/providers/src/main/kotlin/org/near/api/provider/JsonRpcProvider.kt
+[JsonRpcProvider]: https://github.com/antlapit/near-api-kotlin/blob/main/providers/src/main/kotlin/org/near/api/provider/JsonRpcProvider.kt
 
-[AccessKeysRpcEndpoint]: https://github.com/antlapit/near-api-kotlin/tree/main/providers/src/main/kotlin/org/near/api/endpoints/AccessKeysRpcEndpoint.kt
+[AccessKeysRpcEndpoint]: https://github.com/antlapit/near-api-kotlin/blob/main/providers/src/main/kotlin/org/near/api/endpoints/AccessKeysRpcEndpoint.kt
 
-[BlockRpcEndpoint]: https://github.com/antlapit/near-api-kotlin/tree/main/providers/src/main/kotlin/org/near/api/endpoints/BlockRpcEndpoint.kt
+[BlockRpcEndpoint]: https://github.com/antlapit/near-api-kotlin/blob/main/providers/src/main/kotlin/org/near/api/endpoints/BlockRpcEndpoint.kt
 
-[ContractsRpcEndpoint]: https://github.com/antlapit/near-api-kotlin/tree/main/providers/src/main/kotlin/org/near/api/endpoints/ContractsRpcEndpoint.kt
+[ContractsRpcEndpoint]: https://github.com/antlapit/near-api-kotlin/blob/main/providers/src/main/kotlin/org/near/api/endpoints/ContractsRpcEndpoint.kt
 
-[GasRpcEndpoint]: https://github.com/antlapit/near-api-kotlin/tree/main/providers/src/main/kotlin/org/near/api/endpoints/GasRpcEndpoint.kt
+[GasRpcEndpoint]: https://github.com/antlapit/near-api-kotlin/blob/main/providers/src/main/kotlin/org/near/api/endpoints/GasRpcEndpoint.kt
 
-[NetworkRpcEndpoint]: https://github.com/antlapit/near-api-kotlin/tree/main/providers/src/main/kotlin/org/near/api/endpoints/NetworkRpcEndpoint.kt
+[NetworkRpcEndpoint]: https://github.com/antlapit/near-api-kotlin/blob/main/providers/src/main/kotlin/org/near/api/endpoints/NetworkRpcEndpoint.kt
 
-[ProtocolRpcEndpoint]: https://github.com/antlapit/near-api-kotlin/tree/main/providers/src/main/kotlin/org/near/api/endpoints/ProtocolRpcEndpoint.kt
+[ProtocolRpcEndpoint]: https://github.com/antlapit/near-api-kotlin/blob/main/providers/src/main/kotlin/org/near/api/endpoints/ProtocolRpcEndpoint.kt
 
-[TransactionsRpcEndpoint]: https://github.com/antlapit/near-api-kotlin/tree/main/providers/src/main/kotlin/org/near/api/endpoints/TransactionsRpcEndpoint.kt
+[TransactionsRpcEndpoint]: https://github.com/antlapit/near-api-kotlin/blob/main/providers/src/main/kotlin/org/near/api/endpoints/TransactionsRpcEndpoint.kt
 
-[RustEnumSerializers]: https://github.com/antlapit/near-api-kotlin/tree/main/providers/src/main/kotlin/org/near/api/json/RustEnumSerializers.kt
+[RustEnumSerializers]: https://github.com/antlapit/near-api-kotlin/blob/main/providers/src/main/kotlin/org/near/api/json/RustEnumSerializers.kt
 
-[NearRpcModelsModule]: https://github.com/antlapit/near-api-kotlin/tree/main/providers/src/main/kotlin/org/near/api/json/NearRpcModelsModule.kt
+[NearRpcModelsModule]: https://github.com/antlapit/near-api-kotlin/blob/main/providers/src/main/kotlin/org/near/api/json/NearRpcModelsModule.kt
 
 
 [ci-badge]:https://github.com/antlapit/near-api-kotlin/actions/workflows/main.yml/badge.svg "CI build status"
@@ -324,4 +324,4 @@ NEAR Kotlin API examples are placed in [`near-api-kotlin-examples`]
 
 [badge-jvm]: http://img.shields.io/badge/platform-jvm-orange.svg?style=flat
 
-[`near-api-kotlin-examples`]: https://github.com/antlapit/near-api-kotlin/examples.md
+[`near-api-kotlin-examples`]: https://github.com/antlapit/near-api-kotlin/blob/main/examples.md
