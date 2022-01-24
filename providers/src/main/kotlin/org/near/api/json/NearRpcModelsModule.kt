@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.Module
 import com.fasterxml.jackson.databind.jsontype.NamedType
 import com.fasterxml.jackson.databind.module.SimpleDeserializers
 import com.fasterxml.jackson.databind.module.SimpleSerializers
+import org.near.api.camelCaseToSnakeCase
 import org.near.api.model.block.Action
 import org.near.api.model.block.ReceiptInfo
 import org.near.api.model.changes.StateChange
@@ -17,7 +18,6 @@ import org.near.api.model.primitives.*
 import org.near.api.model.transaction.ExecutionStatus
 import org.near.api.model.transaction.FinalExecutionStatus
 import org.near.api.model.validators.ValidatorKickoutReason
-import org.near.api.provider.camelCaseToSnakeCase
 
 
 class NearRpcModelsModule : Module() {

@@ -6,6 +6,7 @@ import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.TestInstance
+import org.komputing.khash.sha256.extensions.sha256
 import org.near.api.borsh.encode
 import org.near.api.exception.InvalidTransactionException
 import org.near.api.model.block.Action

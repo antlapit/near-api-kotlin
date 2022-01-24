@@ -30,7 +30,7 @@ dependencies {
     implementation("com.google.guava:guava:30.1.1-jre")
 
     val komputingKHashSha256Version = "1.1.1"
-    testImplementation("com.github.komputing.KHash:sha256:${komputingKHashSha256Version}")
+    testImplementation("com.github.komputing.khash:sha256:${komputingKHashSha256Version}")
 
     // signing with tweetnacl java port
     val tweetnaclVersion = "1.1.2"
