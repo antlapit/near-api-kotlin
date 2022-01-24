@@ -52,7 +52,7 @@ internal class NetworkRpcEndpointTest {
 
     @Test
     fun getValidationStatus_thenCorrect() = runBlocking {
-        val latestStatus = endpoint.getValidationStatus(6 * 10_000)
+        val latestStatus = endpoint.getLatestValidationStatus(6 * 10_000)
         assertTrue(latestStatus.epochStartHeight > 0, "epoch start height should not be 0")
         assertTrue(latestStatus.epochHeight > 0, "epoch start height should not be 0")
         return@runBlocking
@@ -60,7 +60,7 @@ internal class NetworkRpcEndpointTest {
 
     @Test
     fun getValidationStatusOfBlock_thenCorrect() = runBlocking {
-        val latestStatus = endpoint.getValidationStatus(6 * 10_000)
+        val latestStatus = endpoint.getLatestValidationStatus(6 * 10_000)
 
         // getting last block of previous epoch, which is guaranteed to exist
         val block = blockProvider.getBlock(latestStatus.epochStartHeight - 1)

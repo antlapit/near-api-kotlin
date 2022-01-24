@@ -28,7 +28,7 @@ class NetworkRpcEndpoint(private val jsonRpcProvider: JsonRpcProvider) : Network
     /**
      * @link https://docs.near.org/docs/api/rpc/network#validation-status
      */
-    override suspend fun getValidationStatus(timeout: Long?): EpochValidatorInfo =
+    override suspend fun getLatestValidationStatus(timeout: Long?): EpochValidatorInfo =
         jsonRpcProvider.sendRpc(method = "validators", params = listOf(null), timeout = timeout)
 
     /**

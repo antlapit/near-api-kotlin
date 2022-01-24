@@ -21,7 +21,7 @@ interface NetworkEndpoint {
     /**
      * Returns validation status of latest block.
      */
-    suspend fun getValidationStatus(timeout: Long? = null): EpochValidatorInfo
+    suspend fun getLatestValidationStatus(timeout: Long? = null): EpochValidatorInfo
 
     /**
      * Returns validation status of numeric block id.
