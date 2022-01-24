@@ -15,19 +15,19 @@ import kotlin.test.*
 
 @ExperimentalCoroutinesApi
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class ContractRpcProviderTest {
+class ContractsRpcEndpointTest {
 
     private val client = JsonRpcProvider(JsonRpcConfig(NetworkEnum.TESTNET))
     private val archivalClient = JsonRpcProvider(JsonRpcConfig(NetworkEnum.TESTNET_ARCHIVAL))
-    private lateinit var endpoint: ContractProvider
-    private lateinit var archivalEndpoint: ContractProvider
-    private lateinit var archivalBlockEndpoint: BlockRpcProvider
+    private lateinit var endpoint: ContractsEndpoint
+    private lateinit var archivalEndpoint: ContractsEndpoint
+    private lateinit var archivalBlockEndpoint: BlockRpcEndpoint
 
     @BeforeAll
     fun initEndpoint() {
-        endpoint = ContractRpcProvider(client)
-        archivalEndpoint = ContractRpcProvider(archivalClient)
-        archivalBlockEndpoint = BlockRpcProvider(archivalClient)
+        endpoint = ContractsRpcEndpoint(client)
+        archivalEndpoint = ContractsRpcEndpoint(archivalClient)
+        archivalBlockEndpoint = BlockRpcEndpoint(archivalClient)
     }
 
     @AfterAll

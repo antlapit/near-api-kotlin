@@ -9,7 +9,7 @@ import org.near.api.model.primitives.BlockHeight
 import org.near.api.model.primitives.CryptoHash
 import org.near.api.model.primitives.PublicKey
 
-interface AccessKeyProvider {
+interface AccessKeysEndpoint {
 
     /**
      * Returns information about a single access key for given account.

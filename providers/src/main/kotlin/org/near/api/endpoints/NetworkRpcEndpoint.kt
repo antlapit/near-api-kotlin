@@ -11,7 +11,7 @@ import org.near.api.provider.JsonRpcProvider
  * RPC endpoint for getting Network state
  * @link https://docs.near.org/docs/api/rpc/network
  */
-class NetworkRpcProvider(private val jsonRpcProvider: JsonRpcProvider) : NetworkProvider {
+class NetworkRpcEndpoint(private val jsonRpcProvider: JsonRpcProvider) : NetworkEndpoint {
 
     /**
      * @link https://docs.near.org/docs/api/rpc/network#node-status

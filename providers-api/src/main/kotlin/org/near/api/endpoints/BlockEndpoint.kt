@@ -7,7 +7,7 @@ import org.near.api.model.primitives.BlockHeight
 import org.near.api.model.primitives.CryptoHash
 import org.near.api.model.primitives.ShardId
 
-interface BlockProvider {
+interface BlockEndpoint {
 
     /**
      * Returns block details.

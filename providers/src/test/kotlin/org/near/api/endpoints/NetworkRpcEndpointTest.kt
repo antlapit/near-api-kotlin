@@ -18,16 +18,16 @@ import kotlin.test.assertTrue
  */
 @ExperimentalCoroutinesApi
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-internal class NetworkRpcProviderTest {
+internal class NetworkRpcEndpointTest {
 
     private val client = JsonRpcProvider(JsonRpcConfig(NetworkEnum.TESTNET))
-    private lateinit var endpoint: NetworkRpcProvider
-    private lateinit var blockProvider: BlockRpcProvider
+    private lateinit var endpoint: NetworkRpcEndpoint
+    private lateinit var blockProvider: BlockRpcEndpoint
 
     @BeforeAll
     fun initEndpoint() {
-        endpoint = NetworkRpcProvider(client)
-        blockProvider = BlockRpcProvider(client)
+        endpoint = NetworkRpcEndpoint(client)
+        blockProvider = BlockRpcEndpoint(client)
     }
 
     @AfterAll

@@ -16,7 +16,7 @@ import org.near.api.provider.JsonRpcProvider
  * RPC endpoint for working with Blocks / Chunks
  * @link https://docs.near.org/docs/api/rpc/block-chunk
  */
-class BlockRpcProvider(private val jsonRpcProvider: JsonRpcProvider) : BlockProvider {
+class BlockRpcEndpoint(private val jsonRpcProvider: JsonRpcProvider) : BlockEndpoint {
 
     /**
      * @link https://docs.near.org/docs/api/rpc/block-chunk#block-details

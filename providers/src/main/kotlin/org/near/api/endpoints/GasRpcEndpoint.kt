@@ -9,7 +9,7 @@ import org.near.api.provider.JsonRpcProvider
  * RPC endpoint for getting gas price
  * @link https://docs.near.org/docs/api/rpc/gas
  */
-class GasRpcProvider(private val jsonRpcProvider: JsonRpcProvider) : GasProvider {
+class GasRpcEndpoint(private val jsonRpcProvider: JsonRpcProvider) : GasEndpoint {
 
     /**
      * @link https://docs.near.org/docs/api/rpc/block-chunk#block-details

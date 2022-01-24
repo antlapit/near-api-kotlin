@@ -15,14 +15,14 @@ import kotlin.test.assertTrue
 
 @ExperimentalCoroutinesApi
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class BlockRpcProviderTest {
+class BlockRpcEndpointTest {
 
     private val client = JsonRpcProvider(JsonRpcConfig(NetworkEnum.TESTNET))
-    private lateinit var endpoint: BlockProvider
+    private lateinit var endpoint: BlockEndpoint
 
     @BeforeAll
     fun initEndpoint() {
-        endpoint = BlockRpcProvider(client)
+        endpoint = BlockRpcEndpoint(client)
     }
 
     @AfterAll

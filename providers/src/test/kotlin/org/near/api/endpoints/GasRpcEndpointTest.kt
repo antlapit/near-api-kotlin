@@ -14,16 +14,16 @@ import kotlin.test.assertNotNull
 
 @ExperimentalCoroutinesApi
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class GasRpcProviderTest {
+class GasRpcEndpointTest {
 
     private val client = JsonRpcProvider(JsonRpcConfig(NetworkEnum.TESTNET))
-    private lateinit var endpoint: GasProvider
-    private lateinit var blockProvider: BlockProvider
+    private lateinit var endpoint: GasEndpoint
+    private lateinit var blockEndpoint: BlockEndpoint
 
     @BeforeAll
     fun initEndpoint() {
-        endpoint = GasRpcProvider(client)
-        blockProvider = BlockRpcProvider(client)
+        endpoint = GasRpcEndpoint(client)
+        blockEndpoint = BlockRpcEndpoint(client)
     }
 
     @AfterAll
@@ -41,7 +41,7 @@ class GasRpcProviderTest {
 
     @Test
     fun getGasPrice_byBlock_thenCorrect() = runBlocking {
-        val block = blockProvider.getLatestBlock()
+        val block = blockEndpoint.getLatestBlock()
 
         // latest queried block by hash
         val priceByHash = endpoint.getGasPrice(block.header.hash)

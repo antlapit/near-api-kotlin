@@ -21,19 +21,19 @@ import kotlin.test.assertNotNull
 @ExperimentalKotest
 @ExperimentalCoroutinesApi
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class AccessKeyRpcProviderTest {
+class AccessKeysRpcEndpointTest {
 
     private val client = JsonRpcProvider(JsonRpcConfig(NetworkEnum.TESTNET))
     private val archivalClient = JsonRpcProvider(JsonRpcConfig(NetworkEnum.TESTNET_ARCHIVAL))
-    private lateinit var endpoint: AccessKeyRpcProvider
-    private lateinit var archivalEndpoint: AccessKeyRpcProvider
-    private lateinit var archivalBlockEndpoint: BlockRpcProvider
+    private lateinit var endpoint: AccessKeysRpcEndpoint
+    private lateinit var archivalEndpoint: AccessKeysRpcEndpoint
+    private lateinit var archivalBlockEndpoint: BlockRpcEndpoint
 
     @BeforeAll
     fun initEndpoint() {
-        endpoint = AccessKeyRpcProvider(client)
-        archivalEndpoint = AccessKeyRpcProvider(archivalClient)
-        archivalBlockEndpoint = BlockRpcProvider(archivalClient)
+        endpoint = AccessKeysRpcEndpoint(client)
+        archivalEndpoint = AccessKeysRpcEndpoint(archivalClient)
+        archivalBlockEndpoint = BlockRpcEndpoint(archivalClient)
     }
 
     @AfterAll

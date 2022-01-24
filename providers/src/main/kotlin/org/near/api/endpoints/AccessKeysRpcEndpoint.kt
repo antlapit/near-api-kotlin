@@ -18,7 +18,7 @@ import org.near.api.provider.JsonRpcProvider
  * RPC endpoint for accessing Access Keys
  * @link https://docs.near.org/docs/api/rpc/access-keys
  */
-class AccessKeyRpcProvider(private val jsonRpcProvider: JsonRpcProvider) : AccessKeyProvider {
+class AccessKeysRpcEndpoint(private val jsonRpcProvider: JsonRpcProvider) : AccessKeysEndpoint {
 
     /**
      * @param accountId Account Identifier

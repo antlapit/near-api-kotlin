@@ -6,7 +6,6 @@ import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.TestInstance
-import org.komputing.khash.sha256.extensions.sha256
 import org.near.api.borsh.encode
 import org.near.api.exception.InvalidTransactionException
 import org.near.api.model.block.Action
@@ -25,16 +24,16 @@ import kotlin.time.ExperimentalTime
 @ExperimentalTime
 @ExperimentalCoroutinesApi
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-internal class TransactionRpcProviderTest {
+internal class TransactionsRpcEndpointTest {
 
     private val archivalClient = JsonRpcProvider(JsonRpcConfig(NetworkEnum.TESTNET_ARCHIVAL))
-    private lateinit var archivalEndpoint: TransactionRpcProvider
+    private lateinit var archivalEndpoint: TransactionsRpcEndpoint
 
     private val client = JsonRpcProvider(JsonRpcConfig(NetworkEnum.TESTNET))
-    private lateinit var endpoint: TransactionRpcProvider
-    private lateinit var blockEndpoint: BlockRpcProvider
-    private lateinit var accessKeyEndpoint: AccessKeyRpcProvider
-    private lateinit var contractEndpoint: ContractRpcProvider
+    private lateinit var endpoint: TransactionsRpcEndpoint
+    private lateinit var blockEndpoint: BlockRpcEndpoint
+    private lateinit var accessKeyEndpoint: AccessKeysRpcEndpoint
+    private lateinit var contractEndpoint: ContractsRpcEndpoint
 
     private val tx1Account = "tx1.api_kotlin.testnet"
     private val tx1Public = PublicKey("ed25519:5zpBhMxTtD4ozFsBRV9v5hPKTDDFquHqj8gXGERGh6YF")
@@ -48,11 +47,11 @@ internal class TransactionRpcProviderTest {
 
     @BeforeAll
     fun initEndpoint() {
-        archivalEndpoint = TransactionRpcProvider(archivalClient)
-        endpoint = TransactionRpcProvider(client)
-        blockEndpoint = BlockRpcProvider(client)
-        accessKeyEndpoint = AccessKeyRpcProvider(client)
-        contractEndpoint = ContractRpcProvider(client)
+        archivalEndpoint = TransactionsRpcEndpoint(archivalClient)
+        endpoint = TransactionsRpcEndpoint(client)
+        blockEndpoint = BlockRpcEndpoint(client)
+        accessKeyEndpoint = AccessKeysRpcEndpoint(client)
+        contractEndpoint = ContractsRpcEndpoint(client)
     }
 
     @AfterAll

@@ -14,16 +14,16 @@ import kotlin.test.assertNotNull
 
 @ExperimentalCoroutinesApi
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class ProtocolRpcProviderTest {
+class ProtocolRpcEndpointTest {
 
     private val client = JsonRpcProvider(JsonRpcConfig(NetworkEnum.TESTNET))
-    private lateinit var endpoint: ProtocolProvider
-    private lateinit var blockProvider: BlockProvider
+    private lateinit var endpoint: ProtocolEndpoint
+    private lateinit var blockEndpoint: BlockEndpoint
 
     @BeforeAll
     fun initEndpoint() {
-        endpoint = ProtocolRpcProvider(client)
-        blockProvider = BlockRpcProvider(client)
+        endpoint = ProtocolRpcEndpoint(client)
+        blockEndpoint = BlockRpcEndpoint(client)
     }
 
     @AfterAll
@@ -48,7 +48,7 @@ class ProtocolRpcProviderTest {
 
     @Test
     fun getProtocolConfig_byBlock_thenCorrect() = runBlocking {
-        val block = blockProvider.getLatestBlock()
+        val block = blockEndpoint.getLatestBlock()
 
         // latest queried block by hash
         val protocolConfigByHash = endpoint.getProtocolConfig(block.header.hash)

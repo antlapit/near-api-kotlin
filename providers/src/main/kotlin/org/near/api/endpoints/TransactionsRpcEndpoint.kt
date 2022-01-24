@@ -13,8 +13,8 @@ import org.near.api.provider.JsonRpcProvider
  * RPC endpoint for transactions
  * @link https://docs.near.org/docs/api/rpc/transactions
  */
-class TransactionRpcProvider(private val jsonRpcProvider: JsonRpcProvider) :
-    TransactionProvider {
+class TransactionsRpcEndpoint(private val jsonRpcProvider: JsonRpcProvider) :
+    TransactionsEndpoint {
 
     /**
      * @link https://docs.near.org/docs/api/rpc/transactions#send-transaction-async

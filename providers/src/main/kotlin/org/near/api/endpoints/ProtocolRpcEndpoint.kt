@@ -11,7 +11,7 @@ import org.near.api.provider.JsonRpcProvider
  * RPC endpoint for getting config info
  * @link https://docs.near.org/docs/api/rpc/protocol
  */
-class ProtocolRpcProvider(private val jsonRpcProvider: JsonRpcProvider) : ProtocolProvider {
+class ProtocolRpcEndpoint(private val jsonRpcProvider: JsonRpcProvider) : ProtocolEndpoint {
 
     /**
      * @link https://docs.near.org/docs/api/rpc/protocol#genesis-config

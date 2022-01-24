@@ -7,7 +7,7 @@ import org.near.api.model.transaction.FinalExecutionOutcome
 import org.near.api.model.transaction.FinalExecutionOutcomeWithReceipts
 import org.near.api.model.transaction.SignedTransaction
 
-interface TransactionProvider {
+interface TransactionsEndpoint {
 
     /**
      * Sends a transaction and immediately returns transaction hash.

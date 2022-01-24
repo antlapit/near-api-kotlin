@@ -19,7 +19,7 @@ import org.near.api.provider.JsonRpcProvider
  * RPC endpoint for working with Accounts / Contracts
  * @link https://docs.near.org/docs/api/rpc/contracts
  */
-class ContractRpcProvider(private val jsonRpcProvider: JsonRpcProvider) : ContractProvider {
+class ContractsRpcEndpoint(private val jsonRpcProvider: JsonRpcProvider) : ContractsEndpoint {
 
     /**
      * @link https://docs.near.org/docs/api/rpc/contracts#view-account

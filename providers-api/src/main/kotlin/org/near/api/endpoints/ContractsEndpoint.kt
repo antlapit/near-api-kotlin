@@ -9,7 +9,7 @@ import org.near.api.model.primitives.AccountId
 import org.near.api.model.primitives.BlockHeight
 import org.near.api.model.primitives.CryptoHash
 
-interface ContractProvider {
+interface ContractsEndpoint {
 
     /**
      * Returns basic account information by finality param.

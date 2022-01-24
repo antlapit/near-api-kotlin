@@ -5,7 +5,7 @@ import org.near.api.model.config.ProtocolConfig
 import org.near.api.model.primitives.BlockHeight
 import org.near.api.model.primitives.CryptoHash
 
-interface ProtocolProvider {
+interface ProtocolEndpoint {
 
     /**
      * Returns current genesis configuration.

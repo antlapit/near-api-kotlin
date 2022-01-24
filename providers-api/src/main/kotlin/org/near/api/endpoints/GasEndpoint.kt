@@ -4,7 +4,7 @@ import org.near.api.model.gas.GasPrice
 import org.near.api.model.primitives.BlockHeight
 import org.near.api.model.primitives.CryptoHash
 
-interface GasProvider {
+interface GasEndpoint {
 
     /**
      * Returns gas price for latest block

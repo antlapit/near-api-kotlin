@@ -6,7 +6,7 @@ import org.near.api.model.primitives.BlockHeight
 import org.near.api.model.primitives.CryptoHash
 import org.near.api.model.validators.EpochValidatorInfo
 
-interface NetworkProvider {
+interface NetworkEndpoint {
 
     /**
      * Returns general status of a given node (sync status, nearcore node version, config version, etc), and the current set of validators.
