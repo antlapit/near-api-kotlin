@@ -35,6 +35,11 @@ dependencies {
     // signing with tweetnacl java port
     val tweetnaclVersion = "1.1.2"
     testImplementation("io.github.instantwebp2p:tweetnacl-java:${tweetnaclVersion}")
+
+    // processing markdown
+    val commonmarkVersion = "0.18.1"
+    testImplementation("org.commonmark:commonmark:${commonmarkVersion}")
+
 }
 
 publishing {
