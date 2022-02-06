@@ -1,6 +1,7 @@
 package org.near.api.docs
 
 import io.kotest.common.runBlocking
+import io.kotest.matchers.shouldNotBe
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.features.*
@@ -13,8 +14,9 @@ import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.near.api.json.ObjectMapperFactory
+import org.near.api.provider.JsonRpcProvider
 import java.io.File
-import kotlin.test.Ignore
+import kotlin.test.fail
 
 
 /**
@@ -57,21 +59,29 @@ class DocsIntegrationTest {
     }
 
     @Test
-    @Ignore
-    fun validateDocs() {
-        runBlocking {
-            val loadedExamples = loadExamples()
+    fun validateDocs() = runBlocking {
+        val loadedExamples = loadExamples()
 
-            for (example in loadedExamples) {
-                val className = classMapping[example.code]
-                if (className != null) {
-                    val clazz = Class.forName(className)
-                    val obj = objectMapper.readValue(example.response, clazz)
-                    println(obj)
-                } else {
-                  // mapping required
+        val notFoundMappings = ArrayList<String>()
+        for (example in loadedExamples) {
+            val className = classMapping[example.code]
+            if (className != null) {
+                val clazz = Class.forName(className)
+                val type = objectMapper.typeFactory.constructParametricType(
+                    JsonRpcProvider.GenericRpcResponse::class.java,
+                    clazz
+                )
+                kotlin.runCatching {
+                    val obj: JsonRpcProvider.GenericRpcResponse<*> = objectMapper.readValue(example.response, type)
+                    obj shouldNotBe null
                 }
+            } else {
+                notFoundMappings.add(example.code)
             }
+        }
+
+        if (notFoundMappings.isNotEmpty()) {
+            fail("Examples mapping required for methods: " + notFoundMappings.joinToString(", "))
         }
     }
 
@@ -133,17 +143,32 @@ internal class ExampleResponsesVisitor : AbstractVisitor() {
         if (currentExampleCode == null) {
             // just a normal html
         } else {
-            if (htmlBlock.literal.contains("Example response: ")) {
-                if (htmlBlock.next is FencedCodeBlock) {
-                    val fencedCodeBlock = htmlBlock.next as FencedCodeBlock
-                    if (fencedCodeBlock.info == "json") {
-                        examples.add(Example(currentExampleCode!!, fencedCodeBlock.literal))
-                        currentExampleCode = null
-                    }
-
-                }
+            if (htmlBlock.literal.contains("Example response:")) {
+                processExampleIfCodeFound(htmlBlock)
             }
         }
         visitChildren(htmlBlock)
+    }
+
+    override fun visit(text: Text) {
+        if (currentExampleCode == null) {
+            // just a normal text
+        } else {
+            if (text.literal.contains("Example response:")) {
+                processExampleIfCodeFound(text.parent)
+            }
+        }
+        visitChildren(text)
+    }
+
+    private fun processExampleIfCodeFound(node: Node) {
+        if (node.next is FencedCodeBlock) {
+            val fencedCodeBlock = node.next as FencedCodeBlock
+            if (fencedCodeBlock.info == "json") {
+                examples.add(Example(currentExampleCode!!, fencedCodeBlock.literal))
+                currentExampleCode = null
+            }
+
+        }
     }
 }
