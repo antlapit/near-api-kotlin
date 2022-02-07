@@ -45,7 +45,7 @@ class ErrorsSerializationTest : FunSpec({
             ),
             TestData("\"InvalidSignature\"", InvalidTxError.InvalidSignature),
             TestData(
-                """{"NotEnoughBalance":{"signer_id":"signer","balance":10,"cost":10}}""",
+                """{"NotEnoughBalance":{"signer_id":"signer","balance":"10","cost":"10"}}""",
                 InvalidTxError.NotEnoughBalance(
                     signerId = "signer",
                     balance = BigInteger.TEN,
@@ -53,7 +53,7 @@ class ErrorsSerializationTest : FunSpec({
                 )
             ),
             TestData(
-                """{"LackBalanceForState":{"signer_id":"signer","amount":10}}""",
+                """{"LackBalanceForState":{"signer_id":"signer","amount":"10"}}""",
                 InvalidTxError.LackBalanceForState(
                     signerId = "signer",
                     amount = BigInteger.TEN

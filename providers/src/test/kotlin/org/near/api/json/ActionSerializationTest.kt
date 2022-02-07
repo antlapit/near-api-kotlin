@@ -23,7 +23,7 @@ class ActionSerializationTest : FunSpec({
                 Action.DeployContract(code = "contractcode")
             ),
             TestData(
-                """{"FunctionCall":{"method_name":"test","args":"args","gas":1,"deposit":10}}""",
+                """{"FunctionCall":{"method_name":"test","args":"args","gas":1,"deposit":"10"}}""",
                 Action.FunctionCall(
                     methodName = "test",
                     args = "args",
@@ -32,13 +32,13 @@ class ActionSerializationTest : FunSpec({
                 )
             ),
             TestData(
-                """{"Transfer":{"deposit":100}}""",
+                """{"Transfer":{"deposit":"100"}}""",
                 Action.Transfer(
                     deposit = BigInteger.valueOf(100)
                 )
             ),
             TestData(
-                """{"Stake":{"stake":200,"public_key":"ed25519:SkvGRgDPF2vPM8uiusmYNAoXtv5421yptvwS82cXQZvtkPb5ynyqXhyPaPoaLw9LE86bHahjgkC4VrSgr6aXEog"}}""",
+                """{"Stake":{"stake":"200","public_key":"ed25519:SkvGRgDPF2vPM8uiusmYNAoXtv5421yptvwS82cXQZvtkPb5ynyqXhyPaPoaLw9LE86bHahjgkC4VrSgr6aXEog"}}""",
                 Action.Stake(
                     stake = BigInteger.valueOf(200),
                     publicKey = PublicKey("ed25519:SkvGRgDPF2vPM8uiusmYNAoXtv5421yptvwS82cXQZvtkPb5ynyqXhyPaPoaLw9LE86bHahjgkC4VrSgr6aXEog")
@@ -67,7 +67,7 @@ class ActionSerializationTest : FunSpec({
                 )
             ),
             TestData(
-                """{"StakeChunkOnly":{"stake":100,"public_key":"ed25519:SkvGRgDPF2vPM8uiusmYNAoXtv5421yptvwS82cXQZvtkPb5ynyqXhyPaPoaLw9LE86bHahjgkC4VrSgr6aXEog"}}""",
+                """{"StakeChunkOnly":{"stake":"100","public_key":"ed25519:SkvGRgDPF2vPM8uiusmYNAoXtv5421yptvwS82cXQZvtkPb5ynyqXhyPaPoaLw9LE86bHahjgkC4VrSgr6aXEog"}}""",
                 Action.StakeChunkOnly(
                     stake = BigInteger.valueOf(100),
                     publicKey = PublicKey("ed25519:SkvGRgDPF2vPM8uiusmYNAoXtv5421yptvwS82cXQZvtkPb5ynyqXhyPaPoaLw9LE86bHahjgkC4VrSgr6aXEog"),
