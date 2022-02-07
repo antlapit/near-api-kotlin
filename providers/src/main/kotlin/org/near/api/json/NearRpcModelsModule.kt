@@ -77,7 +77,6 @@ class NearRpcModelsModule : Module() {
                     ValidatorKickoutReason::class.java,
                     RustEnumDeserializer(ValidatorKickoutReason::class)
                 )
-                // validators
                 addDeserializer(
                     ShardLayout::class.java,
                     RustEnumDeserializer(ShardLayout::class)

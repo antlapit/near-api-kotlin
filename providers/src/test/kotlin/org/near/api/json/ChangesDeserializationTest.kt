@@ -13,7 +13,7 @@ import org.near.api.model.primitives.PublicKey
 import java.math.BigInteger
 
 /**
- * Access key change container deserialization test
+ * Change container deserialization test
  */
 @ExperimentalKotest
 class ChangesDeserializationTest : FunSpec({
