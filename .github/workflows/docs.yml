@@ -1,8 +1,8 @@
-name: Release
+name: Docs validation
 on:
-  release:
-    types:
-      - published
+  schedule:
+    - cron: '0 0 * * *'
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -19,16 +19,7 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Build with Gradle
-        env:
-          PROJECT_VERSION: ${{ github.event.release.name }}
-        run: ./gradlew build
-
-      - name: Publish package
-        run: ./gradlew publish
-        if: success()
-        env:
-          PROJECT_VERSION: ${{ github.event.release.name }}
-          GITHUB_TOKEN: ${{ secrets.PKG_GITHUB_TOKEN }}
+        run: ./gradlew test --tests *DocsIntegrationTest
 
       - name: Cleanup Gradle Cache
         # Remove some files from the Gradle cache, so they aren't cached by GitHub Actions.

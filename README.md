@@ -1,6 +1,6 @@
 # NEAR RPC Kotlin API
 
-![ci-badge] ![Tests](.github/badges/tests.svg) ![Coverage](.github/badges/jacoco.svg) ![Branches](.github/badges/branches.svg)
+![ci-badge] ![Tests](.github/badges/tests.svg) ![Coverage](.github/badges/jacoco.svg) ![Branches](.github/badges/branches.svg) ![docs-ci-badge]
 
 **NEAR RPC Kotlin API** is used to interact with NEAR network via RPC API. RPC API documentation can be found
 on [`NEAR RPC documentation`] website.
@@ -313,8 +313,9 @@ NEAR Kotlin API examples are placed in [`near-api-kotlin-examples`]
 
 [NearRpcModelsModule]: https://github.com/antlapit/near-api-kotlin/blob/main/providers/src/main/kotlin/org/near/api/json/NearRpcModelsModule.kt
 
-
 [ci-badge]:https://github.com/antlapit/near-api-kotlin/actions/workflows/main.yml/badge.svg "CI build status"
+
+[docs-ci-badge]:https://github.com/antlapit/near-api-kotlin/actions/workflows/docs.yml/badge.svg "Docs validation status"
 
 [badge-jdk-11]: https://img.shields.io/badge/jdk-11-green.svg "JDK-11 or higher"
 
