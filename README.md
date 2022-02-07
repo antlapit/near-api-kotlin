@@ -41,6 +41,7 @@ Every API group in [`NEAR RPC documentation`] has a separate interface:
 * [ProtocolEndpoint] for [`Protocol`] endpoint
 * [NetworkEndpoint] for [`Network`] endpoint
 * [TransactionsEndpoint] for [`Transactions`] endpoint
+* [SandboxEndpoint] for [`Sandbox`] endpoint
 
 **Models**
 
@@ -70,7 +71,7 @@ contains [Ktor] client that should be closed after final API call. [JsonRpcProvi
 predefined [NetworkEnum].
 
 Other providers ([AccessKeysRpcEndpoint], [BlockRpcEndpoint], [ContractsRpcEndpoint], [GasRpcEndpoint], [ProtocolRpcEndpoint],
-[NetworkRpcEndpoint], [TransactionsRpcEndpoint]) implements high level operations of RPC endpoints. These classes
+[NetworkRpcEndpoint], [TransactionsRpcEndpoint], [SandboxRpcEndpoint]) implements high level operations of RPC endpoints. These classes
 require [JsonRpcProvider] as a constructor parameter. (!) While using the same instance of [JsonRpcProvider] for
 different providers, don't forget that closing [JsonRpcProvider] in one place will lead to errors in other places.
 
@@ -201,6 +202,7 @@ All tests are divided into several groups:
 
 * End-to-end tests
 * Deserialization unit tests
+* Documentation validation tests
 
 ### End-to-end tests
 
@@ -212,6 +214,17 @@ changing RPC API in testnet without backward compatibility.
 
 These tests use prepared JSON responses based on a real for many variants. This stabilizes API and prevents the
 appearance of bugs during refactoring of future improvements.
+
+### Documentation validation tests
+
+These tests validate example responses in [`NEAR RPC documentation`]. 
+Testing algorithm:
+* load markdown documentation from [`near docs`]
+* parse markdown and find RPC methods and example responses
+* try to deserialize example responses to classes defined in [`index file`]
+* fail if:
+  * no mapping found OR 
+  * existing mapping produced error 
 
 ## Known issues
 
@@ -239,12 +252,16 @@ NEAR Kotlin API examples are placed in [`near-api-kotlin-examples`]
 
 [`Transactions`]: https://docs.near.org/docs/api/rpc/transactions
 
+[`Sandbox`]: https://docs.near.org/docs/api/rpc/sandbox
+
 
 [RepositoryURL]: https://github.com/antlapit/near-api-kotlin
 
 [BorshJ]: https://github.com/near/borshj
 
 [nearcore]: https://github.com/near/nearcore
+
+[`near docs`]: https://github.com/near/docs
 
 [Gradle]: https://gradle.org
 
@@ -286,6 +303,8 @@ NEAR Kotlin API examples are placed in [`near-api-kotlin-examples`]
 
 [TransactionsEndpoint]: https://github.com/antlapit/near-api-kotlin/blob/main/providers-api/src/main/kotlin/org/near/api/endpoints/TransactionsEndpoint.kt
 
+[SandboxEndpoint]: https://github.com/antlapit/near-api-kotlin/blob/main/providers-api/src/main/kotlin/org/near/api/endpoints/SandboxEndpoint.kt
+
 [RustBridge]: https://github.com/antlapit/near-api-kotlin/blob/main/providers-api/src/main/kotlin/org/near/api/model/rust/RustBridge.kt
 
 
@@ -309,9 +328,13 @@ NEAR Kotlin API examples are placed in [`near-api-kotlin-examples`]
 
 [TransactionsRpcEndpoint]: https://github.com/antlapit/near-api-kotlin/blob/main/providers/src/main/kotlin/org/near/api/endpoints/TransactionsRpcEndpoint.kt
 
+[SandboxRpcEndpoint]: https://github.com/antlapit/near-api-kotlin/blob/main/providers/src/main/kotlin/org/near/api/endpoints/SandboxRpcEndpoint.kt
+
 [RustEnumSerializers]: https://github.com/antlapit/near-api-kotlin/blob/main/providers/src/main/kotlin/org/near/api/json/RustEnumSerializers.kt
 
 [NearRpcModelsModule]: https://github.com/antlapit/near-api-kotlin/blob/main/providers/src/main/kotlin/org/near/api/json/NearRpcModelsModule.kt
+
+[`index file`]: https://github.com/antlapit/near-api-kotlin/blob/main/providers/src/test/resources/docs/.index
 
 [ci-badge]:https://github.com/antlapit/near-api-kotlin/actions/workflows/main.yml/badge.svg "CI build status"
 

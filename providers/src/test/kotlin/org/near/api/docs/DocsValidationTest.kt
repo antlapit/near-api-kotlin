@@ -25,7 +25,7 @@ import kotlin.test.fail
  * @ses https://github.com/near/docs
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class DocsIntegrationTest {
+class DocsValidationTest {
 
     private val githubReposPrefix = "https://api.github.com/repos"
     private val docsRepoPath = "near/docs"
@@ -61,8 +61,10 @@ class DocsIntegrationTest {
     }
 
     @Test
-    fun validateDocs() = runBlocking {
-        val loadedExamples = loadExamples()
+    fun validateDocs() {
+        val loadedExamples = runBlocking {
+            loadExamples()
+        }
 
         val notFoundMappings = ArrayList<String>()
         for (example in loadedExamples) {
