@@ -1,5 +1,6 @@
 package org.near.api.json
 
+import com.fasterxml.jackson.annotation.JsonFormat
 import com.fasterxml.jackson.core.Version
 import com.fasterxml.jackson.databind.Module
 import com.fasterxml.jackson.databind.jsontype.NamedType
@@ -18,6 +19,7 @@ import org.near.api.model.primitives.*
 import org.near.api.model.transaction.ExecutionStatus
 import org.near.api.model.transaction.FinalExecutionStatus
 import org.near.api.model.validators.ValidatorKickoutReason
+import java.math.BigInteger
 
 
 class NearRpcModelsModule : Module() {
@@ -45,7 +47,10 @@ class NearRpcModelsModule : Module() {
                 addDeserializer(PublicKey::class.java, PublicKeyDeserializer())
 
                 // access key
-                addDeserializer(org.near.api.model.accesskey.AccessKeyPermission::class.java, RustEnumDeserializer(org.near.api.model.accesskey.AccessKeyPermission::class))
+                addDeserializer(
+                    org.near.api.model.accesskey.AccessKeyPermission::class.java,
+                    RustEnumDeserializer(org.near.api.model.accesskey.AccessKeyPermission::class)
+                )
 
                 // block
                 addDeserializer(Action::class.java, RustEnumDeserializer(Action::class))
@@ -56,7 +61,10 @@ class NearRpcModelsModule : Module() {
                 addDeserializer(ActionsValidationError::class.java, RustEnumDeserializer(ActionsValidationError::class))
                 addDeserializer(CompilationErrorType::class.java, RustEnumDeserializer(CompilationErrorType::class))
                 addDeserializer(ContractCallError::class.java, RustEnumDeserializer(ContractCallError::class))
-                addDeserializer(InvalidAccessKeyErrorType::class.java, RustEnumDeserializer(InvalidAccessKeyErrorType::class))
+                addDeserializer(
+                    InvalidAccessKeyErrorType::class.java,
+                    RustEnumDeserializer(InvalidAccessKeyErrorType::class)
+                )
                 addDeserializer(InvalidTxError::class.java, RustEnumDeserializer(InvalidTxError::class))
                 addDeserializer(ReceiptValidationError::class.java, RustEnumDeserializer(ReceiptValidationError::class))
                 addDeserializer(TxExecutionError::class.java, RustEnumDeserializer(TxExecutionError::class))
@@ -103,5 +111,7 @@ class NearRpcModelsModule : Module() {
             subTypes.add(type)
         }
         ctx.registerSubtypes(*subTypes.toTypedArray())
+
+        ctx.configOverride(BigInteger::class.java).format = JsonFormat.Value.forShape(JsonFormat.Shape.STRING)
     }
 }

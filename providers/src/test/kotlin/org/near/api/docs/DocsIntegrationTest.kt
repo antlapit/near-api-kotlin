@@ -1,5 +1,6 @@
 package org.near.api.docs
 
+import com.fasterxml.jackson.core.JsonParseException
 import io.kotest.common.runBlocking
 import io.kotest.matchers.shouldNotBe
 import io.ktor.client.*
@@ -20,7 +21,8 @@ import kotlin.test.fail
 
 
 /**
- * This test is used to verify response formats of e
+ * This test is used to verify response formats of examples in docs repo
+ * @ses https://github.com/near/docs
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class DocsIntegrationTest {
@@ -71,10 +73,16 @@ class DocsIntegrationTest {
                     JsonRpcProvider.GenericRpcResponse::class.java,
                     clazz
                 )
-                kotlin.runCatching {
-                    val obj: JsonRpcProvider.GenericRpcResponse<*> = objectMapper.readValue(example.response, type)
-                    obj shouldNotBe null
+                try {
+                    objectMapper.readValue(example.response, Any::class.java)
+                } catch (e: JsonParseException) {
+                    println("Invalid JSON in docs example '${example.code}'. Skipping test")
+                    continue
                 }
+
+                println("Deserializing example '${example.code}' to $className")
+                val obj: JsonRpcProvider.GenericRpcResponse<*> = objectMapper.readValue(example.response, type)
+                obj shouldNotBe null
             } else {
                 notFoundMappings.add(example.code)
             }

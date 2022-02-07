@@ -94,11 +94,11 @@ data class GenesisConfig(
     /**
      * Layout information regarding how to split accounts to shards
      */
-    val shardLayout: ShardLayout,
+    val shardLayout: ShardLayout?,
     val simpleNightshadeShardLayout: ShardLayout?,
     /**
      * The lowest ratio s/s_total any block producer can have.
      */
-    val minimumStakeRatio: Rational
+    val minimumStakeRatio: Rational?
 
 )

@@ -63,7 +63,7 @@ class StateRecordSerializationTest : FunSpec({
                 )
             ),
             TestData(
-                """{"Account":{"account_id":"abcdef.test.near","account":{"amount":100000000000,"locked":0,"code_hash":"7KoFshMQkdyo5iTx8P2LbLu9jQpxRn24d27FrKShNVXs","storage_usage":200000,"storage_paid_at":0}}}""",
+                """{"Account":{"account_id":"abcdef.test.near","account":{"amount":"100000000000","locked":"0","code_hash":"7KoFshMQkdyo5iTx8P2LbLu9jQpxRn24d27FrKShNVXs","storage_usage":200000,"storage_paid_at":0}}}""",
                 StateRecord.Account(
                     accountId = "abcdef.test.near",
                     account = Account(

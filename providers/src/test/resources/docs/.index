@@ -23,4 +23,4 @@ send-transaction-await=org.near.api.model.transaction.FinalExecutionOutcome
 transaction-status=org.near.api.model.transaction.FinalExecutionOutcome
 transaction-status-with-receipts=org.near.api.model.transaction.FinalExecutionOutcomeWithReceipts
 receipt-by-id=org.near.api.model.block.Receipt
-patch-state=java.lang.String
+patch-state=java.util.Map

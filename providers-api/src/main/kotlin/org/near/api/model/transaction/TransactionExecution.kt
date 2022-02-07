@@ -78,7 +78,7 @@ data class ExecutionOutcomeView(
     /// Execution status. Contains the result in case of successful execution.
     val status: ExecutionStatus,
     /// Execution metadata, versioned
-    val metadata: ExecutionMetadataView
+    val metadata: ExecutionMetadataView?
 )
 
 
