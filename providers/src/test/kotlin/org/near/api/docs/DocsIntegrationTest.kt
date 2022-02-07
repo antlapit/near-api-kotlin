@@ -143,18 +143,23 @@ internal class ExampleResponsesVisitor : AbstractVisitor() {
         if (currentExampleCode == null) {
             // just a normal html
         } else {
-            if (htmlBlock.literal.contains("Example response:")) {
+            if (isExampleLiteral(htmlBlock.literal)) {
                 processExampleIfCodeFound(htmlBlock)
             }
         }
         visitChildren(htmlBlock)
     }
 
+    private fun isExampleLiteral(literal: String): Boolean {
+        val lower = literal.lowercase();
+        return lower.contains("example response:") || lower.contains("example result:") // headers variants
+    }
+
     override fun visit(text: Text) {
         if (currentExampleCode == null) {
             // just a normal text
         } else {
-            if (text.literal.contains("Example response:")) {
+            if (isExampleLiteral(text.literal)) {
                 processExampleIfCodeFound(text.parent)
             }
         }
