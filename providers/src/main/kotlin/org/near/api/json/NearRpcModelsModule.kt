@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.jsontype.NamedType
 import com.fasterxml.jackson.databind.module.SimpleDeserializers
 import com.fasterxml.jackson.databind.module.SimpleSerializers
 import org.near.api.camelCaseToSnakeCase
+import org.near.api.model.accesskey.AccessKeyPermission
 import org.near.api.model.block.Action
 import org.near.api.model.block.ReceiptInfo
 import org.near.api.model.changes.StateChange
@@ -47,10 +48,7 @@ class NearRpcModelsModule : Module() {
                 addDeserializer(PublicKey::class.java, PublicKeyDeserializer())
 
                 // access key
-                addDeserializer(
-                    org.near.api.model.accesskey.AccessKeyPermission::class.java,
-                    RustEnumDeserializer(org.near.api.model.accesskey.AccessKeyPermission::class)
-                )
+                addDeserializer(AccessKeyPermission::class.java, RustEnumDeserializer(AccessKeyPermission::class))
 
                 // block
                 addDeserializer(Action::class.java, RustEnumDeserializer(Action::class))
